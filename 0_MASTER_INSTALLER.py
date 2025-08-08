@@ -53,22 +53,26 @@ class MasterInstaller:
     def print_banner(self):
         """Print welcome banner"""
         banner = """
-╔══════════════════════════════════════════════════════════════╗
-║           🚀 POS AUTOMATION FRAMEWORK INSTALLER 🚀           ║
-║                                                              ║
-║  This installer will set up everything you need to run      ║
-║  automated POS testing with pywinauto and pytest.          ║
-║                                                              ║
-║  Features:                                                   ║
-║  ✅ Offline package installation                            ║
-║  ✅ Project environment setup                               ║
-║  ✅ GitHub integration                                       ║
-║  ✅ CI/CD pipeline configuration                            ║
-║  ✅ Error handling and recovery                             ║
-║                                                              ║
-╚══════════════════════════════════════════════════════════════╝
++==============================================================+
+|           POS AUTOMATION FRAMEWORK INSTALLER                |
+|                                                              |
+|  This installer will set up everything you need to run      |
+|  automated POS testing with pywinauto and pytest.          |
+|                                                              |
+|  Features:                                                   |
+|  [OK] Offline package installation                          |
+|  [OK] Project environment setup                             |
+|  [OK] GitHub integration                                     |
+|  [OK] CI/CD pipeline configuration                          |
+|  [OK] Error handling and recovery                           |
+|                                                              |
++==============================================================+
 """
-        print(banner)
+        try:
+            print(banner)
+        except UnicodeEncodeError:
+            print("POS AUTOMATION FRAMEWORK INSTALLER")
+            print("=" * 50)
         self.log("Master installer started")
     
     def check_system(self):
@@ -81,11 +85,11 @@ class MasterInstaller:
             self.log("ERROR: Python 3.7+ required. Current version: " + sys.version, "ERROR")
             return False
             
-        self.log(f"✅ Python version: {python_version.major}.{python_version.minor}.{python_version.micro}")
+        self.log(f"[OK] Python version: {python_version.major}.{python_version.minor}.{python_version.micro}")
         
         # Check OS
         os_name = platform.system()
-        self.log(f"✅ Operating System: {os_name}")
+        self.log(f"[OK] Operating System: {os_name}")
         
         if os_name != "Windows":
             self.log("WARNING: This framework is optimized for Windows", "WARNING")
@@ -103,7 +107,7 @@ class MasterInstaller:
             self.log("Make sure you're running this from the pywinauto project directory", "ERROR")
             return False
         
-        self.log("✅ All required project files found")
+        self.log("[OK] All required project files found")
         return True
     
     def check_internet_connection(self):
@@ -113,10 +117,10 @@ class MasterInstaller:
         try:
             import urllib.request
             urllib.request.urlopen('https://pypi.org', timeout=10)
-            self.log("✅ Internet connection available")
+            self.log("[OK] Internet connection available")
             return True
         except Exception as e:
-            self.log(f"❌ No internet connection: {e}", "WARNING")
+            self.log(f"[WARNING] No internet connection: {e}", "WARNING")
             return False
     
     def install_offline_packages(self):
@@ -134,10 +138,10 @@ class MasterInstaller:
             ], capture_output=True, text=True, cwd=str(self.script_dir))
             
             if result.returncode == 0:
-                self.log("✅ Offline packages installed successfully")
+                self.log("[OK] Offline packages installed successfully")
                 return True
             else:
-                self.log(f"❌ Offline installation failed: {result.stderr}", "ERROR")
+                self.log(f"[ERROR] Offline installation failed: {result.stderr}", "ERROR")
                 return False
                 
         except Exception as e:
@@ -159,10 +163,10 @@ class MasterInstaller:
             ], capture_output=True, text=True, cwd=str(self.script_dir))
             
             if result.returncode == 0:
-                self.log("✅ Environment setup completed successfully")
+                self.log("[OK] Environment setup completed successfully")
                 return True
             else:
-                self.log(f"❌ Environment setup failed: {result.stderr}", "ERROR")
+                self.log(f"[ERROR] Environment setup failed: {result.stderr}", "ERROR")
                 self.log(f"Output: {result.stdout}", "INFO")
                 return False
                 
