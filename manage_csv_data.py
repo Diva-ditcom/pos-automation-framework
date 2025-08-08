@@ -20,7 +20,7 @@ def display_menu():
     print("2. 👀 View scenario data")
     print("3. ➕ Add new scenario")
     print("4. ⚙️  View application settings")
-    print("5. ✅ Validate scenario data")
+    print("5. [SUCCESS] Validate scenario data")
     print("6. 🧪 Test data loading")
     print("0. 🚪 Exit")
     print("="*60)
@@ -39,7 +39,7 @@ def view_scenario_data():
     scenarios = csv_data_manager.list_available_scenarios()
     
     if not scenarios:
-        print("❌ No scenarios available")
+        print("[ERROR] No scenarios available")
         return
     
     print("\nSelect scenario to view:")
@@ -57,11 +57,11 @@ def view_scenario_data():
                 for key, value in data.items():
                     print(f"   {key}: {value}")
             else:
-                print(f"❌ No data found for scenario: {scenario_name}")
+                print(f"[ERROR] No data found for scenario: {scenario_name}")
         else:
-            print("❌ Invalid choice")
+            print("[ERROR] Invalid choice")
     except ValueError:
-        print("❌ Invalid input. Please enter a number.")
+        print("[ERROR] Invalid input. Please enter a number.")
 
 
 def add_new_scenario():
@@ -89,7 +89,7 @@ def add_new_scenario():
         qty = input("Quantity (default 1): ").strip()
         scenario_data['quantity'] = int(qty) if qty else 1
     except ValueError:
-        print("❌ Invalid numeric input. Setting default values.")
+        print("[ERROR] Invalid numeric input. Setting default values.")
         scenario_data['expected_price'] = ""
         scenario_data['cash_tender_amount'] = ""
         scenario_data['quantity'] = 1
@@ -101,9 +101,9 @@ def add_new_scenario():
     # Add scenario
     success = csv_data_manager.add_scenario(scenario_data)
     if success:
-        print(f"✅ Scenario '{scenario_data['scenario_name']}' added successfully!")
+        print(f"[SUCCESS] Scenario '{scenario_data['scenario_name']}' added successfully!")
     else:
-        print(f"❌ Failed to add scenario")
+        print(f"[ERROR] Failed to add scenario")
 
 
 def view_settings():
@@ -120,7 +120,7 @@ def validate_scenario():
     scenarios = csv_data_manager.list_available_scenarios()
     
     if not scenarios:
-        print("❌ No scenarios available")
+        print("[ERROR] No scenarios available")
         return
     
     print("\nSelect scenario to validate:")
@@ -133,13 +133,13 @@ def validate_scenario():
             is_valid = csv_data_manager.validate_scenario_data(scenario_name)
             
             if is_valid:
-                print(f"✅ Scenario '{scenario_name}' validation passed")
+                print(f"[SUCCESS] Scenario '{scenario_name}' validation passed")
             else:
-                print(f"❌ Scenario '{scenario_name}' validation failed")
+                print(f"[ERROR] Scenario '{scenario_name}' validation failed")
         else:
-            print("❌ Invalid choice")
+            print("[ERROR] Invalid choice")
     except ValueError:
-        print("❌ Invalid input. Please enter a number.")
+        print("[ERROR] Invalid input. Please enter a number.")
 
 
 def test_data_loading():
@@ -149,20 +149,20 @@ def test_data_loading():
     
     # Test scenarios loading
     scenarios = csv_data_manager.load_scenarios()
-    print(f"✅ Loaded {len(scenarios)} scenarios")
+    print(f"[SUCCESS] Loaded {len(scenarios)} scenarios")
     
     # Test settings loading
     settings = csv_data_manager.load_settings()
-    print(f"✅ Loaded {len(settings)} settings")
+    print(f"[SUCCESS] Loaded {len(settings)} settings")
     
     # Test individual scenario loading
     if scenarios:
         first_scenario = scenarios[0]['scenario_name']
         data = csv_data_manager.get_scenario_data(first_scenario)
         if data:
-            print(f"✅ Successfully loaded data for '{first_scenario}'")
+            print(f"[SUCCESS] Successfully loaded data for '{first_scenario}'")
         else:
-            print(f"❌ Failed to load data for '{first_scenario}'")
+            print(f"[ERROR] Failed to load data for '{first_scenario}'")
 
 
 def main():
@@ -189,13 +189,13 @@ def main():
             elif choice == "6":
                 test_data_loading()
             else:
-                print("❌ Invalid choice. Please select 0-6.")
+                print("[ERROR] Invalid choice. Please select 0-6.")
                 
         except KeyboardInterrupt:
             print("\n\n👋 Goodbye!")
             break
         except Exception as e:
-            print(f"❌ Error: {e}")
+            print(f"[ERROR] Error: {e}")
         
         input("\nPress Enter to continue...")
 

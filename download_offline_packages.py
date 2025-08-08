@@ -28,21 +28,21 @@ def run_command(command, description=""):
         result = subprocess.run(command, shell=True, check=True)
         return True
     except subprocess.CalledProcessError as e:
-        print(f"   ❌ Command failed with exit code {e.returncode}")
+        print(f"   [ERROR] Command failed with exit code {e.returncode}")
         return False
     except Exception as e:
-        print(f"   ❌ Error: {str(e)}")
+        print(f"   [ERROR] Error: {str(e)}")
         return False
 
 
 def check_requirements_file():
     """Check if requirements.txt exists"""
     if not os.path.exists("requirements.txt"):
-        print("❌ requirements.txt not found!")
+        print("[ERROR] requirements.txt not found!")
         print("Please ensure you're running this script from the framework root directory.")
         return False
     
-    print("✅ requirements.txt found")
+    print("[SUCCESS] requirements.txt found")
     
     # Display requirements
     with open("requirements.txt", "r") as f:
@@ -59,7 +59,7 @@ def create_offline_directory():
     """Create offline packages directory"""
     offline_dir = Path("offline_packages")
     offline_dir.mkdir(exist_ok=True)
-    print(f"✅ Offline packages directory ready: {offline_dir.absolute()}")
+    print(f"[SUCCESS] Offline packages directory ready: {offline_dir.absolute()}")
     return offline_dir
 
 
@@ -72,10 +72,10 @@ def download_packages(offline_dir):
     
     success = run_command(download_cmd)
     if success:
-        print("✅ All packages downloaded successfully")
+        print("[SUCCESS] All packages downloaded successfully")
         return True
     else:
-        print("❌ Failed to download packages")
+        print("[ERROR] Failed to download packages")
         return False
 
 
@@ -86,9 +86,9 @@ def verify_downloaded_packages(offline_dir):
     wheel_files = list(offline_dir.glob("*.whl"))
     tar_files = list(offline_dir.glob("*.tar.gz"))
     
-    print(f"✅ Downloaded {len(wheel_files)} wheel files")
-    print(f"✅ Downloaded {len(tar_files)} source packages")
-    print(f"📊 Total packages: {len(wheel_files) + len(tar_files)}")
+    print(f"[SUCCESS] Downloaded {len(wheel_files)} wheel files")
+    print(f"[SUCCESS] Downloaded {len(tar_files)} source packages")
+    print(f"[REPORT] Total packages: {len(wheel_files) + len(tar_files)}")
     
     if wheel_files or tar_files:
         print("\n📦 Downloaded packages:")
@@ -101,7 +101,7 @@ def verify_downloaded_packages(offline_dir):
         
         return True
     else:
-        print("❌ No packages were downloaded")
+        print("[ERROR] No packages were downloaded")
         return False
 
 
@@ -140,13 +140,13 @@ def create_offline_requirements():
             for req in sorted(offline_requirements):
                 f.write(f"{req}\n")
         
-        print("✅ Created requirements_offline.txt with exact versions")
+        print("[SUCCESS] Created requirements_offline.txt with exact versions")
         print(f"📄 Pinned versions for {len(offline_requirements)} packages")
         
         return True
         
     except Exception as e:
-        print(f"❌ Failed to create offline requirements: {e}")
+        print(f"[ERROR] Failed to create offline requirements: {e}")
         return False
 
 
@@ -179,7 +179,7 @@ def install_offline_packages():
     offline_dir = Path("offline_packages")
     
     if not offline_dir.exists():
-        print("❌ Offline packages directory not found!")
+        print("[ERROR] Offline packages directory not found!")
         return False
     
     # Check for packages
@@ -187,14 +187,14 @@ def install_offline_packages():
     tar_files = list(offline_dir.glob("*.tar.gz"))
     
     if not (wheel_files or tar_files):
-        print("❌ No packages found in offline_packages directory!")
+        print("[ERROR] No packages found in offline_packages directory!")
         return False
     
     print(f"📦 Found {len(wheel_files)} wheel files and {len(tar_files)} source packages")
     
     # Install from offline packages
     try:
-        print("\\n🔧 Installing packages from offline directory...")
+        print("\\n[CONFIG] Installing packages from offline directory...")
         
         # Method 1: Install using --find-links (preferred)
         install_cmd = [
@@ -206,11 +206,11 @@ def install_offline_packages():
         
         result = subprocess.run(install_cmd, check=True)
         
-        print("✅ All packages installed successfully from offline directory!")
+        print("[SUCCESS] All packages installed successfully from offline directory!")
         return True
         
     except subprocess.CalledProcessError as e:
-        print(f"❌ Installation failed with exit code {e.returncode}")
+        print(f"[ERROR] Installation failed with exit code {e.returncode}")
         
         # Fallback: Try installing wheel files directly
         print("\\n🔄 Trying fallback installation method...")
@@ -219,15 +219,15 @@ def install_offline_packages():
                 print(f"   Installing {wheel_file.name}...")
                 subprocess.run([sys.executable, "-m", "pip", "install", str(wheel_file)], check=True)
             
-            print("✅ Packages installed using fallback method!")
+            print("[SUCCESS] Packages installed using fallback method!")
             return True
             
         except subprocess.CalledProcessError as e2:
-            print(f"❌ Fallback installation also failed: {e2}")
+            print(f"[ERROR] Fallback installation also failed: {e2}")
             return False
     
     except Exception as e:
-        print(f"❌ Installation error: {e}")
+        print(f"[ERROR] Installation error: {e}")
         return False
 
 
@@ -246,9 +246,9 @@ def verify_installation():
         try:
             result = subprocess.run([sys.executable, "-c", test_code], 
                                  capture_output=True, text=True, check=True)
-            print(f"   ✅ {name}: {result.stdout.strip()}")
+            print(f"   [SUCCESS] {name}: {result.stdout.strip()}")
         except:
-            print(f"   ❌ {name}: Failed to import")
+            print(f"   [ERROR] {name}: Failed to import")
 
 
 if __name__ == "__main__":
@@ -256,13 +256,13 @@ if __name__ == "__main__":
     
     if success:
         verify_installation()
-        print("\\n🎉 Offline installation completed successfully!")
+        print("\\n[SUCCESS] Offline installation completed successfully!")
         print("\\n📝 Next steps:")
         print("   1. Run: python setup_new_machine.py")
         print("   2. Or run: python run_tests.py")
     else:
-        print("\\n❌ Offline installation failed!")
-        print("\\n🔧 Troubleshooting:")
+        print("\\n[ERROR] Offline installation failed!")
+        print("\\n[CONFIG] Troubleshooting:")
         print("   • Ensure offline_packages directory contains wheel files")
         print("   • Try: python download_offline_packages.py")
         print("   • Check Python version compatibility")
@@ -274,11 +274,11 @@ if __name__ == "__main__":
         with open("install_offline_packages.py", "w") as f:
             f.write(install_script)
         
-        print("✅ Created install_offline_packages.py")
+        print("[SUCCESS] Created install_offline_packages.py")
         return True
         
     except Exception as e:
-        print(f"❌ Failed to create installation script: {e}")
+        print(f"[ERROR] Failed to create installation script: {e}")
         return False
 
 
@@ -293,19 +293,19 @@ echo 📦 POS Automation - Offline Package Installation
 echo ================================================
 echo.
 
-echo 🔧 Installing packages from offline directory...
+echo [CONFIG] Installing packages from offline directory...
 python install_offline_packages.py
 
 if %errorlevel% neq 0 (
     echo.
-    echo ❌ Offline installation failed!
-    echo 🔧 Try running: python download_offline_packages.py
+    echo [ERROR] Offline installation failed!
+    echo [CONFIG] Try running: python download_offline_packages.py
     pause
     exit /b 1
 )
 
 echo.
-echo ✅ Offline installation completed!
+echo [SUCCESS] Offline installation completed!
 echo.
 echo 📝 Next steps:
 echo    1. Run: python setup_new_machine.py
@@ -318,11 +318,11 @@ pause
         with open("install_offline_packages.bat", "w") as f:
             f.write(batch_script)
         
-        print("✅ Created install_offline_packages.bat")
+        print("[SUCCESS] Created install_offline_packages.bat")
         return True
         
     except Exception as e:
-        print(f"❌ Failed to create batch installer: {e}")
+        print(f"[ERROR] Failed to create batch installer: {e}")
         return False
 
 
@@ -347,7 +347,7 @@ def main():
     
     # Create offline requirements
     if not create_offline_requirements():
-        print("⚠️ Warning: Could not create offline requirements file")
+        print("[WARNING] Warning: Could not create offline requirements file")
     
     # Create installation scripts
     if not create_offline_install_script():
@@ -358,9 +358,9 @@ def main():
     
     # Success summary
     print_header("Download Complete!")
-    print("✅ All packages downloaded successfully")
-    print("✅ Offline installation scripts created")
-    print("✅ Framework is now ready for offline deployment")
+    print("[SUCCESS] All packages downloaded successfully")
+    print("[SUCCESS] Offline installation scripts created")
+    print("[SUCCESS] Framework is now ready for offline deployment")
     
     print("\\n📦 Generated Files:")
     print("   • offline_packages/ - Directory with wheel files")
@@ -368,7 +368,7 @@ def main():
     print("   • install_offline_packages.bat - Windows batch installer")
     print("   • offline_packages/requirements_offline.txt - Pinned versions")
     
-    print("\\n🚀 Deployment Instructions:")
+    print("\\n[LAUNCH] Deployment Instructions:")
     print("   1. Copy entire framework folder to target machine")
     print("   2. Run: python install_offline_packages.py")
     print("   3. Run: python setup_new_machine.py")

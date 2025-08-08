@@ -19,7 +19,7 @@ class Config:
         """Initialize configuration by loading data from CSV files"""
         self.data_manager = csv_data_manager
         self.settings = self.data_manager.load_settings()
-        print("✅ Configuration initialized with CSV data")
+        print("[SUCCESS] Configuration initialized with CSV data")
     
     # POS Application Settings (loaded from CSV)
     @property

@@ -13,7 +13,7 @@ from pathlib import Path
 def print_header(text):
     """Print a formatted header"""
     print("\n" + "=" * 60)
-    print(f"🚀 {text}")
+    print(f"[LAUNCH] {text}")
     print("=" * 60)
 
 
@@ -40,10 +40,10 @@ def check_python():
     
     success, output = run_command("python --version")
     if success:
-        print(f"✅ Python found: {output.strip()}")
+        print(f"[SUCCESS] Python found: {output.strip()}")
         return True
     else:
-        print("❌ Python not found!")
+        print("[ERROR] Python not found!")
         print("Please install Python 3.8+ from https://python.org")
         return False
 
@@ -53,15 +53,15 @@ def install_dependencies():
     print_step(3, "Installing dependencies")
     
     if not os.path.exists("requirements.txt"):
-        print("❌ requirements.txt not found!")
+        print("[ERROR] requirements.txt not found!")
         return False
     
     success, output = run_command("pip install -r requirements.txt")
     if success:
-        print("✅ Dependencies installed successfully")
+        print("[SUCCESS] Dependencies installed successfully")
         return True
     else:
-        print("❌ Failed to install dependencies")
+        print("[ERROR] Failed to install dependencies")
         print(f"Error: {output}")
         return False
 
@@ -80,9 +80,9 @@ def test_framework_components():
         print(f"   Testing {name}...")
         success, output = run_command(f'python -c "{test_code}"')
         if success:
-            print(f"   ✅ {name} loaded successfully")
+            print(f"   [SUCCESS] {name} loaded successfully")
         else:
-            print(f"   ❌ {name} failed to load")
+            print(f"   [ERROR] {name} failed to load")
             print(f"   Error: {output}")
             return False
     
@@ -97,10 +97,10 @@ def test_pytest_discovery():
     if success:
         # Count tests discovered
         test_count = output.count("<Function")
-        print(f"✅ Pytest discovered {test_count} tests successfully")
+        print(f"[SUCCESS] Pytest discovered {test_count} tests successfully")
         return True
     else:
-        print("❌ Pytest test discovery failed")
+        print("[ERROR] Pytest test discovery failed")
         print(f"Error: {output}")
         return False
 
@@ -120,11 +120,11 @@ print("Available scenarios:", scenarios)
     
     success, output = run_command(f'python -c "{test_code}"')
     if success:
-        print("✅ CSV data loading successful")
+        print("[SUCCESS] CSV data loading successful")
         print("   " + output.replace("\n", "\n   "))
         return True
     else:
-        print("❌ CSV data loading failed")
+        print("[ERROR] CSV data loading failed")
         print(f"Error: {output}")
         return False
 
@@ -140,9 +140,9 @@ def clean_conflicting_files():
     if root_init.exists():
         try:
             root_init.unlink()
-            print(f"✅ Removed conflicting file: {root_init}")
+            print(f"[SUCCESS] Removed conflicting file: {root_init}")
         except Exception as e:
-            print(f"⚠️ Could not remove {root_init}: {e}")
+            print(f"[WARNING] Could not remove {root_init}: {e}")
     
     # Clean __pycache__ directories
     try:
@@ -154,11 +154,11 @@ def clean_conflicting_files():
             except:
                 pass
         if pycache_dirs:
-            print(f"✅ Cleaned {len(pycache_dirs)} cache directories")
+            print(f"[SUCCESS] Cleaned {len(pycache_dirs)} cache directories")
     except:
         pass
     
-    print("✅ Conflict cleaning completed")
+    print("[SUCCESS] Conflict cleaning completed")
     return True
 
 
@@ -172,25 +172,25 @@ def display_next_steps():
     print("   3. Run tests: python run_tests.py")
     print("   4. Manage data: python manage_csv_data.py")
     
-    print("\n🎯 Quick commands:")
+    print("\n[TARGET] Quick commands:")
     print("   • Test framework: python run_tests.py")
     print("   • Manage data: python manage_csv_data.py")
     print("   • View help: python -m pytest --help")
     
-    print("\n📁 Important files to configure:")
+    print("\n[FOLDER] Important files to configure:")
     print("   • data\\app_settings.csv - Application configuration")
     print("   • data\\test_scenarios.csv - Test data")
     
-    print("\n🔧 Framework structure validated:")
-    print("   ✅ All Python modules loading correctly")
-    print("   ✅ All dependencies installed")
-    print("   ✅ Pytest discovering tests")
-    print("   ✅ CSV data management working")
+    print("\n[CONFIG] Framework structure validated:")
+    print("   [SUCCESS] All Python modules loading correctly")
+    print("   [SUCCESS] All dependencies installed")
+    print("   [SUCCESS] Pytest discovering tests")
+    print("   [SUCCESS] CSV data management working")
 
 
 def display_error_help():
     """Display troubleshooting help"""
-    print("\n❌ Setup failed! Troubleshooting tips:")
+    print("\n[ERROR] Setup failed! Troubleshooting tips:")
     print("   • Ensure you're running from the correct directory")
     print("   • Check if all files are present in the framework folder")
     print("   • Try: pip install --upgrade -r requirements.txt")

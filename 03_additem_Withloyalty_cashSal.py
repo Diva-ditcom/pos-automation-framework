@@ -10,11 +10,11 @@ def launch_pos():
     bat_path = r"c:\WIN_POC\pywinauto\Scripts\WOWPospplication\AI\launch.bat"
     try:
         subprocess.Popen([bat_path], shell=True)
-        print(f"✅ Launched POS application using: {bat_path}")
+        print(f"[SUCCESS] Launched POS application using: {bat_path}")
         time.sleep(20)  # Wait for the application to start
         return True
     except Exception as e:
-        print(f"❌ Failed to launch POS application: {e}")
+        print(f"[ERROR] Failed to launch POS application: {e}")
         return False
 
 def login_to_pos(username, password):
@@ -48,9 +48,9 @@ def login_to_pos(username, password):
     if login_btn.exists(timeout=5):
         login_btn.wait("enabled", timeout=10)
         login_btn.click_input()
-        print("✅ Login button clicked.")
+        print("[SUCCESS] Login button clicked.")
     else:
-        print("❌ Login button not found after all attempts. Cannot proceed with login.")
+        print("[ERROR] Login button not found after all attempts. Cannot proceed with login.")
         return False
     # Enter username only if not already present
     username_field = win.child_window(auto_id="UserName", control_type="Edit")
@@ -59,32 +59,32 @@ def login_to_pos(username, password):
         current_username = username_field.get_value() if hasattr(username_field, 'get_value') else username_field.window_text()
         if current_username.strip() != username:
             username_field.type_keys(username, with_spaces=True)
-            print(f"✅ User ID field found and entered: {username}")
+            print(f"[SUCCESS] User ID field found and entered: {username}")
         else:
             print(f"ℹ️ Username already present: {current_username}. Skipping entry.")
     else:
-        print("❌ User ID field not found.")
+        print("[ERROR] User ID field not found.")
         return False
     # Enter password
     password_field = win.child_window(auto_id="Password", control_type="Edit")
     if password_field.exists(timeout=5):
         password_field.wait("ready", timeout=10)
         password_field.type_keys(password, with_spaces=True)
-        print(f"✅ Password field found and entered: {'*' * len(password)}")
+        print(f"[SUCCESS] Password field found and entered: {'*' * len(password)}")
     else:
-        print("❌ Password field not found.")
+        print("[ERROR] Password field not found.")
         return False
     # Click the sign-in OK button
     loginrc_btn = win.child_window(auto_id="UCSignInOKButton", control_type="Button")
     if loginrc_btn.exists(timeout=5):
         loginrc_btn.wait("enabled", timeout=5)
         loginrc_btn.click_input()
-        print("✅ Sign-in OK button clicked.")
+        print("[SUCCESS] Sign-in OK button clicked.")
         time.sleep(2)
-        print("🎉 Login attempted. Check POS for success.")
+        print("[SUCCESS] Login attempted. Check POS for success.")
         return True
     else:
-        print("❌ Login OK button not found.")
+        print("[ERROR] Login OK button not found.")
         return False
 
 def check_nosale(win):
@@ -93,10 +93,10 @@ def check_nosale(win):
     """
     nosale_btn = win.child_window(auto_id="commandsLowerButtonsNo Sale", control_type="Button")
     if nosale_btn.exists() and nosale_btn.is_visible():
-        print("✅ 'No Sale' button is enabled and exists.")
+        print("[SUCCESS] 'No Sale' button is enabled and exists.")
         return True
     else:
-        print("❌ 'No Sale' button is not enabled or does not exist.")
+        print("[ERROR] 'No Sale' button is not enabled or does not exist.")
         return False
 
 def click_button_by_text(win, button_text, timeout=10):
@@ -121,7 +121,7 @@ def click_button_by_text(win, button_text, timeout=10):
         time.sleep(0.5)
         return True
     else:
-        print(f"❌ '{button_text}' button not found within timeout.")
+        print(f"[ERROR] '{button_text}' button not found within timeout.")
         return False
 
 
@@ -143,22 +143,22 @@ def add_product_and_check_basket(win, ean):
                 if click_button_by_text(win, "<<", timeout=2):
                     time.sleep(0.2)
         if cleared:
-            print("✅ EAN field cleared.")
+            print("[SUCCESS] EAN field cleared.")
             break
 
     # Enter EAN digits
     print(f"Entering EAN: {ean}")
     for digit in str(ean):
         if not click_button_by_text(win, digit):
-            print(f"❌ Failed to enter digit: {digit}")
+            print(f"[ERROR] Failed to enter digit: {digit}")
             return False
         time.sleep(0.2)
 
     # Click OK to add product
     if not click_button_by_text(win, "OK"):
-        print("❌ Failed to click OK button")
+        print("[ERROR] Failed to click OK button")
         return False
-    print("✅ Product added successfully")
+    print("[SUCCESS] Product added successfully")
 
     # Check basket contents
     print("\n=== Checking basket ===")
@@ -182,14 +182,14 @@ def add_product_and_check_basket(win, ean):
             print(f"- {txt}")
             if "promotion" in txt.lower() or "bonus" in txt.lower():
                 promotion_found = True
-                print(f"🎉 Promotion found: {txt}")
+                print(f"[SUCCESS] Promotion found: {txt}")
        
-        print("✅ Basket check completed.")
+        print("[SUCCESS] Basket check completed.")
         time.sleep(2)
         click_button_by_text(win, "OK")
         return True
     else:
-        print("❌ Could not find basket")
+        print("[ERROR] Could not find basket")
         return False
 
 def handle_loyalty_popup(app):
@@ -209,14 +209,14 @@ def handle_loyalty_popup(app):
             field.set_focus()
             field.type_keys(card_number, with_spaces=True)
             time.sleep(2)
-            print(f"✅ Entered customer card: {card_number}")
+            print(f"[SUCCESS] Entered customer card: {card_number}")
             entered = True
             break
         except Exception:
             continue
 
     if not entered:
-        print("❌ Could not enter customer card")
+        print("[ERROR] Could not enter customer card")
         return False
 
     # Click OK button
@@ -225,10 +225,10 @@ def handle_loyalty_popup(app):
         if btn.window_text().strip().lower() == "ok":
             time.sleep(2)  # Wait for any animations
             btn.click_input()
-            print("✅ Clicked OK button on loyalty popup")
+            print("[SUCCESS] Clicked OK button on loyalty popup")
             return True
    
-    print("❌ OK button not found on loyalty popup")
+    print("[ERROR] OK button not found on loyalty popup")
     return False
 
 def complete_cash_tender(app):
@@ -243,11 +243,11 @@ def complete_cash_tender(app):
         # Click Cash tender button
         tender_btn = win.child_window(auto_id="TenderButtonsCash", control_type="ListItem")
         if not tender_btn.exists():
-            print("❌ Cash tender button not found")
+            print("[ERROR] Cash tender button not found")
             return False
        
         tender_btn.click_input()
-        print("✅ Clicked Cash tender button")
+        print("[SUCCESS] Clicked Cash tender button")
         time.sleep(1)
 
         # Select first suggested amount
@@ -255,9 +255,9 @@ def complete_cash_tender(app):
         list_items = cash_list.children(control_type="ListItem")
         if list_items:
             list_items[0].click_input()
-            print(f"✅ Selected suggested amount: {list_items[0].window_text()}")
+            print(f"[SUCCESS] Selected suggested amount: {list_items[0].window_text()}")
         else:
-            print("❌ No suggested amounts found")
+            print("[ERROR] No suggested amounts found")
             return False
 
         # Handle receipt popup
@@ -267,14 +267,14 @@ def complete_cash_tender(app):
         for btn in buttons:
             if btn.window_text().strip().lower() == "yes":
                 btn.click_input()
-                print("✅ Clicked Yes on receipt popup")
+                print("[SUCCESS] Clicked Yes on receipt popup")
                 return True
        
-        print("❌ Yes button not found on receipt popup")
+        print("[ERROR] Yes button not found on receipt popup")
         return False
 
     except Exception as e:
-        print(f"❌ Error during tender process: {e}")
+        print(f"[ERROR] Error during tender process: {e}")
         return False
 
 def main():
@@ -296,57 +296,57 @@ def main():
         win = app.window(title_re=pos_title_re)
         win.set_focus()
         if check_nosale(win):
-            print("✅ POS is ready. No Sale button is present.")
+            print("[SUCCESS] POS is ready. No Sale button is present.")
         else:
-            print("❌ No Sale button not found. Attempting login...")
+            print("[ERROR] No Sale button not found. Attempting login...")
             if login_to_pos("atmgr5", "abcd1234"):
-                print("✅ Logged in successfully. Checking No Sale button...")
+                print("[SUCCESS] Logged in successfully. Checking No Sale button...")
                 if check_nosale(win):
-                    print("✅ No Sale button found after login.")
+                    print("[SUCCESS] No Sale button found after login.")
                 else:
-                    print("❌ No Sale button still not found after login.")
+                    print("[ERROR] No Sale button still not found after login.")
             else:
-                print("❌ Login failed. Cannot check No Sale button.")
+                print("[ERROR] Login failed. Cannot check No Sale button.")
     else:
         print("ℹ️ POS is not running. Launching POS...")
         launch_pos()
         time.sleep(10)  # Wait longer for POS to launch
         if login_to_pos("atmgr5", "abcd1234"):
-            print("✅ Logged in successfully. Checking No Sale button...")
+            print("[SUCCESS] Logged in successfully. Checking No Sale button...")
             app = Application(backend="uia").connect(title_re=pos_title_re)
             win = app.window(title_re=pos_title_re)
             win.set_focus()
             if check_nosale(win):
-                print("✅ No Sale button found after login.")
+                print("[SUCCESS] No Sale button found after login.")
                
             else:
-                print("❌ No Sale button not found after login.")
+                print("[ERROR] No Sale button not found after login.")
         else:
-            print("❌ Login failed. Cannot check No Sale button.")
+            print("[ERROR] Login failed. Cannot check No Sale button.")
     # Step 2: Login to POS
  
     time.sleep(2)
 
     # Step 3: Add product and check basket
     if not add_product_and_check_basket(win, "9300675084147"):
-        print("❌ Failed to add product or check basket")
+        print("[ERROR] Failed to add product or check basket")
         return
 
     time.sleep(4)
 
     # Step 4: Handle loyalty popup
     if not handle_loyalty_popup(app):
-        print("❌ Failed to handle loyalty popup")
+        print("[ERROR] Failed to handle loyalty popup")
         return
 
     time.sleep(4)
 
     # Step 5: Complete transaction with cash tender
     if not complete_cash_tender(app):
-        print("❌ Failed to complete transaction")
+        print("[ERROR] Failed to complete transaction")
         return
 
-    print("\n🎉 Happy flow completed successfully!")
+    print("\n[SUCCESS] Happy flow completed successfully!")
     time.sleep(2)
     # Click randomly on the POS window at the end
     import random

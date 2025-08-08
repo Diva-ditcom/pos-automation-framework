@@ -43,19 +43,19 @@ class TestBasicCashSaleDataDriven:
         item_data = pos.get_item_data()
         payment_data = pos.get_payment_data()
         
-        print(f"\n🎯 Executing Basic Cash Sale with CSV data:")
+        print(f"\n[TARGET] Executing Basic Cash Sale with CSV data:")
         print(f"   User: {user_data['username']}")
         print(f"   EAN: {item_data['ean_code']}")
         print(f"   Item: {item_data['item_name']}")
         print(f"   Cash Amount: ${payment_data['cash_tender_amount']}")
         
         # Step 1: Launch POS application
-        print("\n🚀 Step 1: Launching POS application...")
+        print("\n[LAUNCH] Step 1: Launching POS application...")
         success = pos.launch_pos()
         assert success, "Failed to launch POS application"
         
         # Step 2: Connect to POS
-        print("\n🔗 Step 2: Connecting to POS...")
+        print("\n[CONNECT] Step 2: Connecting to POS...")
         success = pos.connect_to_pos()
         assert success, "Failed to connect to POS application"
         
@@ -74,4 +74,4 @@ class TestBasicCashSaleDataDriven:
         success = pos.execute_scenario_payment()
         assert success, f"Failed to complete cash payment"
         
-        print("\n✅ Basic Cash Sale test completed successfully with CSV data!")
+        print("\n[SUCCESS] Basic Cash Sale test completed successfully with CSV data!")

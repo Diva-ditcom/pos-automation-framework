@@ -13,7 +13,7 @@ from pathlib import Path
 def print_header():
     """Print setup header"""
     print("=" * 60)
-    print("🚀 POS Automation Framework Setup (Enhanced)")
+    print("[LAUNCH] POS Automation Framework Setup (Enhanced)")
     print("=" * 60)
     print()
 
@@ -23,15 +23,15 @@ def print_step(step_num, description):
 
 def print_success(message):
     """Print success message"""
-    print(f"✅ {message}")
+    print(f"[SUCCESS] {message}")
 
 def print_error(message):
     """Print error message"""
-    print(f"❌ {message}")
+    print(f"[ERROR] {message}")
 
 def print_warning(message):
     """Print warning message"""
-    print(f"⚠️ {message}")
+    print(f"[WARNING] {message}")
 
 def check_python():
     """Check Python installation"""
@@ -260,7 +260,7 @@ def main():
     print("=" * 60)
     
     if not failed_steps:
-        print_success("🎉 Setup completed successfully!")
+        print_success("[SUCCESS] Setup completed successfully!")
         print()
         print("Next steps:")
         print("• Run tests: python run_tests.py")
@@ -268,7 +268,7 @@ def main():
         print("• View reports in: reports/")
         print("• Check logs in: logs/")
     else:
-        print_error("❌ Setup failed!")
+        print_error("[ERROR] Setup failed!")
         print(f"Failed steps: {', '.join(failed_steps)}")
         print()
         print("Troubleshooting tips:")

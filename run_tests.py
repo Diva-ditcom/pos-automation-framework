@@ -10,7 +10,7 @@ def run_tests():
     """Run all POS automation tests with HTML reporting."""
     
     print("=" * 80)
-    print("🚀 POS AUTOMATION TEST SUITE")
+    print("[LAUNCH] POS AUTOMATION TEST SUITE")
     print("=" * 80)
     print(f"📅 Start Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print()
@@ -40,7 +40,7 @@ def run_tests():
     ]
     
     print("🧪 Running POS automation test suite...")
-    print(f"📊 HTML Report will be saved to: {report_name}")
+    print(f"[REPORT] HTML Report will be saved to: {report_name}")
     print()
     
     try:
@@ -49,28 +49,28 @@ def run_tests():
         
         print()
         print("=" * 80)
-        print("📊 TEST EXECUTION COMPLETED")
+        print("[REPORT] TEST EXECUTION COMPLETED")
         print("=" * 80)
         print(f"📅 End Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print(f"📋 Exit Code: {result.returncode}")
         
         if result.returncode == 0:
-            print("✅ All tests passed successfully!")
+            print("[SUCCESS] All tests passed successfully!")
         else:
-            print("❌ Some tests failed. Check the report for details.")
+            print("[ERROR] Some tests failed. Check the report for details.")
         
-        print(f"📊 View detailed report: {os.path.abspath(report_name)}")
+        print(f"[REPORT] View detailed report: {os.path.abspath(report_name)}")
         
         return result.returncode
         
     except Exception as e:
-        print(f"❌ Error running tests: {e}")
+        print(f"[ERROR] Error running tests: {e}")
         return 1
 
 def run_specific_test(test_name):
     """Run a specific test by name."""
     
-    print(f"🎯 Running specific test: {test_name}")
+    print(f"[TARGET] Running specific test: {test_name}")
     
     # Ensure we're in the correct directory
     pywinauto_dir = os.path.dirname(os.path.abspath(__file__))
@@ -94,10 +94,10 @@ def run_specific_test(test_name):
     
     try:
         result = subprocess.run(pytest_cmd, capture_output=False, text=True)
-        print(f"📊 Report saved: {os.path.abspath(report_name)}")
+        print(f"[REPORT] Report saved: {os.path.abspath(report_name)}")
         return result.returncode
     except Exception as e:
-        print(f"❌ Error running test: {e}")
+        print(f"[ERROR] Error running test: {e}")
         return 1
 
 if __name__ == "__main__":

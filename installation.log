@@ -1,0 +1,11 @@
+2025-08-08 20:21:40,202 - INFO - [SUCCESS] Python version check passed: 3.13.2
+2025-08-08 20:21:40,264 - INFO - [SUCCESS] pip is already available
+2025-08-08 20:21:40,283 - INFO - [SUCCESS] Found 41 offline packages
+2025-08-08 20:24:37,228 - INFO - [SUCCESS] Offline packages installed successfully
+2025-08-08 20:24:41,362 - INFO - [SUCCESS] Package pytest is available
+2025-08-08 20:24:44,588 - INFO - [SUCCESS] Package pywinauto is available
+2025-08-08 20:24:55,440 - INFO - [SUCCESS] Package pandas is available
+2025-08-08 20:24:59,225 - INFO - [SUCCESS] Package openpyxl is available
+2025-08-08 20:24:59,227 - INFO - [SUCCESS] All required packages verified
+2025-08-08 20:24:59,229 - INFO - [SUCCESS] Framework test passed
+2025-08-08 20:24:59,241 - INFO - [SUCCESS] Installation report saved to C:\Myapps\wow\vibecoding\Projectsetup3-working signleflows\github\venv\Scripts\pywinauto\installation_report.json

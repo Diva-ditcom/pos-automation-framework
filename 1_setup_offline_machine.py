@@ -72,14 +72,14 @@ class OfflineSetup:
             ], capture_output=True, text=True)
             
             if result.returncode == 0:
-                self.log(f"✅ pip is available: {result.stdout.strip()}")
+                self.log(f"[SUCCESS] pip is available: {result.stdout.strip()}")
                 return True
             else:
-                self.log(f"❌ pip check failed: {result.stderr}", "ERROR")
+                self.log(f"[ERROR] pip check failed: {result.stderr}", "ERROR")
                 return False
                 
         except Exception as e:
-            self.log(f"❌ Error checking pip: {e}", "ERROR")
+            self.log(f"[ERROR] Error checking pip: {e}", "ERROR")
             return False
     
     def upgrade_pip(self):
@@ -92,14 +92,14 @@ class OfflineSetup:
             ], capture_output=True, text=True)
             
             if result.returncode == 0:
-                self.log("✅ pip upgraded successfully")
+                self.log("[SUCCESS] pip upgraded successfully")
                 return True
             else:
-                self.log(f"⚠️ pip upgrade failed (continuing anyway): {result.stderr}", "WARNING")
+                self.log(f"[WARNING] pip upgrade failed (continuing anyway): {result.stderr}", "WARNING")
                 return True  # Continue even if upgrade fails
                 
         except Exception as e:
-            self.log(f"⚠️ Error upgrading pip (continuing anyway): {e}", "WARNING")
+            self.log(f"[WARNING] Error upgrading pip (continuing anyway): {e}", "WARNING")
             return True  # Continue even if upgrade fails
     
     def check_offline_packages(self):
@@ -112,10 +112,10 @@ class OfflineSetup:
         total_packages = len(wheel_files) + len(tar_files)
         
         if total_packages > 0:
-            self.log(f"✅ Found {total_packages} offline packages ({len(wheel_files)} wheels, {len(tar_files)} source)")
+            self.log(f"[SUCCESS] Found {total_packages} offline packages ({len(wheel_files)} wheels, {len(tar_files)} source)")
             return True
         else:
-            self.log("❌ No offline packages found", "WARNING")
+            self.log("[ERROR] No offline packages found", "WARNING")
             return False
     
     def install_from_offline(self):
@@ -135,9 +135,9 @@ class OfflineSetup:
                 capture_output=True, text=True)
                 
                 if result.returncode == 0:
-                    self.log("✅ Wheel packages installed successfully")
+                    self.log("[SUCCESS] Wheel packages installed successfully")
                 else:
-                    self.log(f"⚠️ Some wheel packages failed to install: {result.stderr}", "WARNING")
+                    self.log(f"[WARNING] Some wheel packages failed to install: {result.stderr}", "WARNING")
             
             # Install from requirements.txt using offline packages
             requirements_file = self.script_dir / "requirements.txt"
@@ -151,18 +151,18 @@ class OfflineSetup:
                 ], capture_output=True, text=True)
                 
                 if result.returncode == 0:
-                    self.log("✅ Requirements installed from offline packages")
+                    self.log("[SUCCESS] Requirements installed from offline packages")
                     return True
                 else:
-                    self.log(f"❌ Failed to install from requirements: {result.stderr}", "ERROR")
+                    self.log(f"[ERROR] Failed to install from requirements: {result.stderr}", "ERROR")
                     # Try individual package installation
                     return self.install_individual_packages()
             else:
-                self.log("❌ requirements.txt not found", "ERROR")
+                self.log("[ERROR] requirements.txt not found", "ERROR")
                 return False
                 
         except Exception as e:
-            self.log(f"❌ Error during offline installation: {e}", "ERROR")
+            self.log(f"[ERROR] Error during offline installation: {e}", "ERROR")
             return False
     
     def install_individual_packages(self):
@@ -189,19 +189,19 @@ class OfflineSetup:
                 ], capture_output=True, text=True)
                 
                 if result.returncode == 0:
-                    self.log(f"✅ {package} installed successfully")
+                    self.log(f"[SUCCESS] {package} installed successfully")
                     success_count += 1
                 else:
-                    self.log(f"❌ Failed to install {package}: {result.stderr}", "WARNING")
+                    self.log(f"[ERROR] Failed to install {package}: {result.stderr}", "WARNING")
                     
             except Exception as e:
-                self.log(f"❌ Error installing {package}: {e}", "WARNING")
+                self.log(f"[ERROR] Error installing {package}: {e}", "WARNING")
         
         if success_count > 0:
-            self.log(f"✅ Successfully installed {success_count}/{len(core_packages)} core packages")
+            self.log(f"[SUCCESS] Successfully installed {success_count}/{len(core_packages)} core packages")
             return True
         else:
-            self.log("❌ No packages could be installed from offline cache", "ERROR")
+            self.log("[ERROR] No packages could be installed from offline cache", "ERROR")
             return False
     
     def download_packages_for_offline(self):
@@ -212,14 +212,14 @@ class OfflineSetup:
         try:
             import urllib.request
             urllib.request.urlopen('https://pypi.org', timeout=10)
-            self.log("✅ Internet available, downloading packages...")
+            self.log("[SUCCESS] Internet available, downloading packages...")
         except Exception:
-            self.log("❌ No internet connection, cannot download packages", "WARNING")
+            self.log("[ERROR] No internet connection, cannot download packages", "WARNING")
             return False
         
         requirements_file = self.script_dir / "requirements.txt"
         if not requirements_file.exists():
-            self.log("❌ requirements.txt not found", "ERROR")
+            self.log("[ERROR] requirements.txt not found", "ERROR")
             return False
         
         try:
@@ -231,7 +231,7 @@ class OfflineSetup:
             ], capture_output=True, text=True)
             
             if result.returncode == 0:
-                self.log("✅ Packages downloaded for offline use")
+                self.log("[SUCCESS] Packages downloaded for offline use")
                 
                 # Create README for offline packages
                 readme_content = f"""# Offline Packages
@@ -255,11 +255,11 @@ python 1_setup_offline_machine.py
                 
                 return True
             else:
-                self.log(f"❌ Failed to download packages: {result.stderr}", "ERROR")
+                self.log(f"[ERROR] Failed to download packages: {result.stderr}", "ERROR")
                 return False
                 
         except Exception as e:
-            self.log(f"❌ Error downloading packages: {e}", "ERROR")
+            self.log(f"[ERROR] Error downloading packages: {e}", "ERROR")
             return False
     
     def verify_installation(self):
@@ -278,16 +278,16 @@ python 1_setup_offline_machine.py
         for package in packages_to_test:
             try:
                 __import__(package)
-                self.log(f"✅ {package} imported successfully")
+                self.log(f"[SUCCESS] {package} imported successfully")
                 success_count += 1
             except ImportError:
-                self.log(f"❌ {package} not available", "WARNING")
+                self.log(f"[ERROR] {package} not available", "WARNING")
         
         if success_count >= 2:  # At least pywinauto and pytest
-            self.log(f"✅ Verification passed ({success_count}/{len(packages_to_test)} packages working)")
+            self.log(f"[SUCCESS] Verification passed ({success_count}/{len(packages_to_test)} packages working)")
             return True
         else:
-            self.log(f"❌ Verification failed ({success_count}/{len(packages_to_test)} packages working)", "ERROR")
+            self.log(f"[ERROR] Verification failed ({success_count}/{len(packages_to_test)} packages working)", "ERROR")
             return False
     
     def run(self):
@@ -296,7 +296,7 @@ python 1_setup_offline_machine.py
         
         # Step 1: Check pip
         if not self.check_pip():
-            self.log("❌ Cannot proceed without pip", "ERROR")
+            self.log("[ERROR] Cannot proceed without pip", "ERROR")
             return False
         
         # Step 2: Upgrade pip
@@ -308,27 +308,27 @@ python 1_setup_offline_machine.py
         # Step 4: Try offline installation if packages available
         if has_offline:
             if self.install_from_offline():
-                self.log("✅ Offline installation completed")
+                self.log("[SUCCESS] Offline installation completed")
             else:
-                self.log("❌ Offline installation failed", "ERROR")
+                self.log("[ERROR] Offline installation failed", "ERROR")
         else:
             # Step 5: Try to download packages if internet available
             if self.download_packages_for_offline():
                 # Try installation again
                 if self.install_from_offline():
-                    self.log("✅ Installation completed after download")
+                    self.log("[SUCCESS] Installation completed after download")
                 else:
-                    self.log("❌ Installation failed even after download", "ERROR")
+                    self.log("[ERROR] Installation failed even after download", "ERROR")
             else:
-                self.log("❌ No offline packages and cannot download", "ERROR")
+                self.log("[ERROR] No offline packages and cannot download", "ERROR")
                 return False
         
         # Step 6: Verify installation
         if self.verify_installation():
-            self.log("✅ Offline setup completed successfully")
+            self.log("[SUCCESS] Offline setup completed successfully")
             return True
         else:
-            self.log("❌ Offline setup verification failed", "ERROR")
+            self.log("[ERROR] Offline setup verification failed", "ERROR")
             return False
 
 def main():
@@ -338,13 +338,13 @@ def main():
         success = setup.run()
         
         if success:
-            print("\n🎉 Offline setup completed successfully!")
+            print("\n[SUCCESS] Offline setup completed successfully!")
             print("\n📋 Next steps:")
             print("   1. Run: python 2_setup_new_machine_enhanced.py")
             print("   2. Or continue with: python 0_MASTER_INSTALLER.py")
             return True
         else:
-            print("\n❌ Offline setup failed.")
+            print("\n[ERROR] Offline setup failed.")
             print("\n📋 Troubleshooting:")
             print("   1. Check the log file in logs/ directory")
             print("   2. Ensure you have offline packages in offline_packages/")
@@ -352,10 +352,10 @@ def main():
             return False
             
     except KeyboardInterrupt:
-        print("\n\n⚠️ Setup cancelled by user.")
+        print("\n\n[WARNING] Setup cancelled by user.")
         return False
     except Exception as e:
-        print(f"\n❌ Unexpected error: {e}")
+        print(f"\n[ERROR] Unexpected error: {e}")
         return False
 
 if __name__ == "__main__":

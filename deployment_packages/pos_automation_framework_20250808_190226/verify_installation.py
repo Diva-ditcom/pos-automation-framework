@@ -11,7 +11,7 @@ import importlib.util
 
 def verify_framework():
     """Complete framework verification"""
-    print("🔍 POS Automation Framework - Verification")
+    print("[SEARCH] POS Automation Framework - Verification")
     print("=" * 45)
     
     results = {
@@ -27,10 +27,10 @@ def verify_framework():
     print("\n1. 🐍 Python Environment:")
     version = sys.version_info
     if version.major >= 3 and version.minor >= 8:
-        print(f"   ✅ Python {version.major}.{version.minor}.{version.micro} - Compatible")
+        print(f"   [SUCCESS] Python {version.major}.{version.minor}.{version.micro} - Compatible")
         results["python_environment"] = True
     else:
-        print(f"   ❌ Python {version.major}.{version.minor}.{version.micro} - Incompatible (need 3.8+)")
+        print(f"   [ERROR] Python {version.major}.{version.minor}.{version.micro} - Incompatible (need 3.8+)")
     
     # Check dependencies
     print("\n2. 📦 Dependencies:")
@@ -40,15 +40,15 @@ def verify_framework():
     for package in required_packages:
         try:
             __import__(package)
-            print(f"   ✅ {package} - Available")
+            print(f"   [SUCCESS] {package} - Available")
         except ImportError:
-            print(f"   ❌ {package} - Missing")
+            print(f"   [ERROR] {package} - Missing")
             all_deps_ok = False
     
     results["dependencies"] = all_deps_ok
     
     # Check framework components
-    print("\n3. 🔧 Framework Components:")
+    print("\n3. [CONFIG] Framework Components:")
     components = {
         "config/config.py": "Configuration",
         "data/csv_data_manager.py": "CSV Data Manager", 
@@ -62,9 +62,9 @@ def verify_framework():
     for path, name in components.items():
         full_path = os.path.join(base_dir, path)
         if os.path.exists(full_path):
-            print(f"   ✅ {name} - Found")
+            print(f"   [SUCCESS] {name} - Found")
         else:
-            print(f"   ❌ {name} - Missing")
+            print(f"   [ERROR] {name} - Missing")
             all_components_ok = False
     
     results["framework_components"] = all_components_ok
@@ -78,14 +78,14 @@ def verify_framework():
             if spec and spec.loader:
                 config_module = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(config_module)
-                print("   ✅ Configuration loads successfully")
+                print("   [SUCCESS] Configuration loads successfully")
                 results["configuration"] = True
             else:
-                print("   ❌ Configuration module spec failed")
+                print("   [ERROR] Configuration module spec failed")
         else:
-            print("   ❌ Configuration file not found")
+            print("   [ERROR] Configuration file not found")
     except Exception as e:
-        print(f"   ❌ Configuration failed: {e}")
+        print(f"   [ERROR] Configuration failed: {e}")
     
     # Check test discovery
     print("\n5. 🧪 Test Discovery:")
@@ -96,21 +96,21 @@ def verify_framework():
         
         if result.returncode == 0:
             test_count = result.stdout.count("test")
-            print(f"   ✅ Pytest discovers tests ({test_count} found)")
+            print(f"   [SUCCESS] Pytest discovers tests ({test_count} found)")
             results["test_discovery"] = True
         else:
-            print(f"   ❌ Test discovery failed")
+            print(f"   [ERROR] Test discovery failed")
     except Exception as e:
-        print(f"   ❌ Test discovery error: {e}")
+        print(f"   [ERROR] Test discovery error: {e}")
     
     # Check reports generation
-    print("\n6. 📊 Reports Generation:")
+    print("\n6. [REPORT] Reports Generation:")
     reports_dir = os.path.join(base_dir, "reports")
     if os.path.exists(reports_dir):
-        print("   ✅ Reports directory exists")
+        print("   [SUCCESS] Reports directory exists")
         results["reports_generation"] = True
     else:
-        print("   ❌ Reports directory missing")
+        print("   [ERROR] Reports directory missing")
     
     # Summary
     print("\n" + "=" * 45)
@@ -120,16 +120,16 @@ def verify_framework():
     total = len(results)
     
     for check, status in results.items():
-        icon = "✅" if status else "❌"
+        icon = "[SUCCESS]" if status else "[ERROR]"
         print(f"   {icon} {check.replace('_', ' ').title()}")
     
-    print(f"\n🎯 Overall Status: {passed}/{total} checks passed")
+    print(f"\n[TARGET] Overall Status: {passed}/{total} checks passed")
     
     if passed == total:
-        print("🎉 Framework verification PASSED! Ready for use.")
+        print("[SUCCESS] Framework verification PASSED! Ready for use.")
         return True
     else:
-        print("⚠️ Framework verification FAILED! Please check missing components.")
+        print("[WARNING] Framework verification FAILED! Please check missing components.")
         return False
 
 if __name__ == "__main__":

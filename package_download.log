@@ -1,0 +1,9 @@
+2025-08-08 20:21:10,005 - INFO - [SUCCESS] Internet connection verified
+2025-08-08 20:21:10,014 - INFO - [SUCCESS] Offline directory ready: C:\Myapps\wow\vibecoding\Projectsetup3-working signleflows\github\venv\Scripts\pywinauto\offline_packages
+2025-08-08 20:21:10,025 - INFO - [SUCCESS] Starting package download...
+2025-08-08 20:21:31,183 - INFO - [SUCCESS] Package download completed
+2025-08-08 20:21:31,191 - INFO - [SUCCESS] Downloaded 41 wheel files and 0 source packages
+2025-08-08 20:21:31,464 - INFO - [SUCCESS] Total download size: 45.9 MB
+2025-08-08 20:21:31,474 - INFO - [SUCCESS] Offline installer created: C:\Myapps\wow\vibecoding\Projectsetup3-working signleflows\github\venv\Scripts\pywinauto\offline_packages\install_offline_packages.py
+2025-08-08 20:21:31,488 - INFO - [SUCCESS] README created: C:\Myapps\wow\vibecoding\Projectsetup3-working signleflows\github\venv\Scripts\pywinauto\offline_packages\README.md
+2025-08-08 20:21:31,516 - INFO - [SUCCESS] Download report saved: C:\Myapps\wow\vibecoding\Projectsetup3-working signleflows\github\venv\Scripts\pywinauto\package_download_report.json

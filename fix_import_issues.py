@@ -9,7 +9,7 @@ import shutil
 from pathlib import Path
 
 def main():
-    print("🔧 Quick Fix for pywinauto Import Issues")
+    print("[CONFIG] Quick Fix for pywinauto Import Issues")
     print("=" * 50)
     
     current_dir = Path.cwd()
@@ -20,11 +20,11 @@ def main():
     if root_init.exists():
         try:
             root_init.unlink()
-            print(f"✅ Removed conflicting file: {root_init}")
+            print(f"[SUCCESS] Removed conflicting file: {root_init}")
         except Exception as e:
-            print(f"❌ Could not remove {root_init}: {e}")
+            print(f"[ERROR] Could not remove {root_init}: {e}")
     else:
-        print("✅ No conflicting __init__.py found in root")
+        print("[SUCCESS] No conflicting __init__.py found in root")
     
     # Clean all __pycache__ directories
     pycache_dirs = list(current_dir.rglob("__pycache__"))
@@ -34,21 +34,21 @@ def main():
             shutil.rmtree(pycache_dir)
             removed_count += 1
         except Exception as e:
-            print(f"⚠️ Could not remove {pycache_dir}: {e}")
+            print(f"[WARNING] Could not remove {pycache_dir}: {e}")
     
     if removed_count > 0:
-        print(f"✅ Cleaned {removed_count} __pycache__ directories")
+        print(f"[SUCCESS] Cleaned {removed_count} __pycache__ directories")
     else:
-        print("✅ No __pycache__ directories to clean")
+        print("[SUCCESS] No __pycache__ directories to clean")
     
     # Test the import
     print("\n🧪 Testing pywinauto import...")
     try:
         from pywinauto import Application
-        print("✅ pywinauto.Application imported successfully!")
-        print("🎉 Fix completed! You can now run the setup again.")
+        print("[SUCCESS] pywinauto.Application imported successfully!")
+        print("[SUCCESS] Fix completed! You can now run the setup again.")
     except Exception as e:
-        print(f"❌ Import still failing: {e}")
+        print(f"[ERROR] Import still failing: {e}")
         print("\n💡 Additional troubleshooting:")
         print("1. Try: pip uninstall pywinauto && pip install pywinauto")
         print("2. Ensure you're in the correct directory")

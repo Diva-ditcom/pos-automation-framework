@@ -19,11 +19,11 @@ def pos_session():
     
     # Setup: Launch and login to POS if not running
     if not pos.is_pos_running():
-        print("\n🚀 Launching POS application...")
+        print("\n[LAUNCH] Launching POS application...")
         assert pos.launch_pos(), "Failed to launch POS application"
         time.sleep(10)
     
-    print("\n🔗 Connecting to POS...")
+    print("\n[CONNECT] Connecting to POS...")
     assert pos.connect_to_pos(), "Failed to connect to POS"
     
     # Check if already logged in by looking for No Sale button
@@ -32,7 +32,7 @@ def pos_session():
         assert pos.login_to_pos(), "Failed to login to POS"
         assert pos.check_nosale(), "POS not ready after login"
     else:
-        print("\n✅ POS already logged in and ready")
+        print("\n[SUCCESS] POS already logged in and ready")
     
     yield pos
     
@@ -44,9 +44,9 @@ def pos_session():
         x = random.randint(rect.left + 50, rect.right - 50)
         y = random.randint(rect.top + 50, rect.bottom - 50)
         pos.win.click_input(coords=(x, y))
-        print(f"✅ Cleanup completed - clicked at ({x}, {y})")
+        print(f"[SUCCESS] Cleanup completed - clicked at ({x}, {y})")
     except Exception as e:
-        print(f"⚠️ Cleanup warning: {e}")
+        print(f"[WARNING] Cleanup warning: {e}")
 
 @pytest.fixture(scope="function")
 def pos_transaction(pos_session):
@@ -75,7 +75,7 @@ def capture_test_info(request):
     
     test_info['end_time'] = time.time()
     test_info['duration'] = test_info['end_time'] - test_info['start_time']
-    print(f"\n📊 Test '{test_info['name']}' completed in {test_info['duration']:.2f} seconds")
+    print(f"\n[REPORT] Test '{test_info['name']}' completed in {test_info['duration']:.2f} seconds")
 
 
 # Data-Driven Fixtures for CSV-based testing
@@ -99,7 +99,7 @@ def pos_automation_with_scenario(request):
             scenario_name = 'loyalty_cash_sale'
     
     if scenario_name:
-        print(f"\n🎯 Setting up test with scenario: {scenario_name}")
+        print(f"\n[TARGET] Setting up test with scenario: {scenario_name}")
         automation = POSAutomation(scenario_name)
         
         # Validate scenario data before test
@@ -109,7 +109,7 @@ def pos_automation_with_scenario(request):
         yield automation
     else:
         # Fallback to basic fixture
-        print("\n⚠️ No scenario detected, using basic automation")
+        print("\n[WARNING] No scenario detected, using basic automation")
         automation = POSAutomation()
         yield automation
 

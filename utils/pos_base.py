@@ -33,10 +33,10 @@ class POSAutomation:
         self.scenario_data = self.config.get_scenario_data(scenario_name)
         
         if self.scenario_data:
-            print(f"✅ Loaded data for scenario: {scenario_name}")
+            print(f"[SUCCESS] Loaded data for scenario: {scenario_name}")
             return True
         else:
-            print(f"❌ Failed to load data for scenario: {scenario_name}")
+            print(f"[ERROR] Failed to load data for scenario: {scenario_name}")
             return False
     
     def get_user_credentials(self):
@@ -61,11 +61,11 @@ class POSAutomation:
         """Launch the POS application using launch.bat."""
         try:
             subprocess.Popen([self.config.POS_LAUNCH_PATH], shell=True)
-            print(f"✅ Launched POS application using: {self.config.POS_LAUNCH_PATH}")
+            print(f"[SUCCESS] Launched POS application using: {self.config.POS_LAUNCH_PATH}")
             time.sleep(self.config.POS_STARTUP_WAIT)
             return True
         except Exception as e:
-            print(f"❌ Failed to launch POS application: {e}")
+            print(f"[ERROR] Failed to launch POS application: {e}")
             return False
     
     def is_pos_running(self):
@@ -84,7 +84,7 @@ class POSAutomation:
             self.win.set_focus()
             return True
         except Exception as e:
-            print(f"❌ Failed to connect to POS: {e}")
+            print(f"[ERROR] Failed to connect to POS: {e}")
             return False
     
     def login_to_pos(self, username=None, password=None):
@@ -104,9 +104,9 @@ class POSAutomation:
         if login_btn.exists(timeout=self.config.LOGIN_TIMEOUT):
             login_btn.wait("enabled", timeout=self.config.LOGIN_TIMEOUT)
             login_btn.click_input()
-            print("✅ Login button clicked.")
+            print("[SUCCESS] Login button clicked.")
         else:
-            print("❌ Login button not found after all attempts.")
+            print("[ERROR] Login button not found after all attempts.")
             return False
         
         # Enter username
@@ -122,12 +122,12 @@ class POSAutomation:
         if loginrc_btn.exists(timeout=self.config.LOGIN_TIMEOUT):
             loginrc_btn.wait("enabled", timeout=self.config.LOGIN_TIMEOUT)
             loginrc_btn.click_input()
-            print("✅ Sign-in OK button clicked.")
+            print("[SUCCESS] Sign-in OK button clicked.")
             time.sleep(2)
-            print("🎉 Login attempted. Check POS for success.")
+            print("[SUCCESS] Login attempted. Check POS for success.")
             return True
         else:
-            print("❌ Login OK button not found.")
+            print("[ERROR] Login OK button not found.")
             return False
     
     def _dismiss_overlays(self):
@@ -157,12 +157,12 @@ class POSAutomation:
             current_username = username_field.get_value() if hasattr(username_field, 'get_value') else username_field.window_text()
             if current_username.strip() != username:
                 username_field.type_keys(username, with_spaces=True)
-                print(f"✅ User ID field found and entered: {username}")
+                print(f"[SUCCESS] User ID field found and entered: {username}")
             else:
                 print(f"ℹ️ Username already present: {current_username}. Skipping entry.")
             return True
         else:
-            print("❌ User ID field not found.")
+            print("[ERROR] User ID field not found.")
             return False
     
     def _enter_password(self, password):
@@ -171,20 +171,20 @@ class POSAutomation:
         if password_field.exists(timeout=self.config.ELEMENT_WAIT):
             password_field.wait("ready", timeout=self.config.DEFAULT_TIMEOUT)
             password_field.type_keys(password, with_spaces=True)
-            print(f"✅ Password field found and entered: {'*' * len(password)}")
+            print(f"[SUCCESS] Password field found and entered: {'*' * len(password)}")
             return True
         else:
-            print("❌ Password field not found.")
+            print("[ERROR] Password field not found.")
             return False
     
     def check_nosale(self):
         """Check if the 'No Sale' button is enabled and visible."""
         nosale_btn = self.win.child_window(auto_id="commandsLowerButtonsNo Sale", control_type="Button")
         if nosale_btn.exists() and nosale_btn.is_visible():
-            print("✅ 'No Sale' button is enabled and exists.")
+            print("[SUCCESS] 'No Sale' button is enabled and exists.")
             return True
         else:
-            print("❌ 'No Sale' button is not enabled or does not exist.")
+            print("[ERROR] 'No Sale' button is not enabled or does not exist.")
             return False
     
     def click_button_by_text(self, button_text, timeout=None):
@@ -210,7 +210,7 @@ class POSAutomation:
             time.sleep(0.5)
             return True
         else:
-            print(f"❌ '{button_text}' button not found within timeout.")
+            print(f"[ERROR] '{button_text}' button not found within timeout.")
             return False
     
     def add_product_by_ean(self, ean):
@@ -225,16 +225,16 @@ class POSAutomation:
         print(f"Entering EAN: {ean}")
         for digit in str(ean):
             if not self.click_button_by_text(digit):
-                print(f"❌ Failed to enter digit: {digit}")
+                print(f"[ERROR] Failed to enter digit: {digit}")
                 return False
             time.sleep(0.2)
         
         # Click OK to add product
         if not self.click_button_by_text("OK"):
-            print("❌ Failed to click OK button")
+            print("[ERROR] Failed to click OK button")
             return False
         
-        print("✅ Product added successfully")
+        print("[SUCCESS] Product added successfully")
         return True
     
     def _clear_ean_field(self):
@@ -250,7 +250,7 @@ class POSAutomation:
                     if self.click_button_by_text("<<", timeout=2):
                         time.sleep(0.2)
             if cleared:
-                print("✅ EAN field cleared.")
+                print("[SUCCESS] EAN field cleared.")
                 break
     
     def handle_loyalty_popup(self):
@@ -264,10 +264,10 @@ class POSAutomation:
             if btn.window_text().strip().lower() == "cancel":
                 time.sleep(4)
                 btn.click_input()
-                print("✅ Clicked Cancel button on loyalty popup")
+                print("[SUCCESS] Clicked Cancel button on loyalty popup")
                 return True
         
-        print("❌ Cancel button not found on loyalty popup")
+        print("[ERROR] Cancel button not found on loyalty popup")
         return False
     
     def complete_cash_tender(self):
@@ -278,11 +278,11 @@ class POSAutomation:
             # Click Cash tender button
             tender_btn = self.win.child_window(auto_id="TenderButtonsCash", control_type="ListItem")
             if not tender_btn.exists():
-                print("❌ Cash tender button not found")
+                print("[ERROR] Cash tender button not found")
                 return False
             
             tender_btn.click_input()
-            print("✅ Clicked Cash tender button")
+            print("[SUCCESS] Clicked Cash tender button")
             time.sleep(1)
             
             # Select first suggested amount
@@ -290,9 +290,9 @@ class POSAutomation:
             list_items = cash_list.children(control_type="ListItem")
             if list_items:
                 list_items[0].click_input()
-                print(f"✅ Selected suggested amount: {list_items[0].window_text()}")
+                print(f"[SUCCESS] Selected suggested amount: {list_items[0].window_text()}")
             else:
-                print("❌ No suggested amounts found")
+                print("[ERROR] No suggested amounts found")
                 return False
             
             # Handle receipt popup
@@ -302,14 +302,14 @@ class POSAutomation:
             for btn in buttons:
                 if btn.window_text().strip().lower() == "yes":
                     btn.click_input()
-                    print("✅ Clicked Yes on receipt popup")
+                    print("[SUCCESS] Clicked Yes on receipt popup")
                     return True
             
-            print("❌ Yes button not found on receipt popup")
+            print("[ERROR] Yes button not found on receipt popup")
             return False
             
         except Exception as e:
-            print(f"❌ Error during tender process: {e}")
+            print(f"[ERROR] Error during tender process: {e}")
             return False
     
     # Data-Driven Methods for Scenario-Based Testing
@@ -320,7 +320,7 @@ class POSAutomation:
             print(f"🔐 Logging in with scenario credentials for: {credentials['username']}")
             return self.login(credentials['username'], credentials['password'])
         else:
-            print("❌ No valid credentials found in scenario data")
+            print("[ERROR] No valid credentials found in scenario data")
             return False
     
     def execute_scenario_add_item(self):
@@ -336,13 +336,13 @@ class POSAutomation:
             for i in range(quantity):
                 success = self.add_item_by_ean(ean_code)
                 if not success:
-                    print(f"❌ Failed to add item {i+1}/{quantity}")
+                    print(f"[ERROR] Failed to add item {i+1}/{quantity}")
                     return False
-                print(f"✅ Added item {i+1}/{quantity}")
+                print(f"[SUCCESS] Added item {i+1}/{quantity}")
             
             return True
         else:
-            print("❌ No valid item data found in scenario")
+            print("[ERROR] No valid item data found in scenario")
             return False
     
     def execute_scenario_payment(self):
@@ -357,13 +357,13 @@ class POSAutomation:
             
             # Handle loyalty if present
             if loyalty_number:
-                print(f"🎯 Loyalty number available: {loyalty_number}")
+                print(f"[TARGET] Loyalty number available: {loyalty_number}")
                 # You can add loyalty handling logic here
             
             # Complete cash transaction
             return self.complete_cash_transaction(cash_amount)
         else:
-            print("❌ No valid payment data found in scenario")
+            print("[ERROR] No valid payment data found in scenario")
             return False
     
     def add_item_by_ean(self, ean_code):
@@ -378,10 +378,10 @@ class POSAutomation:
             # enter_btn = self.win.child_window(auto_id="AddItemButton", control_type="Button")
             # enter_btn.click()
             
-            print(f"✅ Item with EAN {ean_code} added successfully")
+            print(f"[SUCCESS] Item with EAN {ean_code} added successfully")
             return True
         except Exception as e:
-            print(f"❌ Failed to add item with EAN {ean_code}: {e}")
+            print(f"[ERROR] Failed to add item with EAN {ean_code}: {e}")
             return False
     
     def complete_cash_transaction(self, cash_amount):
@@ -401,8 +401,8 @@ class POSAutomation:
             # complete_btn = self.win.child_window(auto_id="CompleteButton", control_type="Button")
             # complete_btn.click()
             
-            print(f"✅ Cash transaction completed with ${cash_amount}")
+            print(f"[SUCCESS] Cash transaction completed with ${cash_amount}")
             return True
         except Exception as e:
-            print(f"❌ Failed to complete cash transaction: {e}")
+            print(f"[ERROR] Failed to complete cash transaction: {e}")
             return False

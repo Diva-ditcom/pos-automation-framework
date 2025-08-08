@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🚀 MASTER POS AUTOMATION FRAMEWORK INSTALLER 🚀
+[LAUNCH] MASTER POS AUTOMATION FRAMEWORK INSTALLER [LAUNCH]
 ==================================================
 
 This is the ONE-CLICK master installer that will:
@@ -129,7 +129,7 @@ class MasterInstaller:
         
         offline_script = self.script_dir / "1_setup_offline_machine.py"
         if not offline_script.exists():
-            self.log("❌ Offline installer not found", "ERROR")
+            self.log("[ERROR] Offline installer not found", "ERROR")
             return False
         
         try:
@@ -145,7 +145,7 @@ class MasterInstaller:
                 return False
                 
         except Exception as e:
-            self.log(f"❌ Error running offline installer: {e}", "ERROR")
+            self.log(f"[ERROR] Error running offline installer: {e}", "ERROR")
             return False
     
     def setup_environment(self):
@@ -154,7 +154,7 @@ class MasterInstaller:
         
         setup_script = self.script_dir / "2_setup_new_machine_enhanced.py"
         if not setup_script.exists():
-            self.log("❌ Environment setup script not found", "ERROR")
+            self.log("[ERROR] Environment setup script not found", "ERROR")
             return False
         
         try:
@@ -171,7 +171,7 @@ class MasterInstaller:
                 return False
                 
         except Exception as e:
-            self.log(f"❌ Error running environment setup: {e}", "ERROR")
+            self.log(f"[ERROR] Error running environment setup: {e}", "ERROR")
             return False
     
     def setup_github(self):
@@ -186,7 +186,7 @@ class MasterInstaller:
         
         github_script = self.script_dir / "3_deploy_to_github.py"
         if not github_script.exists():
-            self.log("❌ GitHub deployment script not found", "ERROR")
+            self.log("[ERROR] GitHub deployment script not found", "ERROR")
             return False
         
         try:
@@ -196,14 +196,14 @@ class MasterInstaller:
             ], cwd=str(self.script_dir))
             
             if result.returncode == 0:
-                self.log("✅ GitHub setup completed successfully")
+                self.log("[SUCCESS] GitHub setup completed successfully")
                 return True
             else:
-                self.log("❌ GitHub setup failed", "WARNING")
+                self.log("[ERROR] GitHub setup failed", "WARNING")
                 return False
                 
         except Exception as e:
-            self.log(f"❌ Error running GitHub setup: {e}", "ERROR")
+            self.log(f"[ERROR] Error running GitHub setup: {e}", "ERROR")
             return False
     
     def verify_installation(self):
@@ -224,13 +224,13 @@ class MasterInstaller:
         for package in packages_to_test:
             try:
                 __import__(package)
-                self.log(f"✅ {package} imported successfully")
+                self.log(f"[SUCCESS] {package} imported successfully")
             except ImportError as e:
-                self.log(f"❌ Failed to import {package}: {e}", "ERROR")
+                self.log(f"[ERROR] Failed to import {package}: {e}", "ERROR")
                 failed_imports.append(package)
         
         if failed_imports:
-            self.log(f"❌ Some packages failed to import: {failed_imports}", "ERROR")
+            self.log(f"[ERROR] Some packages failed to import: {failed_imports}", "ERROR")
             return False
         
         # Try to run a simple test
@@ -240,14 +240,14 @@ class MasterInstaller:
             ], capture_output=True, text=True, cwd=str(self.script_dir))
             
             if result.returncode == 0:
-                self.log("✅ pytest is working correctly")
+                self.log("[SUCCESS] pytest is working correctly")
             else:
-                self.log("❌ pytest test failed", "WARNING")
+                self.log("[ERROR] pytest test failed", "WARNING")
                 
         except Exception as e:
-            self.log(f"❌ Error testing pytest: {e}", "WARNING")
+            self.log(f"[ERROR] Error testing pytest: {e}", "WARNING")
         
-        self.log("✅ Installation verification completed")
+        self.log("[SUCCESS] Installation verification completed")
         return True
     
     def print_summary(self, success_steps, failed_steps):
@@ -257,18 +257,18 @@ class MasterInstaller:
 ║                    📋 INSTALLATION SUMMARY                   ║
 ╠══════════════════════════════════════════════════════════════╣
 ║                                                              ║
-║  ✅ Successful Steps: {len(success_steps):2d}                                ║
-║  ❌ Failed Steps:     {len(failed_steps):2d}                                ║
+║  [SUCCESS] Successful Steps: {len(success_steps):2d}                                ║
+║  [ERROR] Failed Steps:     {len(failed_steps):2d}                                ║
 ║                                                              ║
 ╚══════════════════════════════════════════════════════════════╝
 
-✅ SUCCESSFUL STEPS:
+[SUCCESS] SUCCESSFUL STEPS:
 """
         for step in success_steps:
             summary += f"   • {step}\n"
             
         if failed_steps:
-            summary += f"\n❌ FAILED STEPS:\n"
+            summary += f"\n[ERROR] FAILED STEPS:\n"
             for step in failed_steps:
                 summary += f"   • {step}\n"
             
@@ -277,13 +277,13 @@ class MasterInstaller:
             summary += f"   2. Try running the failed steps manually\n"
             summary += f"   3. See README.md for troubleshooting\n"
         else:
-            summary += f"\n🎉 ALL STEPS COMPLETED SUCCESSFULLY!\n"
+            summary += f"\n[SUCCESS] ALL STEPS COMPLETED SUCCESSFULLY!\n"
             summary += f"\n📋 NEXT STEPS:\n"
             summary += f"   1. Run: python -m pytest tests/ -v\n"
             summary += f"   2. Check out the test reports in reports/\n"
             summary += f"   3. Read EXECUTION_GUIDE.md for usage instructions\n"
         
-        summary += f"\n📁 Log file: {self.log_file}\n"
+        summary += f"\n[FOLDER] Log file: {self.log_file}\n"
         
         print(summary)
         self.log("Installation summary printed")
@@ -354,17 +354,17 @@ def main():
         success = installer.run()
         
         if success:
-            print("\n🎉 Installation completed successfully!")
+            print("\n[SUCCESS] Installation completed successfully!")
             sys.exit(0)
         else:
-            print("\n❌ Installation completed with errors.")
+            print("\n[ERROR] Installation completed with errors.")
             sys.exit(1)
             
     except KeyboardInterrupt:
-        print("\n\n⚠️ Installation cancelled by user.")
+        print("\n\n[WARNING] Installation cancelled by user.")
         sys.exit(1)
     except Exception as e:
-        print(f"\n❌ Unexpected error: {e}")
+        print(f"\n[ERROR] Unexpected error: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":

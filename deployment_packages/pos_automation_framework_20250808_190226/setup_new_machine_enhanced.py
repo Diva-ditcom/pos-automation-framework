@@ -19,11 +19,11 @@ class FrameworkInstaller:
         
     def setup_framework(self):
         """Complete framework setup"""
-        print("🚀 POS Automation Framework - New Machine Setup")
+        print("[LAUNCH] POS Automation Framework - New Machine Setup")
         print("=" * 50)
         print(f"🖥️ Operating System: {self.system}")
         print(f"🐍 Python: {sys.version}")
-        print(f"📁 Installation Directory: {self.base_dir}")
+        print(f"[FOLDER] Installation Directory: {self.base_dir}")
         print()
         
         try:
@@ -45,22 +45,22 @@ class FrameworkInstaller:
             # Step 6: Setup VS Code (if available)
             self._setup_vscode()
             
-            print("\n🎉 Framework setup completed successfully!")
-            print("✅ Ready for POS automation testing")
+            print("\n[SUCCESS] Framework setup completed successfully!")
+            print("[SUCCESS] Ready for POS automation testing")
             
         except Exception as e:
-            print(f"\n❌ Setup failed: {e}")
+            print(f"\n[ERROR] Setup failed: {e}")
             sys.exit(1)
     
     def _check_python_environment(self):
         """Check Python version and environment"""
-        print("🔍 Checking Python environment...")
+        print("[SEARCH] Checking Python environment...")
         
         version = sys.version_info
         if version.major < 3 or (version.major == 3 and version.minor < 8):
             raise Exception(f"Python 3.8+ required, found {version.major}.{version.minor}")
         
-        print(f"  ✅ Python {version.major}.{version.minor}.{version.micro} - Compatible")
+        print(f"  [SUCCESS] Python {version.major}.{version.minor}.{version.micro} - Compatible")
     
     def _install_dependencies(self):
         """Install all required dependencies"""
@@ -69,7 +69,7 @@ class FrameworkInstaller:
         # Check if requirements.txt exists
         req_file = os.path.join(self.base_dir, "requirements.txt")
         if not os.path.exists(req_file):
-            print("  ⚠️ requirements.txt not found, creating basic one...")
+            print("  [WARNING] requirements.txt not found, creating basic one...")
             self._create_requirements_file()
         
         # Install packages
@@ -82,10 +82,10 @@ class FrameworkInstaller:
                 self.python_exe, "-m", "pip", "install", "-r", req_file
             ], check=True, capture_output=True)
             
-            print("  ✅ All dependencies installed successfully")
+            print("  [SUCCESS] All dependencies installed successfully")
             
         except subprocess.CalledProcessError as e:
-            print(f"  ❌ Failed to install dependencies: {e}")
+            print(f"  [ERROR] Failed to install dependencies: {e}")
             raise
     
     def _setup_virtual_environment(self):
@@ -99,10 +99,10 @@ class FrameworkInstaller:
                 subprocess.run([
                     self.python_exe, "-m", "venv", venv_dir
                 ], check=True)
-                print(f"  ✅ Virtual environment created: {venv_dir}")
+                print(f"  [SUCCESS] Virtual environment created: {venv_dir}")
                 print(f"  💡 Activate with: {venv_dir}/Scripts/activate (Windows) or source {venv_dir}/bin/activate (Linux/Mac)")
             except subprocess.CalledProcessError:
-                print("  ⚠️ Virtual environment creation failed, continuing without it")
+                print("  [WARNING] Virtual environment creation failed, continuing without it")
         else:
             print("  ⏭️ Skipping virtual environment creation")
     
@@ -118,19 +118,19 @@ class FrameworkInstaller:
         reports_dir = os.path.join(self.base_dir, "reports")
         os.makedirs(reports_dir, exist_ok=True)
         
-        print("  ✅ Directory structure created")
+        print("  [SUCCESS] Directory structure created")
         
         # Configure paths in config files if needed
         self._update_config_paths()
         
-        print("  ✅ Framework configured")
+        print("  [SUCCESS] Framework configured")
     
     def _update_config_paths(self):
         """Update configuration paths for current machine"""
         config_file = os.path.join(self.base_dir, "config", "config.py")
         if os.path.exists(config_file):
             # Update any hardcoded paths if necessary
-            print("  ✅ Configuration paths updated")
+            print("  [SUCCESS] Configuration paths updated")
     
     def _run_validation(self):
         """Run framework validation tests"""
@@ -145,14 +145,14 @@ class FrameworkInstaller:
                 ], capture_output=True, text=True, timeout=60)
                 
                 if result.returncode == 0:
-                    print("  ✅ All validation tests passed")
+                    print("  [SUCCESS] All validation tests passed")
                 else:
-                    print("  ⚠️ Some validation tests failed, but framework should still work")
+                    print("  [WARNING] Some validation tests failed, but framework should still work")
                     
             except subprocess.TimeoutExpired:
-                print("  ⚠️ Validation tests timed out, but framework should still work")
+                print("  [WARNING] Validation tests timed out, but framework should still work")
         else:
-            print("  ⚠️ Diagnostic script not found, skipping validation")
+            print("  [WARNING] Diagnostic script not found, skipping validation")
     
     def _setup_vscode(self):
         """Setup VS Code configuration if VS Code is available"""
@@ -161,16 +161,16 @@ class FrameworkInstaller:
         # Check if VS Code is available
         try:
             subprocess.run(["code", "--version"], capture_output=True, check=True)
-            print("  ✅ VS Code detected")
+            print("  [SUCCESS] VS Code detected")
             
             # Workspace file should already be copied
             workspace_file = os.path.join(self.base_dir, "pos-automation.code-workspace")
             if os.path.exists(workspace_file):
-                print(f"  ✅ VS Code workspace configured: {workspace_file}")
+                print(f"  [SUCCESS] VS Code workspace configured: {workspace_file}")
                 print("  💡 Open workspace with: code pos-automation.code-workspace")
             
         except (subprocess.CalledProcessError, FileNotFoundError):
-            print("  ⚠️ VS Code not found, skipping VS Code setup")
+            print("  [WARNING] VS Code not found, skipping VS Code setup")
     
     def _create_requirements_file(self):
         """Create basic requirements.txt if missing"""

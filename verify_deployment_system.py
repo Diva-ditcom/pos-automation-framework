@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🔍 DEPLOYMENT VERIFICATION SCRIPT
+[SEARCH] DEPLOYMENT VERIFICATION SCRIPT
 ================================
 
 This script verifies that the complete deployment system is working correctly.
@@ -52,7 +52,7 @@ class DeploymentVerifier:
         """Print banner"""
         banner = """
 ╔══════════════════════════════════════════════════════════════╗
-║           🔍 DEPLOYMENT SYSTEM VERIFICATION                  ║
+║           [SEARCH] DEPLOYMENT SYSTEM VERIFICATION                  ║
 ║                                                              ║
 ║  Comprehensive health check for the POS automation          ║
 ║  framework deployment system.                               ║
@@ -77,8 +77,8 @@ class DeploymentVerifier:
             "working_directory": str(self.script_dir)
         }
         
-        self.log(f"✅ Platform: {platform.system()}")
-        self.log(f"✅ Python: {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}")
+        self.log(f"[SUCCESS] Platform: {platform.system()}")
+        self.log(f"[SUCCESS] Python: {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}")
         
         return True
     
@@ -109,16 +109,16 @@ class DeploymentVerifier:
             }
             
             if exists:
-                self.log(f"✅ {file_path} - {description}")
+                self.log(f"[SUCCESS] {file_path} - {description}")
             else:
-                self.log(f"❌ {file_path} - {description}", "ERROR")
+                self.log(f"[ERROR] {file_path} - {description}", "ERROR")
                 missing_files.append(file_path)
         
         if missing_files:
-            self.log(f"❌ Missing files: {missing_files}", "ERROR")
+            self.log(f"[ERROR] Missing files: {missing_files}", "ERROR")
             return False
         
-        self.log("✅ All deployment files present")
+        self.log("[SUCCESS] All deployment files present")
         return True
     
     def check_project_structure(self):
@@ -141,9 +141,9 @@ class DeploymentVerifier:
             exists = full_path.exists() and full_path.is_dir()
             
             if exists:
-                self.log(f"✅ {dir_path}/ - {description}")
+                self.log(f"[SUCCESS] {dir_path}/ - {description}")
             else:
-                self.log(f"⚠️ {dir_path}/ - {description} (will be created if needed)", "WARNING")
+                self.log(f"[WARNING] {dir_path}/ - {description} (will be created if needed)", "WARNING")
         
         return True
     
@@ -154,7 +154,7 @@ class DeploymentVerifier:
         requirements_file = self.script_dir / "requirements.txt"
         
         if not requirements_file.exists():
-            self.log("❌ requirements.txt not found", "ERROR")
+            self.log("[ERROR] requirements.txt not found", "ERROR")
             return False
         
         try:
@@ -174,14 +174,14 @@ class DeploymentVerifier:
                     missing_packages.append(package)
             
             if missing_packages:
-                self.log(f"⚠️ Missing packages in requirements.txt: {missing_packages}", "WARNING")
+                self.log(f"[WARNING] Missing packages in requirements.txt: {missing_packages}", "WARNING")
             else:
-                self.log("✅ All core packages listed in requirements.txt")
+                self.log("[SUCCESS] All core packages listed in requirements.txt")
             
             return True
             
         except Exception as e:
-            self.log(f"❌ Error reading requirements.txt: {e}", "ERROR")
+            self.log(f"[ERROR] Error reading requirements.txt: {e}", "ERROR")
             return False
     
     def check_script_syntax(self):
@@ -220,14 +220,14 @@ class DeploymentVerifier:
                     "syntax_valid": True,
                     "error": None
                 }
-                self.log(f"✅ {script} - Syntax valid")
+                self.log(f"[SUCCESS] {script} - Syntax valid")
                 
             except SyntaxError as e:
                 self.results["script_checks"][script] = {
                     "syntax_valid": False,
                     "error": str(e)
                 }
-                self.log(f"❌ {script} - Syntax error: {e}", "ERROR")
+                self.log(f"[ERROR] {script} - Syntax error: {e}", "ERROR")
                 syntax_errors.append(script)
                 
             except Exception as e:
@@ -235,14 +235,14 @@ class DeploymentVerifier:
                     "syntax_valid": False,
                     "error": str(e)
                 }
-                self.log(f"❌ {script} - Error: {e}", "ERROR")
+                self.log(f"[ERROR] {script} - Error: {e}", "ERROR")
                 syntax_errors.append(script)
         
         if syntax_errors:
-            self.log(f"❌ Scripts with syntax errors: {syntax_errors}", "ERROR")
+            self.log(f"[ERROR] Scripts with syntax errors: {syntax_errors}", "ERROR")
             return False
         
-        self.log("✅ All deployment scripts have valid syntax")
+        self.log("[SUCCESS] All deployment scripts have valid syntax")
         return True
     
     def test_package_imports(self):
@@ -268,7 +268,7 @@ class DeploymentVerifier:
                     "error": None,
                     "description": description
                 }
-                self.log(f"✅ {package} - {description}")
+                self.log(f"[SUCCESS] {package} - {description}")
                 
             except ImportError as e:
                 self.results["package_checks"][package] = {
@@ -276,14 +276,14 @@ class DeploymentVerifier:
                     "error": str(e),
                     "description": description
                 }
-                self.log(f"❌ {package} - {description}: {e}", "ERROR")
+                self.log(f"[ERROR] {package} - {description}: {e}", "ERROR")
                 import_failures.append(package)
         
         if import_failures:
-            self.log(f"❌ Failed imports: {import_failures}", "ERROR")
+            self.log(f"[ERROR] Failed imports: {import_failures}", "ERROR")
             return False
         
-        self.log("✅ All core packages can be imported")
+        self.log("[SUCCESS] All core packages can be imported")
         return True
     
     def test_script_execution(self):
@@ -297,12 +297,12 @@ class DeploymentVerifier:
             ], capture_output=True, text=True, timeout=10)
             
             # Even if --help is not implemented, the script should load without syntax errors
-            self.log("✅ Master installer script loads successfully")
+            self.log("[SUCCESS] Master installer script loads successfully")
             
         except subprocess.TimeoutExpired:
-            self.log("⚠️ Master installer script runs (timeout expected for interactive script)", "WARNING")
+            self.log("[WARNING] Master installer script runs (timeout expected for interactive script)", "WARNING")
         except Exception as e:
-            self.log(f"❌ Master installer execution error: {e}", "ERROR")
+            self.log(f"[ERROR] Master installer execution error: {e}", "ERROR")
             return False
         
         return True
@@ -317,17 +317,17 @@ class DeploymentVerifier:
             ], capture_output=True, text=True)
             
             if result.returncode == 0:
-                self.log(f"✅ Git available: {result.stdout.strip()}")
+                self.log(f"[SUCCESS] Git available: {result.stdout.strip()}")
                 return True
             else:
-                self.log("❌ Git not working properly", "WARNING")
+                self.log("[ERROR] Git not working properly", "WARNING")
                 return False
                 
         except FileNotFoundError:
-            self.log("⚠️ Git not found (needed for GitHub deployment)", "WARNING")
+            self.log("[WARNING] Git not found (needed for GitHub deployment)", "WARNING")
             return False
         except Exception as e:
-            self.log(f"⚠️ Git check error: {e}", "WARNING")
+            self.log(f"[WARNING] Git check error: {e}", "WARNING")
             return False
     
     def check_internet_connectivity(self):
@@ -339,14 +339,14 @@ class DeploymentVerifier:
             response = urllib.request.urlopen('https://pypi.org', timeout=10)
             
             if response.getcode() == 200:
-                self.log("✅ Internet connectivity available (PyPI reachable)")
+                self.log("[SUCCESS] Internet connectivity available (PyPI reachable)")
                 return True
             else:
-                self.log("⚠️ Internet connectivity issues", "WARNING")
+                self.log("[WARNING] Internet connectivity issues", "WARNING")
                 return False
                 
         except Exception as e:
-            self.log(f"⚠️ No internet connectivity: {e}", "WARNING")
+            self.log(f"[WARNING] No internet connectivity: {e}", "WARNING")
             return False
     
     def create_verification_report(self):
@@ -376,9 +376,9 @@ class DeploymentVerifier:
         try:
             with open(report_file, "w") as f:
                 json.dump(self.results, f, indent=4)
-            self.log(f"✅ Verification report saved: {report_file}")
+            self.log(f"[SUCCESS] Verification report saved: {report_file}")
         except Exception as e:
-            self.log(f"⚠️ Could not save report: {e}", "WARNING")
+            self.log(f"[WARNING] Could not save report: {e}", "WARNING")
         
         return True
     
@@ -389,44 +389,44 @@ class DeploymentVerifier:
 ║                  📋 VERIFICATION SUMMARY                     ║
 ╠══════════════════════════════════════════════════════════════╣
 ║                                                              ║
-║  Overall Status: {'✅ PASS' if self.results['overall_status'] == 'PASS' else '❌ FAIL'}                                       ║
+║  Overall Status: {'[SUCCESS] PASS' if self.results['overall_status'] == 'PASS' else '[ERROR] FAIL'}                                       ║
 ║                                                              ║
 ║  System: {self.results['system_info']['platform']} {self.results['system_info']['python_version']}                          ║
 ║  Directory: {str(self.script_dir)[:45]}...║
 ║                                                              ║
 ╚══════════════════════════════════════════════════════════════╝
 
-📁 FILE CHECKS:
+[FOLDER] FILE CHECKS:
 """
         
         for file_name, result in self.results["file_checks"].items():
-            status = "✅" if result["exists"] else "❌"
+            status = "[SUCCESS]" if result["exists"] else "[ERROR]"
             summary += f"   {status} {file_name}\n"
         
         summary += f"\n🐍 PACKAGE CHECKS:\n"
         for package, result in self.results["package_checks"].items():
-            status = "✅" if result["importable"] else "❌"
+            status = "[SUCCESS]" if result["importable"] else "[ERROR]"
             summary += f"   {status} {package}\n"
         
         summary += f"\n📜 SCRIPT CHECKS:\n"
         for script, result in self.results["script_checks"].items():
-            status = "✅" if result["syntax_valid"] else "❌"
+            status = "[SUCCESS]" if result["syntax_valid"] else "[ERROR]"
             summary += f"   {status} {script}\n"
         
         if self.results["overall_status"] == "PASS":
-            summary += f"\n🎉 DEPLOYMENT SYSTEM IS READY!\n"
+            summary += f"\n[SUCCESS] DEPLOYMENT SYSTEM IS READY!\n"
             summary += f"\n📋 NEXT STEPS:\n"
             summary += f"   1. Run: python 0_MASTER_INSTALLER.py\n"
             summary += f"   2. Follow the prompts for setup\n"
             summary += f"   3. Check EXECUTION_GUIDE.md for details\n"
         else:
-            summary += f"\n❌ DEPLOYMENT SYSTEM NEEDS ATTENTION\n"
+            summary += f"\n[ERROR] DEPLOYMENT SYSTEM NEEDS ATTENTION\n"
             summary += f"\n📋 TROUBLESHOOTING:\n"
             summary += f"   1. Check log file: {self.log_file}\n"
             summary += f"   2. Fix missing files or syntax errors\n"
             summary += f"   3. Ensure all required files are present\n"
         
-        summary += f"\n📊 Full report: logs/verification_report_*.json\n"
+        summary += f"\n[REPORT] Full report: logs/verification_report_*.json\n"
         
         print(summary)
         self.log("Verification summary printed")
@@ -454,11 +454,11 @@ class DeploymentVerifier:
             try:
                 if check_function():
                     success_count += 1
-                    self.log(f"✅ {check_name} completed successfully")
+                    self.log(f"[SUCCESS] {check_name} completed successfully")
                 else:
-                    self.log(f"❌ {check_name} failed", "ERROR")
+                    self.log(f"[ERROR] {check_name} failed", "ERROR")
             except Exception as e:
-                self.log(f"❌ {check_name} error: {e}", "ERROR")
+                self.log(f"[ERROR] {check_name} error: {e}", "ERROR")
         
         self.log(f"\nVerification completed: {success_count}/{len(checks)} checks passed")
         
@@ -475,17 +475,17 @@ def main():
         success = verifier.run()
         
         if success:
-            print("\n🎉 Deployment system verification passed!")
+            print("\n[SUCCESS] Deployment system verification passed!")
             sys.exit(0)
         else:
-            print("\n❌ Deployment system verification failed.")
+            print("\n[ERROR] Deployment system verification failed.")
             sys.exit(1)
             
     except KeyboardInterrupt:
-        print("\n\n⚠️ Verification cancelled by user.")
+        print("\n\n[WARNING] Verification cancelled by user.")
         sys.exit(1)
     except Exception as e:
-        print(f"\n❌ Unexpected error during verification: {e}")
+        print(f"\n[ERROR] Unexpected error during verification: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":

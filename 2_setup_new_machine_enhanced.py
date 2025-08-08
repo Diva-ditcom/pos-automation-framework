@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🔧 ENHANCED MACHINE SETUP - STEP 2  
+[CONFIG] ENHANCED MACHINE SETUP - STEP 2  
 ==================================
 
 This script sets up the complete development environment for POS automation testing.
@@ -55,7 +55,7 @@ class EnhancedSetup:
         """Print banner"""
         banner = """
 ╔══════════════════════════════════════════════════════════════╗
-║            🔧 ENHANCED ENVIRONMENT SETUP                     ║
+║            [CONFIG] ENHANCED ENVIRONMENT SETUP                     ║
 ║                                                              ║
 ║  Setting up complete development environment for            ║
 ║  POS automation testing with maximum compatibility.         ║
@@ -73,10 +73,10 @@ class EnhancedSetup:
         self.log(f"Python version: {version.major}.{version.minor}.{version.micro}")
         
         if version.major < 3 or (version.major == 3 and version.minor < 7):
-            self.log("❌ Python 3.7+ required", "ERROR")
+            self.log("[ERROR] Python 3.7+ required", "ERROR")
             return False
         
-        self.log("✅ Python version is compatible")
+        self.log("[SUCCESS] Python version is compatible")
         return True
     
     def create_virtual_environment(self):
@@ -85,7 +85,7 @@ class EnhancedSetup:
         
         # Check if we're already in a virtual environment
         if hasattr(sys, 'real_prefix') or (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix):
-            self.log("✅ Already running in virtual environment")
+            self.log("[SUCCESS] Already running in virtual environment")
             return True
         
         # Create virtual environment if it doesn't exist
@@ -93,12 +93,12 @@ class EnhancedSetup:
             self.log("Creating virtual environment...")
             try:
                 venv.create(self.venv_dir, with_pip=True)
-                self.log("✅ Virtual environment created")
+                self.log("[SUCCESS] Virtual environment created")
             except Exception as e:
-                self.log(f"❌ Failed to create virtual environment: {e}", "ERROR")
+                self.log(f"[ERROR] Failed to create virtual environment: {e}", "ERROR")
                 return False
         else:
-            self.log("✅ Virtual environment already exists")
+            self.log("[SUCCESS] Virtual environment already exists")
         
         return True
     
@@ -134,14 +134,14 @@ class EnhancedSetup:
             )
             
             if result.returncode == 0:
-                self.log("✅ pip upgraded successfully")
+                self.log("[SUCCESS] pip upgraded successfully")
                 return True
             else:
-                self.log(f"⚠️ pip upgrade warning: {result.stderr}", "WARNING")
+                self.log(f"[WARNING] pip upgrade warning: {result.stderr}", "WARNING")
                 return True  # Continue even if upgrade fails
                 
         except Exception as e:
-            self.log(f"⚠️ pip upgrade error: {e}", "WARNING")
+            self.log(f"[WARNING] pip upgrade error: {e}", "WARNING")
             return True  # Continue even if upgrade fails
     
     def install_packages(self):
@@ -152,7 +152,7 @@ class EnhancedSetup:
         requirements_file = self.script_dir / "requirements.txt"
         
         if not requirements_file.exists():
-            self.log("❌ requirements.txt not found", "ERROR")
+            self.log("[ERROR] requirements.txt not found", "ERROR")
             return self.install_core_packages_manually()
         
         # Try installing from requirements.txt
@@ -163,14 +163,14 @@ class EnhancedSetup:
             )
             
             if result.returncode == 0:
-                self.log("✅ Packages installed from requirements.txt")
+                self.log("[SUCCESS] Packages installed from requirements.txt")
                 return True
             else:
-                self.log(f"❌ Requirements installation failed: {result.stderr}", "WARNING")
+                self.log(f"[ERROR] Requirements installation failed: {result.stderr}", "WARNING")
                 return self.install_core_packages_manually()
                 
         except Exception as e:
-            self.log(f"❌ Error installing requirements: {e}", "WARNING")
+            self.log(f"[ERROR] Error installing requirements: {e}", "WARNING")
             return self.install_core_packages_manually()
     
     def install_core_packages_manually(self):
@@ -199,7 +199,7 @@ class EnhancedSetup:
                 # Check if already installed
                 try:
                     __import__(package.replace("-", "_"))
-                    self.log(f"✅ {package} already installed")
+                    self.log(f"[SUCCESS] {package} already installed")
                     success_count += 1
                     continue
                 except ImportError:
@@ -212,19 +212,19 @@ class EnhancedSetup:
                 )
                 
                 if result.returncode == 0:
-                    self.log(f"✅ {package} installed successfully")
+                    self.log(f"[SUCCESS] {package} installed successfully")
                     success_count += 1
                 else:
-                    self.log(f"❌ Failed to install {package}: {result.stderr}", "WARNING")
+                    self.log(f"[ERROR] Failed to install {package}: {result.stderr}", "WARNING")
                     
             except Exception as e:
-                self.log(f"❌ Error installing {package}: {e}", "WARNING")
+                self.log(f"[ERROR] Error installing {package}: {e}", "WARNING")
         
         if success_count >= 3:  # At least pywinauto, pytest, and one other
-            self.log(f"✅ Core packages installed ({success_count}/{len(packages)})")
+            self.log(f"[SUCCESS] Core packages installed ({success_count}/{len(packages)})")
             return True
         else:
-            self.log(f"❌ Insufficient packages installed ({success_count}/{len(packages)})", "ERROR")
+            self.log(f"[ERROR] Insufficient packages installed ({success_count}/{len(packages)})", "ERROR")
             return False
     
     def setup_vscode_config(self):
@@ -259,9 +259,9 @@ class EnhancedSetup:
         try:
             with open(vscode_dir / "settings.json", "w") as f:
                 json.dump(settings, f, indent=4)
-            self.log("✅ VS Code settings configured")
+            self.log("[SUCCESS] VS Code settings configured")
         except Exception as e:
-            self.log(f"⚠️ VS Code settings error: {e}", "WARNING")
+            self.log(f"[WARNING] VS Code settings error: {e}", "WARNING")
         
         # Launch.json for debugging
         launch_config = {
@@ -290,9 +290,9 @@ class EnhancedSetup:
         try:
             with open(vscode_dir / "launch.json", "w") as f:
                 json.dump(launch_config, f, indent=4)
-            self.log("✅ VS Code launch configuration created")
+            self.log("[SUCCESS] VS Code launch configuration created")
         except Exception as e:
-            self.log(f"⚠️ VS Code launch config error: {e}", "WARNING")
+            self.log(f"[WARNING] VS Code launch config error: {e}", "WARNING")
         
         return True
     
@@ -322,14 +322,14 @@ class EnhancedSetup:
                     missing_items.append(f"{item} (file)")
         
         if missing_items:
-            self.log(f"❌ Missing project items: {missing_items}", "WARNING")
+            self.log(f"[ERROR] Missing project items: {missing_items}", "WARNING")
             # Create missing directories
             for item, item_type in required_items:
                 if item_type == "directory":
                     (self.script_dir / item).mkdir(exist_ok=True)
-            self.log("✅ Created missing directories")
+            self.log("[SUCCESS] Created missing directories")
         else:
-            self.log("✅ Project structure is valid")
+            self.log("[SUCCESS] Project structure is valid")
         
         return True
     
@@ -349,16 +349,16 @@ class EnhancedSetup:
         for package, description in packages_to_test:
             try:
                 __import__(package)
-                self.log(f"✅ {package} ({description}) imported successfully")
+                self.log(f"[SUCCESS] {package} ({description}) imported successfully")
                 success_count += 1
             except ImportError as e:
-                self.log(f"❌ {package} import failed: {e}", "WARNING")
+                self.log(f"[ERROR] {package} import failed: {e}", "WARNING")
         
         if success_count >= 2:  # At least pywinauto and pytest
-            self.log(f"✅ Import test passed ({success_count}/{len(packages_to_test)})")
+            self.log(f"[SUCCESS] Import test passed ({success_count}/{len(packages_to_test)})")
             return True
         else:
-            self.log(f"❌ Import test failed ({success_count}/{len(packages_to_test)})", "ERROR")
+            self.log(f"[ERROR] Import test failed ({success_count}/{len(packages_to_test)})", "ERROR")
             return False
     
     def run_basic_test(self):
@@ -405,9 +405,9 @@ if __name__ == "__main__":
             try:
                 with open(basic_test_file, "w") as f:
                     f.write(test_content)
-                self.log("✅ Basic test file created")
+                self.log("[SUCCESS] Basic test file created")
             except Exception as e:
-                self.log(f"⚠️ Could not create test file: {e}", "WARNING")
+                self.log(f"[WARNING] Could not create test file: {e}", "WARNING")
                 return True  # Continue anyway
         
         # Run the test
@@ -429,14 +429,14 @@ if __name__ == "__main__":
             )
             
             if result.returncode == 0:
-                self.log("✅ Basic test verification passed")
+                self.log("[SUCCESS] Basic test verification passed")
                 return True
             else:
-                self.log(f"⚠️ Basic test had issues: {result.stderr}", "WARNING")
+                self.log(f"[WARNING] Basic test had issues: {result.stderr}", "WARNING")
                 return True  # Continue anyway
                 
         except Exception as e:
-            self.log(f"⚠️ Could not run basic test: {e}", "WARNING")
+            self.log(f"[WARNING] Could not run basic test: {e}", "WARNING")
             return True  # Continue anyway
     
     def create_run_script(self):
@@ -491,11 +491,11 @@ echo "Check reports/test_report.html for detailed results."
             if os.name != 'nt':
                 os.chmod(script_file, 0o755)
             
-            self.log("✅ Test runner script created")
+            self.log("[SUCCESS] Test runner script created")
             return True
             
         except Exception as e:
-            self.log(f"⚠️ Could not create run script: {e}", "WARNING")
+            self.log(f"[WARNING] Could not create run script: {e}", "WARNING")
             return True  # Continue anyway
     
     def run(self):
@@ -561,14 +561,14 @@ echo "Check reports/test_report.html for detailed results."
             failed_steps.append("Test runner script creation")
         
         # Print summary
-        self.log(f"\n✅ Successful steps: {len(success_steps)}")
-        self.log(f"❌ Failed steps: {len(failed_steps)}")
+        self.log(f"\n[SUCCESS] Successful steps: {len(success_steps)}")
+        self.log(f"[ERROR] Failed steps: {len(failed_steps)}")
         
         if len(failed_steps) <= 2:  # Allow some non-critical failures
-            self.log("✅ Enhanced setup completed successfully")
+            self.log("[SUCCESS] Enhanced setup completed successfully")
             return True
         else:
-            self.log("❌ Enhanced setup completed with significant issues", "ERROR")
+            self.log("[ERROR] Enhanced setup completed with significant issues", "ERROR")
             return False
 
 def main():
@@ -578,7 +578,7 @@ def main():
         success = setup.run()
         
         if success:
-            print("\n🎉 Enhanced setup completed successfully!")
+            print("\n[SUCCESS] Enhanced setup completed successfully!")
             print("\n📋 Next steps:")
             print("   1. Run: python -m pytest tests/ -v")
             print("   2. Or use: run_tests.bat (Windows) / ./run_tests.sh (Unix)")
@@ -586,7 +586,7 @@ def main():
             print("   4. Or finish with: python 0_MASTER_INSTALLER.py")
             return True
         else:
-            print("\n❌ Enhanced setup completed with issues.")
+            print("\n[ERROR] Enhanced setup completed with issues.")
             print("\n📋 Troubleshooting:")
             print("   1. Check the log file in logs/ directory")
             print("   2. Try running individual steps manually")
@@ -594,10 +594,10 @@ def main():
             return False
             
     except KeyboardInterrupt:
-        print("\n\n⚠️ Setup cancelled by user.")
+        print("\n\n[WARNING] Setup cancelled by user.")
         return False
     except Exception as e:
-        print(f"\n❌ Unexpected error: {e}")
+        print(f"\n[ERROR] Unexpected error: {e}")
         return False
 
 if __name__ == "__main__":

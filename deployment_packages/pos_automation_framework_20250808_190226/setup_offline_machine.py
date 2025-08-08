@@ -12,7 +12,7 @@ from pathlib import Path
 def print_header(text):
     """Print a formatted header"""
     print("\n" + "=" * 60)
-    print(f"🚀 {text}")
+    print(f"[LAUNCH] {text}")
     print("=" * 60)
 
 
@@ -39,10 +39,10 @@ def check_python():
     
     success, output = run_command("python --version")
     if success:
-        print(f"✅ Python found: {output.strip()}")
+        print(f"[SUCCESS] Python found: {output.strip()}")
         return True
     else:
-        print("❌ Python not found!")
+        print("[ERROR] Python not found!")
         print("Please install Python 3.8+ from https://python.org")
         return False
 
@@ -66,10 +66,10 @@ def install_dependencies_offline():
         # Run the offline installation script
         result = subprocess.run([sys.executable, "install_offline_packages.py"], 
                               capture_output=True, text=True, check=True)
-        print("✅ Dependencies installed successfully from offline packages")
+        print("[SUCCESS] Dependencies installed successfully from offline packages")
         return True
     except subprocess.CalledProcessError as e:
-        print("❌ Failed to install dependencies from offline packages")
+        print("[ERROR] Failed to install dependencies from offline packages")
         print(f"Error: {e.stderr}")
         return False
 
@@ -79,15 +79,15 @@ def install_dependencies_online():
     print_step(2, "Installing dependencies from PyPI")
     
     if not os.path.exists("requirements.txt"):
-        print("❌ requirements.txt not found!")
+        print("[ERROR] requirements.txt not found!")
         return False
     
     success, output = run_command("pip install -r requirements.txt")
     if success:
-        print("✅ Dependencies installed successfully from PyPI")
+        print("[SUCCESS] Dependencies installed successfully from PyPI")
         return True
     else:
-        print("❌ Failed to install dependencies from PyPI")
+        print("[ERROR] Failed to install dependencies from PyPI")
         print(f"Error: {output}")
         return False
 
@@ -106,9 +106,9 @@ def test_framework_components():
         print(f"   Testing {name}...")
         success, output = run_command(f'python -c "{test_code}"')
         if success:
-            print(f"   ✅ {name} loaded successfully")
+            print(f"   [SUCCESS] {name} loaded successfully")
         else:
-            print(f"   ❌ {name} failed to load")
+            print(f"   [ERROR] {name} failed to load")
             print(f"   Error: {output}")
             return False
     
@@ -123,10 +123,10 @@ def test_pytest_discovery():
     if success:
         # Count tests discovered
         test_count = output.count("<Function")
-        print(f"✅ Pytest discovered {test_count} tests successfully")
+        print(f"[SUCCESS] Pytest discovered {test_count} tests successfully")
         return True
     else:
-        print("❌ Pytest test discovery failed")
+        print("[ERROR] Pytest test discovery failed")
         print(f"Error: {output}")
         return False
 
@@ -146,11 +146,11 @@ print("Available scenarios:", scenarios)
     
     success, output = run_command(f'python -c "{test_code}"')
     if success:
-        print("✅ CSV data loading successful")
+        print("[SUCCESS] CSV data loading successful")
         print("   " + output.replace("\n", "\n   "))
         return True
     else:
-        print("❌ CSV data loading failed")
+        print("[ERROR] CSV data loading failed")
         print(f"Error: {output}")
         return False
 
@@ -165,25 +165,25 @@ def display_next_steps():
     print("   3. Run tests: python run_tests.py")
     print("   4. Manage data: python manage_csv_data.py")
     
-    print("\n🎯 Quick commands:")
+    print("\n[TARGET] Quick commands:")
     print("   • Test framework: python run_tests.py")
     print("   • Manage data: python manage_csv_data.py")
     print("   • View help: python -m pytest --help")
     
-    print("\n📁 Important files to configure:")
+    print("\n[FOLDER] Important files to configure:")
     print("   • data\\app_settings.csv - Application configuration")
     print("   • data\\test_scenarios.csv - Test data")
     
-    print("\n🔧 Framework structure validated:")
-    print("   ✅ All Python modules loading correctly")
-    print("   ✅ All dependencies installed")
-    print("   ✅ Pytest discovering tests")
-    print("   ✅ CSV data management working")
+    print("\n[CONFIG] Framework structure validated:")
+    print("   [SUCCESS] All Python modules loading correctly")
+    print("   [SUCCESS] All dependencies installed")
+    print("   [SUCCESS] Pytest discovering tests")
+    print("   [SUCCESS] CSV data management working")
 
 
 def display_error_help():
     """Display troubleshooting help"""
-    print("\n❌ Setup failed! Troubleshooting tips:")
+    print("\n[ERROR] Setup failed! Troubleshooting tips:")
     print("   • Ensure you're running from the correct directory")
     print("   • Check if all files are present in the framework folder")
     print("   • For online installation: pip install --upgrade -r requirements.txt")
@@ -197,7 +197,7 @@ def choose_installation_method():
     offline_available = check_offline_packages()
     
     if offline_available:
-        print("\n🔧 Installation Options Available:")
+        print("\n[CONFIG] Installation Options Available:")
         print("   1. 📦 Offline installation (recommended for restricted networks)")
         print("   2. 🌐 Online installation (download from PyPI)")
         print("   3. 🔄 Auto-detect (try offline first, fallback to online)")
@@ -212,7 +212,7 @@ def choose_installation_method():
                 elif choice == "3":
                     return "auto"
                 else:
-                    print("❌ Invalid choice. Please enter 1, 2, or 3.")
+                    print("[ERROR] Invalid choice. Please enter 1, 2, or 3.")
             except KeyboardInterrupt:
                 print("\n\n👋 Setup cancelled by user")
                 return None

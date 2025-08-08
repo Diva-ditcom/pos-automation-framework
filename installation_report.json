@@ -1,0 +1,57 @@
+{
+  "installation_steps": [
+    {
+      "message": "Python version check passed: 3.13.2",
+      "success": true,
+      "timestamp": "C:\\Myapps\\wow\\vibecoding\\Projectsetup3-working signleflows\\github\\venv\\Scripts\\pywinauto"
+    },
+    {
+      "message": "pip is already available",
+      "success": true,
+      "timestamp": "C:\\Myapps\\wow\\vibecoding\\Projectsetup3-working signleflows\\github\\venv\\Scripts\\pywinauto"
+    },
+    {
+      "message": "Found 41 offline packages",
+      "success": true,
+      "timestamp": "C:\\Myapps\\wow\\vibecoding\\Projectsetup3-working signleflows\\github\\venv\\Scripts\\pywinauto"
+    },
+    {
+      "message": "Offline packages installed successfully",
+      "success": true,
+      "timestamp": "C:\\Myapps\\wow\\vibecoding\\Projectsetup3-working signleflows\\github\\venv\\Scripts\\pywinauto"
+    },
+    {
+      "message": "Package pytest is available",
+      "success": true,
+      "timestamp": "C:\\Myapps\\wow\\vibecoding\\Projectsetup3-working signleflows\\github\\venv\\Scripts\\pywinauto"
+    },
+    {
+      "message": "Package pywinauto is available",
+      "success": true,
+      "timestamp": "C:\\Myapps\\wow\\vibecoding\\Projectsetup3-working signleflows\\github\\venv\\Scripts\\pywinauto"
+    },
+    {
+      "message": "Package pandas is available",
+      "success": true,
+      "timestamp": "C:\\Myapps\\wow\\vibecoding\\Projectsetup3-working signleflows\\github\\venv\\Scripts\\pywinauto"
+    },
+    {
+      "message": "Package openpyxl is available",
+      "success": true,
+      "timestamp": "C:\\Myapps\\wow\\vibecoding\\Projectsetup3-working signleflows\\github\\venv\\Scripts\\pywinauto"
+    },
+    {
+      "message": "All required packages verified",
+      "success": true,
+      "timestamp": "C:\\Myapps\\wow\\vibecoding\\Projectsetup3-working signleflows\\github\\venv\\Scripts\\pywinauto"
+    },
+    {
+      "message": "Framework test passed",
+      "success": true,
+      "timestamp": "C:\\Myapps\\wow\\vibecoding\\Projectsetup3-working signleflows\\github\\venv\\Scripts\\pywinauto"
+    }
+  ],
+  "python_version": "3.13.2",
+  "platform": "win32",
+  "working_directory": "C:\\Myapps\\wow\\vibecoding\\Projectsetup3-working signleflows\\github\\venv\\Scripts\\pywinauto"
+}

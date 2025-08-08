@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🚀 GITHUB DEPLOYMENT - STEP 3
+[LAUNCH] GITHUB DEPLOYMENT - STEP 3
 =============================
 
 This script handles GitHub repository setup and deployment with maximum error handling.
@@ -55,7 +55,7 @@ class GitHubDeployer:
         """Print banner"""
         banner = """
 ╔══════════════════════════════════════════════════════════════╗
-║                🚀 GITHUB DEPLOYMENT SETUP                   ║
+║                [LAUNCH] GITHUB DEPLOYMENT SETUP                   ║
 ║                                                              ║
 ║  This will help you deploy your POS automation framework    ║
 ║  to GitHub with CI/CD integration and error handling.       ║
@@ -76,17 +76,17 @@ class GitHubDeployer:
             )
             
             if result.returncode == 0:
-                self.log(f"✅ Git is installed: {result.stdout.strip()}")
+                self.log(f"[SUCCESS] Git is installed: {result.stdout.strip()}")
                 return True
             else:
-                self.log("❌ Git is not installed", "ERROR")
+                self.log("[ERROR] Git is not installed", "ERROR")
                 return False
                 
         except FileNotFoundError:
-            self.log("❌ Git command not found", "ERROR")
+            self.log("[ERROR] Git command not found", "ERROR")
             return False
         except Exception as e:
-            self.log(f"❌ Error checking Git: {e}", "ERROR")
+            self.log(f"[ERROR] Error checking Git: {e}", "ERROR")
             return False
     
     def check_internet_connection(self):
@@ -96,14 +96,14 @@ class GitHubDeployer:
         try:
             response = urllib.request.urlopen('https://github.com', timeout=10)
             if response.getcode() == 200:
-                self.log("✅ GitHub is accessible")
+                self.log("[SUCCESS] GitHub is accessible")
                 return True
             else:
-                self.log(f"❌ GitHub returned status {response.getcode()}", "ERROR")
+                self.log(f"[ERROR] GitHub returned status {response.getcode()}", "ERROR")
                 return False
                 
         except Exception as e:
-            self.log(f"❌ Cannot reach GitHub: {e}", "ERROR")
+            self.log(f"[ERROR] Cannot reach GitHub: {e}", "ERROR")
             return False
     
     def load_or_create_config(self):
@@ -114,10 +114,10 @@ class GitHubDeployer:
             try:
                 with open(self.config_file, "r") as f:
                     config = json.load(f)
-                self.log("✅ Existing configuration loaded")
+                self.log("[SUCCESS] Existing configuration loaded")
                 return config
             except Exception as e:
-                self.log(f"⚠️ Could not load config: {e}", "WARNING")
+                self.log(f"[WARNING] Could not load config: {e}", "WARNING")
         
         # Create new configuration
         config = {
@@ -127,7 +127,7 @@ class GitHubDeployer:
             "created_at": datetime.now().isoformat()
         }
         
-        self.log("✅ New configuration created")
+        self.log("[SUCCESS] New configuration created")
         return config
     
     def save_config(self, config):
@@ -135,10 +135,10 @@ class GitHubDeployer:
         try:
             with open(self.config_file, "w") as f:
                 json.dump(config, f, indent=4)
-            self.log("✅ Configuration saved")
+            self.log("[SUCCESS] Configuration saved")
             return True
         except Exception as e:
-            self.log(f"⚠️ Could not save config: {e}", "WARNING")
+            self.log(f"[WARNING] Could not save config: {e}", "WARNING")
             return False
     
     def get_user_input(self, config):
@@ -158,7 +158,7 @@ class GitHubDeployer:
             username = input("GitHub username: ").strip()
         
         if not username:
-            self.log("❌ GitHub username is required", "ERROR")
+            self.log("[ERROR] GitHub username is required", "ERROR")
             return None
         
         config["username"] = username
@@ -187,7 +187,7 @@ class GitHubDeployer:
         visibility_choice = input("Choose [1]: ").strip()
         config["is_private"] = visibility_choice == "2"
         
-        self.log("✅ User configuration collected")
+        self.log("[SUCCESS] User configuration collected")
         return config
     
     def setup_git_config(self, config):
@@ -203,9 +203,9 @@ class GitHubDeployer:
             ], capture_output=True, text=True)
             
             if result.returncode == 0:
-                self.log(f"✅ Git user.name set to {username}")
+                self.log(f"[SUCCESS] Git user.name set to {username}")
             else:
-                self.log(f"⚠️ Could not set git user.name: {result.stderr}", "WARNING")
+                self.log(f"[WARNING] Could not set git user.name: {result.stderr}", "WARNING")
             
             # Set up email (if not already set)
             result = subprocess.run([
@@ -218,14 +218,14 @@ class GitHubDeployer:
                     subprocess.run([
                         "git", "config", "--global", "user.email", email
                     ], capture_output=True, text=True)
-                    self.log(f"✅ Git user.email set to {email}")
+                    self.log(f"[SUCCESS] Git user.email set to {email}")
             else:
-                self.log(f"✅ Git email already configured: {result.stdout.strip()}")
+                self.log(f"[SUCCESS] Git email already configured: {result.stdout.strip()}")
             
             return True
             
         except Exception as e:
-            self.log(f"❌ Error setting up Git config: {e}", "ERROR")
+            self.log(f"[ERROR] Error setting up Git config: {e}", "ERROR")
             return False
     
     def initialize_git_repository(self, config):
@@ -242,16 +242,16 @@ class GitHubDeployer:
                 ], capture_output=True, text=True, cwd=str(self.script_dir))
                 
                 if result.returncode == 0:
-                    self.log("✅ Git repository initialized")
+                    self.log("[SUCCESS] Git repository initialized")
                 else:
-                    self.log(f"❌ Git init failed: {result.stderr}", "ERROR")
+                    self.log(f"[ERROR] Git init failed: {result.stderr}", "ERROR")
                     return False
                     
             except Exception as e:
-                self.log(f"❌ Error initializing Git: {e}", "ERROR")
+                self.log(f"[ERROR] Error initializing Git: {e}", "ERROR")
                 return False
         else:
-            self.log("✅ Git repository already exists")
+            self.log("[SUCCESS] Git repository already exists")
         
         # Set default branch
         try:
@@ -259,9 +259,9 @@ class GitHubDeployer:
             subprocess.run([
                 "git", "branch", "-M", branch_name
             ], capture_output=True, text=True, cwd=str(self.script_dir))
-            self.log(f"✅ Default branch set to {branch_name}")
+            self.log(f"[SUCCESS] Default branch set to {branch_name}")
         except Exception as e:
-            self.log(f"⚠️ Could not set default branch: {e}", "WARNING")
+            self.log(f"[WARNING] Could not set default branch: {e}", "WARNING")
         
         return True
     
@@ -355,10 +355,10 @@ temp/
         try:
             with open(gitignore_file, "w") as f:
                 f.write(gitignore_content)
-            self.log("✅ .gitignore file created")
+            self.log("[SUCCESS] .gitignore file created")
             return True
         except Exception as e:
-            self.log(f"⚠️ Could not create .gitignore: {e}", "WARNING")
+            self.log(f"[WARNING] Could not create .gitignore: {e}", "WARNING")
             return True  # Continue anyway
     
     def create_github_workflow(self):
@@ -410,9 +410,9 @@ jobs:
     
     - name: Check framework integrity
       run: |
-        python -c "import pywinauto; print('✅ pywinauto imported successfully')"
-        python -c "import pytest; print('✅ pytest imported successfully')"
-        python -c "from config.config import Config; print('✅ Config loaded successfully')"
+        python -c "import pywinauto; print('[SUCCESS] pywinauto imported successfully')"
+        python -c "import pytest; print('[SUCCESS] pytest imported successfully')"
+        python -c "from config.config import Config; print('[SUCCESS] Config loaded successfully')"
 """
         
         workflow_file = self.script_dir / ".github" / "workflows" / "pos_automation_tests.yml"
@@ -420,10 +420,10 @@ jobs:
         try:
             with open(workflow_file, "w") as f:
                 f.write(workflow_content)
-            self.log("✅ GitHub Actions workflow created")
+            self.log("[SUCCESS] GitHub Actions workflow created")
             return True
         except Exception as e:
-            self.log(f"⚠️ Could not create workflow: {e}", "WARNING")
+            self.log(f"[WARNING] Could not create workflow: {e}", "WARNING")
             return True  # Continue anyway
     
     def add_and_commit_files(self, config):
@@ -437,9 +437,9 @@ jobs:
             ], capture_output=True, text=True, cwd=str(self.script_dir))
             
             if result.returncode == 0:
-                self.log("✅ Files added to Git")
+                self.log("[SUCCESS] Files added to Git")
             else:
-                self.log(f"❌ Git add failed: {result.stderr}", "ERROR")
+                self.log(f"[ERROR] Git add failed: {result.stderr}", "ERROR")
                 return False
             
             # Check if there are changes to commit
@@ -448,7 +448,7 @@ jobs:
             ], capture_output=True, text=True, cwd=str(self.script_dir))
             
             if not result.stdout.strip():
-                self.log("✅ No changes to commit")
+                self.log("[SUCCESS] No changes to commit")
                 return True
             
             # Commit files
@@ -459,14 +459,14 @@ jobs:
             ], capture_output=True, text=True, cwd=str(self.script_dir))
             
             if result.returncode == 0:
-                self.log("✅ Files committed to Git")
+                self.log("[SUCCESS] Files committed to Git")
                 return True
             else:
-                self.log(f"❌ Git commit failed: {result.stderr}", "ERROR")
+                self.log(f"[ERROR] Git commit failed: {result.stderr}", "ERROR")
                 return False
                 
         except Exception as e:
-            self.log(f"❌ Error committing files: {e}", "ERROR")
+            self.log(f"[ERROR] Error committing files: {e}", "ERROR")
             return False
     
     def setup_github_remote(self, config):
@@ -488,14 +488,14 @@ jobs:
             if result.returncode == 0:
                 current_url = result.stdout.strip()
                 if current_url == repo_url:
-                    self.log("✅ GitHub remote already configured correctly")
+                    self.log("[SUCCESS] GitHub remote already configured correctly")
                     return True
                 else:
                     # Update remote URL
                     subprocess.run([
                         "git", "remote", "set-url", "origin", repo_url
                     ], capture_output=True, text=True, cwd=str(self.script_dir))
-                    self.log(f"✅ GitHub remote updated to {repo_url}")
+                    self.log(f"[SUCCESS] GitHub remote updated to {repo_url}")
             else:
                 # Add new remote
                 result = subprocess.run([
@@ -503,15 +503,15 @@ jobs:
                 ], capture_output=True, text=True, cwd=str(self.script_dir))
                 
                 if result.returncode == 0:
-                    self.log(f"✅ GitHub remote added: {repo_url}")
+                    self.log(f"[SUCCESS] GitHub remote added: {repo_url}")
                 else:
-                    self.log(f"❌ Failed to add remote: {result.stderr}", "ERROR")
+                    self.log(f"[ERROR] Failed to add remote: {result.stderr}", "ERROR")
                     return False
             
             return True
             
         except Exception as e:
-            self.log(f"❌ Error setting up remote: {e}", "ERROR")
+            self.log(f"[ERROR] Error setting up remote: {e}", "ERROR")
             return False
     
     def push_to_github(self, config):
@@ -551,19 +551,19 @@ jobs:
             ], capture_output=True, text=True, cwd=str(self.script_dir))
             
             if result.returncode == 0:
-                self.log("✅ Code pushed to GitHub successfully")
+                self.log("[SUCCESS] Code pushed to GitHub successfully")
                 
                 # Print repository URL
                 username = config["username"]
                 repo_name = config["repository_name"]
                 repo_url = f"https://github.com/{username}/{repo_name}"
                 
-                print(f"\n🎉 Repository URL: {repo_url}")
-                print(f"📊 Actions URL: {repo_url}/actions")
+                print(f"\n[SUCCESS] Repository URL: {repo_url}")
+                print(f"[REPORT] Actions URL: {repo_url}/actions")
                 
                 return True
             else:
-                self.log(f"❌ Push failed: {result.stderr}", "ERROR")
+                self.log(f"[ERROR] Push failed: {result.stderr}", "ERROR")
                 
                 # Provide helpful error messages
                 if "Authentication failed" in result.stderr:
@@ -572,14 +572,14 @@ jobs:
                     print("2. Set up SSH key authentication")
                     print("3. Use GitHub CLI: gh auth login")
                 elif "Repository not found" in result.stderr:
-                    print(f"\n📁 Repository might not exist. Create it at:")
+                    print(f"\n[FOLDER] Repository might not exist. Create it at:")
                     print(f"   https://github.com/new")
                     print(f"   Repository name: {config['repository_name']}")
                 
                 return False
                 
         except Exception as e:
-            self.log(f"❌ Error pushing to GitHub: {e}", "ERROR")
+            self.log(f"[ERROR] Error pushing to GitHub: {e}", "ERROR")
             return False
     
     def create_repository_instructions(self, config):
@@ -591,7 +591,7 @@ jobs:
         is_private = config.get("is_private", False)
         
         instructions = f"""
-📁 GITHUB REPOSITORY SETUP INSTRUCTIONS
+[FOLDER] GITHUB REPOSITORY SETUP INSTRUCTIONS
 =======================================
 
 If the repository doesn't exist yet, create it manually:
@@ -603,9 +603,9 @@ If the repository doesn't exist yet, create it manually:
    - Repository name: {repo_name}
    - Description: POS Automation Testing Framework with pywinauto
    - Visibility: {'Private' if is_private else 'Public'}
-   - ✅ Add a README file: NO (we have one)
-   - ✅ Add .gitignore: NO (we have one)
-   - ✅ Choose a license: Optional
+   - [SUCCESS] Add a README file: NO (we have one)
+   - [SUCCESS] Add .gitignore: NO (we have one)
+   - [SUCCESS] Choose a license: Optional
 
 3. Click "Create repository"
 
@@ -613,7 +613,7 @@ If the repository doesn't exist yet, create it manually:
    git remote add origin https://github.com/{username}/{repo_name}.git
    git push -u origin main
 
-🔗 Repository URL: https://github.com/{username}/{repo_name}
+[CONNECT] Repository URL: https://github.com/{username}/{repo_name}
 🤖 Actions URL: https://github.com/{username}/{repo_name}/actions
 """
         
@@ -624,9 +624,9 @@ If the repository doesn't exist yet, create it manually:
             instructions_file = self.script_dir / "GITHUB_SETUP_INSTRUCTIONS.md"
             with open(instructions_file, "w") as f:
                 f.write(instructions)
-            self.log("✅ Setup instructions saved to GITHUB_SETUP_INSTRUCTIONS.md")
+            self.log("[SUCCESS] Setup instructions saved to GITHUB_SETUP_INSTRUCTIONS.md")
         except Exception as e:
-            self.log(f"⚠️ Could not save instructions: {e}", "WARNING")
+            self.log(f"[WARNING] Could not save instructions: {e}", "WARNING")
         
         return True
     
@@ -642,7 +642,7 @@ If the repository doesn't exist yet, create it manually:
             success_steps.append("Git installation check")
         else:
             failed_steps.append("Git installation check")
-            print("\n❌ Git is required. Install from: https://git-scm.com/")
+            print("\n[ERROR] Git is required. Install from: https://git-scm.com/")
             return False
         
         # Step 2: Check internet connection
@@ -650,7 +650,7 @@ If the repository doesn't exist yet, create it manually:
             success_steps.append("GitHub connectivity check")
         else:
             failed_steps.append("GitHub connectivity check")
-            print("\n❌ Cannot reach GitHub. Check your internet connection.")
+            print("\n[ERROR] Cannot reach GitHub. Check your internet connection.")
             return False
         
         # Step 3: Load/create configuration
@@ -719,14 +719,14 @@ If the repository doesn't exist yet, create it manually:
             failed_steps.append("Setup instructions")
         
         # Print summary
-        self.log(f"\n✅ Successful steps: {len(success_steps)}")
-        self.log(f"❌ Failed steps: {len(failed_steps)}")
+        self.log(f"\n[SUCCESS] Successful steps: {len(success_steps)}")
+        self.log(f"[ERROR] Failed steps: {len(failed_steps)}")
         
         if len(failed_steps) <= 3:  # Allow some non-critical failures
-            self.log("✅ GitHub deployment completed successfully")
+            self.log("[SUCCESS] GitHub deployment completed successfully")
             return True
         else:
-            self.log("❌ GitHub deployment completed with significant issues", "ERROR")
+            self.log("[ERROR] GitHub deployment completed with significant issues", "ERROR")
             return False
 
 def main():
@@ -736,7 +736,7 @@ def main():
         success = deployer.run()
         
         if success:
-            print("\n🎉 GitHub deployment completed!")
+            print("\n[SUCCESS] GitHub deployment completed!")
             print("\n📋 Next steps:")
             print("   1. Check your repository on GitHub")
             print("   2. GitHub Actions will run automatically on push")
@@ -744,7 +744,7 @@ def main():
             print("   4. Read GITHUB_SETUP_INSTRUCTIONS.md for details")
             return True
         else:
-            print("\n❌ GitHub deployment completed with issues.")
+            print("\n[ERROR] GitHub deployment completed with issues.")
             print("\n📋 Troubleshooting:")
             print("   1. Check the log file in logs/ directory")
             print("   2. Verify GitHub credentials and repository access")
@@ -752,10 +752,10 @@ def main():
             return False
             
     except KeyboardInterrupt:
-        print("\n\n⚠️ Deployment cancelled by user.")
+        print("\n\n[WARNING] Deployment cancelled by user.")
         return False
     except Exception as e:
-        print(f"\n❌ Unexpected error: {e}")
+        print(f"\n[ERROR] Unexpected error: {e}")
         return False
 
 if __name__ == "__main__":

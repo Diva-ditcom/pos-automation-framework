@@ -71,8 +71,8 @@ class TestPromotionCashSale:
         cash_completed = pos.complete_cash_tender()
         assert cash_completed, "Failed to complete cash tender"
         
-        print("\n🎉 TEST PASSED: Promotion cash sale completed successfully!")
-        print(f"📊 Promotion Summary: {promotion_data['summary']}")
+        print("\n[SUCCESS] TEST PASSED: Promotion cash sale completed successfully!")
+        print(f"[REPORT] Promotion Summary: {promotion_data['summary']}")
         
         # Final cleanup click
         self._cleanup_pos_window(pos)
@@ -142,18 +142,18 @@ class TestPromotionCashSale:
                         if price < 0 or any(keyword in name.lower() for keyword in ["promotion", "bonus", "discount"]):
                             promo_total += price
                             promotion_found = True
-                            print(f"      🎉 PROMOTION DETECTED!")
+                            print(f"      [SUCCESS] PROMOTION DETECTED!")
                     
                     if any(keyword in name.lower() for keyword in ["promotion", "bonus", "ff", "discount"]):
                         promotion_found = True
-                        print(f"      🎯 Promotion keyword found in: {name}")
+                        print(f"      [TARGET] Promotion keyword found in: {name}")
                 
                 # Update promotion data
                 promotion_data["total_amount"] = total
                 promotion_data["promotion_amount"] = promo_total
                 promotion_data["promotion_found"] = promotion_found
                 
-                print(f"\n📊 BASKET SUMMARY:")
+                print(f"\n[REPORT] BASKET SUMMARY:")
                 print(f"   Total Items: {len(items)}")
                 print(f"   Gross Amount: ${total:.2f}")
                 
@@ -166,23 +166,23 @@ class TestPromotionCashSale:
                     promotion_data["summary"] = f"Items: {len(items)}, Total: ${total:.2f}, No discount"
                 
                 if promotion_found:
-                    print("   ✅ Promotion items detected in basket")
+                    print("   [SUCCESS] Promotion items detected in basket")
                 else:
                     print("   ℹ️ No promotion items detected")
                 
-                print("✅ Enhanced basket analysis completed.")
+                print("[SUCCESS] Enhanced basket analysis completed.")
                 promotion_data["basket_verified"] = True
                 
                 time.sleep(3)
                 pos.click_button_by_text("OK")
                 return promotion_data
             else:
-                print("❌ Could not find basket/list control.")
+                print("[ERROR] Could not find basket/list control.")
                 pos.click_button_by_text("OK")
                 return promotion_data
                 
         except Exception as e:
-            print(f"❌ Error in basket analysis: {e}")
+            print(f"[ERROR] Error in basket analysis: {e}")
             return promotion_data
     
     def _cleanup_pos_window(self, pos):
@@ -196,4 +196,4 @@ class TestPromotionCashSale:
             pos.win.click_input(coords=(x, y))
             print(f"🧹 Cleanup: Clicked at ({x}, {y}) on POS window")
         except Exception as e:
-            print(f"⚠️ Cleanup warning: {e}")
+            print(f"[WARNING] Cleanup warning: {e}")

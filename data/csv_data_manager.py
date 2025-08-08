@@ -71,12 +71,12 @@ class CSVDataManager:
                         
                         self._settings_cache[setting_name] = setting_value
                 
-                print(f"✅ Loaded {len(self._settings_cache)} settings from CSV")
+                print(f"[SUCCESS] Loaded {len(self._settings_cache)} settings from CSV")
             except FileNotFoundError:
-                print(f"❌ Settings file not found: {self.settings_file}")
+                print(f"[ERROR] Settings file not found: {self.settings_file}")
                 return {}
             except Exception as e:
-                print(f"❌ Error loading settings: {str(e)}")
+                print(f"[ERROR] Error loading settings: {str(e)}")
                 return {}
         
         return self._settings_cache
@@ -86,10 +86,10 @@ class CSVDataManager:
         scenarios = self.load_scenarios()
         for scenario in scenarios:
             if scenario['scenario_name'] == scenario_name:
-                print(f"✅ Found data for scenario: {scenario_name}")
+                print(f"[SUCCESS] Found data for scenario: {scenario_name}")
                 return scenario
         
-        print(f"❌ No data found for scenario: {scenario_name}")
+        print(f"[ERROR] No data found for scenario: {scenario_name}")
         return None
     
     def get_setting(self, setting_name: str, default_value: Any = None) -> Any:
@@ -104,7 +104,7 @@ class CSVDataManager:
             existing_scenarios = self.load_scenarios()
             for scenario in existing_scenarios:
                 if scenario['scenario_name'] == scenario_data['scenario_name']:
-                    print(f"❌ Scenario '{scenario_data['scenario_name']}' already exists")
+                    print(f"[ERROR] Scenario '{scenario_data['scenario_name']}' already exists")
                     return False
             
             # Append to CSV file
@@ -117,11 +117,11 @@ class CSVDataManager:
             
             # Clear cache to reload data
             self._scenarios_cache = None
-            print(f"✅ Added new scenario: {scenario_data['scenario_name']}")
+            print(f"[SUCCESS] Added new scenario: {scenario_data['scenario_name']}")
             return True
             
         except Exception as e:
-            print(f"❌ Error adding scenario: {str(e)}")
+            print(f"[ERROR] Error adding scenario: {str(e)}")
             return False
     
     def list_available_scenarios(self) -> List[str]:
@@ -143,10 +143,10 @@ class CSVDataManager:
                 missing_fields.append(field)
         
         if missing_fields:
-            print(f"❌ Scenario '{scenario_name}' missing required fields: {missing_fields}")
+            print(f"[ERROR] Scenario '{scenario_name}' missing required fields: {missing_fields}")
             return False
         
-        print(f"✅ Scenario '{scenario_name}' data validation passed")
+        print(f"[SUCCESS] Scenario '{scenario_name}' data validation passed")
         return True
 
 

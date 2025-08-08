@@ -63,7 +63,7 @@ class TestBasicCashSale:
         cash_completed = pos.complete_cash_tender()
         assert cash_completed, "Failed to complete cash tender"
         
-        print("\n🎉 TEST PASSED: Basic cash sale completed successfully!")
+        print("\n[SUCCESS] TEST PASSED: Basic cash sale completed successfully!")
         
         # Final cleanup click
         self._cleanup_pos_window(pos)
@@ -92,19 +92,19 @@ class TestBasicCashSale:
                     txt = item.window_text()
                     print(f"- {txt}")
                     if "promotion" in txt.lower() or "bonus" in txt.lower():
-                        print(f"🎉 Promotion found: {txt}")
+                        print(f"[SUCCESS] Promotion found: {txt}")
                 
-                print("✅ Basket check completed.")
+                print("[SUCCESS] Basket check completed.")
                 time.sleep(2)
                 pos.click_button_by_text("OK")
                 return True
             else:
-                print("❌ Could not find basket")
+                print("[ERROR] Could not find basket")
                 pos.click_button_by_text("OK")
                 return False
                 
         except Exception as e:
-            print(f"❌ Error checking basket: {e}")
+            print(f"[ERROR] Error checking basket: {e}")
             return False
     
     def _cleanup_pos_window(self, pos):
@@ -118,4 +118,4 @@ class TestBasicCashSale:
             pos.win.click_input(coords=(x, y))
             print(f"🧹 Cleanup: Clicked at ({x}, {y}) on POS window")
         except Exception as e:
-            print(f"⚠️ Cleanup warning: {e}")
+            print(f"[WARNING] Cleanup warning: {e}")

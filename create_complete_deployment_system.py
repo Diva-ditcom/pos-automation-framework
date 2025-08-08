@@ -22,7 +22,7 @@ class CompleteFrameworkDeployer:
         
     def create_complete_deployment_package(self):
         """Create complete deployment package with all scenarios"""
-        print("🎯 Creating Complete POS Automation Deployment System")
+        print("[TARGET] Creating Complete POS Automation Deployment System")
         print("=" * 60)
         
         package_name = f"pos_automation_complete_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
@@ -30,7 +30,7 @@ class CompleteFrameworkDeployer:
         
         # Create package directory
         os.makedirs(package_dir, exist_ok=True)
-        print(f"📁 Created package directory: {package_dir}")
+        print(f"[FOLDER] Created package directory: {package_dir}")
         
         # Copy all framework files
         self._copy_framework_files(package_dir)
@@ -48,9 +48,9 @@ class CompleteFrameworkDeployer:
         # Create ZIP package
         zip_path = self._create_zip_package(package_dir)
         
-        print(f"\n🎉 Complete deployment system created!")
+        print(f"\n[SUCCESS] Complete deployment system created!")
         print(f"📦 Package: {zip_path}")
-        print(f"📁 Directory: {package_dir}")
+        print(f"[FOLDER] Directory: {package_dir}")
         
         return zip_path, package_dir
     
@@ -74,11 +74,11 @@ class CompleteFrameworkDeployer:
                 else:
                     os.makedirs(os.path.dirname(dst_path), exist_ok=True)
                     shutil.copy2(src_path, dst_path)
-                print(f"  ✅ Copied: {item}")
+                print(f"  [SUCCESS] Copied: {item}")
     
     def _create_offline_installer(self, package_dir):
         """Create setup_offline_machine.py - handles offline package installation"""
-        print("\n🔧 Creating offline installer...")
+        print("\n[CONFIG] Creating offline installer...")
         
         offline_content = '''#!/usr/bin/env python3
 """
@@ -106,7 +106,7 @@ class OfflineInstaller:
         print("=" * 60)
         print(f"🖥️ System: {self.system}")
         print(f"🐍 Python: {sys.version}")
-        print(f"📁 Base Directory: {self.base_dir}")
+        print(f"[FOLDER] Base Directory: {self.base_dir}")
         print()
         
         try:
@@ -120,24 +120,24 @@ class OfflineInstaller:
             # Verify installation
             self._verify_offline_installation()
             
-            print("\\n🎉 Offline package installation completed successfully!")
-            print("✅ Ready for project setup - run: python setup_new_machine_enhanced.py")
+            print("\\n[SUCCESS] Offline package installation completed successfully!")
+            print("[SUCCESS] Ready for project setup - run: python setup_new_machine_enhanced.py")
             
         except Exception as e:
-            print(f"\\n❌ Offline installation failed: {e}")
+            print(f"\\n[ERROR] Offline installation failed: {e}")
             self._provide_manual_instructions()
             
     def _check_offline_packages(self):
         """Check if offline packages directory exists"""
-        print("🔍 Checking offline packages...")
+        print("[SEARCH] Checking offline packages...")
         
         if os.path.exists(self.offline_packages_dir):
             wheels = list(Path(self.offline_packages_dir).glob("*.whl"))
             if wheels:
-                print(f"  ✅ Found {len(wheels)} offline packages")
+                print(f"  [SUCCESS] Found {len(wheels)} offline packages")
                 return True
         
-        print("  ⚠️ No offline packages found")
+        print("  [WARNING] No offline packages found")
         return False
     
     def _download_packages_if_possible(self):
@@ -165,15 +165,15 @@ class OfflineInstaller:
                 ], capture_output=True, text=True, timeout=30)
                 
                 if result.returncode == 0:
-                    print(f"    ✅ Downloaded {package}")
+                    print(f"    [SUCCESS] Downloaded {package}")
                 else:
-                    print(f"    ❌ Failed to download {package}")
+                    print(f"    [ERROR] Failed to download {package}")
             
-            print("  ✅ Package download completed")
+            print("  [SUCCESS] Package download completed")
             return True
             
         except (subprocess.TimeoutExpired, subprocess.CalledProcessError) as e:
-            print(f"  ❌ Download failed: {e}")
+            print(f"  [ERROR] Download failed: {e}")
             return False
     
     def _install_from_offline(self):
@@ -199,12 +199,12 @@ class OfflineInstaller:
                 ], capture_output=True, text=True)
                 
                 if result.returncode == 0:
-                    print(f"    ✅ Installed {wheel.name}")
+                    print(f"    [SUCCESS] Installed {wheel.name}")
                 else:
-                    print(f"    ⚠️ Warning installing {wheel.name}: {result.stderr}")
+                    print(f"    [WARNING] Warning installing {wheel.name}: {result.stderr}")
                     
             except Exception as e:
-                print(f"    ❌ Failed to install {wheel.name}: {e}")
+                print(f"    [ERROR] Failed to install {wheel.name}: {e}")
     
     def _install_direct_packages(self):
         """Install packages directly (fallback)"""
@@ -220,16 +220,16 @@ class OfflineInstaller:
                 ], capture_output=True, text=True, timeout=60)
                 
                 if result.returncode == 0:
-                    print(f"      ✅ Installed {package}")
+                    print(f"      [SUCCESS] Installed {package}")
                 else:
-                    print(f"      ⚠️ Warning with {package}")
+                    print(f"      [WARNING] Warning with {package}")
                     
             except Exception as e:
-                print(f"      ❌ Failed to install {package}: {e}")
+                print(f"      [ERROR] Failed to install {package}: {e}")
     
     def _verify_offline_installation(self):
         """Verify that packages were installed correctly"""
-        print("🔍 Verifying package installation...")
+        print("[SEARCH] Verifying package installation...")
         
         required_packages = ["pytest", "pywinauto"]
         all_ok = True
@@ -237,15 +237,15 @@ class OfflineInstaller:
         for package in required_packages:
             try:
                 __import__(package)
-                print(f"  ✅ {package} - Available")
+                print(f"  [SUCCESS] {package} - Available")
             except ImportError:
-                print(f"  ❌ {package} - Missing")
+                print(f"  [ERROR] {package} - Missing")
                 all_ok = False
         
         if not all_ok:
-            print("  ⚠️ Some packages missing, but framework may still work")
+            print("  [WARNING] Some packages missing, but framework may still work")
         else:
-            print("  ✅ All critical packages installed successfully")
+            print("  [SUCCESS] All critical packages installed successfully")
     
     def _provide_manual_instructions(self):
         """Provide manual installation instructions"""
@@ -277,11 +277,11 @@ if __name__ == "__main__":
         offline_file = os.path.join(package_dir, "1_setup_offline_machine.py")
         with open(offline_file, "w", encoding='utf-8') as f:
             f.write(offline_content)
-        print(f"  ✅ Created: 1_setup_offline_machine.py")
+        print(f"  [SUCCESS] Created: 1_setup_offline_machine.py")
     
     def _create_enhanced_project_setup(self, package_dir):
         """Create setup_new_machine_enhanced.py - handles project setup"""
-        print("🔧 Creating enhanced project setup...")
+        print("[CONFIG] Creating enhanced project setup...")
         
         setup_content = '''#!/usr/bin/env python3
 """
@@ -304,11 +304,11 @@ class ProjectSetup:
         
     def setup_project(self):
         """Complete project setup process"""
-        print("🚀 POS Automation Framework - Project Setup")
+        print("[LAUNCH] POS Automation Framework - Project Setup")
         print("=" * 50)
         print(f"🖥️ System: {self.system}")
         print(f"🐍 Python: {sys.version}")
-        print(f"📁 Project Directory: {self.base_dir}")
+        print(f"[FOLDER] Project Directory: {self.base_dir}")
         print()
         
         try:
@@ -330,23 +330,23 @@ class ProjectSetup:
             # Run validation
             self._run_project_validation()
             
-            print("\\n🎉 Project setup completed successfully!")
-            print("✅ Framework ready for use")
+            print("\\n[SUCCESS] Project setup completed successfully!")
+            print("[SUCCESS] Framework ready for use")
             print("📋 Next step: python 3_deploy_to_github.py (optional)")
             
         except Exception as e:
-            print(f"\\n❌ Project setup failed: {e}")
+            print(f"\\n[ERROR] Project setup failed: {e}")
             self._provide_troubleshooting()
             
     def _check_python_environment(self):
         """Check Python version and environment"""
-        print("🔍 Checking Python environment...")
+        print("[SEARCH] Checking Python environment...")
         
         version = sys.version_info
         if version.major < 3 or (version.major == 3 and version.minor < 8):
             raise Exception(f"Python 3.8+ required, found {version.major}.{version.minor}")
         
-        print(f"  ✅ Python {version.major}.{version.minor}.{version.micro} - Compatible")
+        print(f"  [SUCCESS] Python {version.major}.{version.minor}.{version.micro} - Compatible")
     
     def _verify_dependencies(self):
         """Verify that required dependencies are installed"""
@@ -362,24 +362,24 @@ class ProjectSetup:
         for package, description in required_packages.items():
             try:
                 __import__(package)
-                print(f"  ✅ {package} - {description}")
+                print(f"  [SUCCESS] {package} - {description}")
             except ImportError:
-                print(f"  ❌ {package} - Missing ({description})")
+                print(f"  [ERROR] {package} - Missing ({description})")
                 missing_packages.append(package)
         
         if missing_packages:
-            print(f"\\n⚠️ Missing packages: {', '.join(missing_packages)}")
+            print(f"\\n[WARNING] Missing packages: {', '.join(missing_packages)}")
             print("💡 Run: python 1_setup_offline_machine.py first")
             
             response = input("\\nContinue anyway? (y/n) [y]: ").lower()
             if response and response != 'y':
                 raise Exception("Dependencies not satisfied")
         else:
-            print("  ✅ All dependencies satisfied")
+            print("  [SUCCESS] All dependencies satisfied")
     
     def _setup_project_structure(self):
         """Setup project directory structure"""
-        print("📁 Setting up project structure...")
+        print("[FOLDER] Setting up project structure...")
         
         # Create required directories
         directories = ["logs", "reports", "temp"]
@@ -387,7 +387,7 @@ class ProjectSetup:
         for directory in directories:
             dir_path = os.path.join(self.base_dir, directory)
             os.makedirs(dir_path, exist_ok=True)
-            print(f"  ✅ Created/verified: {directory}/")
+            print(f"  [SUCCESS] Created/verified: {directory}/")
         
         # Create gitignore if not exists
         gitignore_path = os.path.join(self.base_dir, ".gitignore")
@@ -410,9 +410,9 @@ venv/
 """
             with open(gitignore_path, "w") as f:
                 f.write(gitignore_content)
-            print("  ✅ Created: .gitignore")
+            print("  [SUCCESS] Created: .gitignore")
         
-        print("  ✅ Project structure ready")
+        print("  [SUCCESS] Project structure ready")
     
     def _configure_vscode(self):
         """Configure VS Code workspace if available"""
@@ -421,17 +421,17 @@ venv/
         workspace_file = os.path.join(self.base_dir, "pos-automation.code-workspace")
         
         if os.path.exists(workspace_file):
-            print("  ✅ VS Code workspace file found")
+            print("  [SUCCESS] VS Code workspace file found")
             
             # Check if VS Code is available
             try:
                 subprocess.run(["code", "--version"], capture_output=True, check=True)
-                print("  ✅ VS Code available")
+                print("  [SUCCESS] VS Code available")
                 print(f"  💡 Open workspace: code {workspace_file}")
             except (subprocess.CalledProcessError, FileNotFoundError):
-                print("  ⚠️ VS Code not found, but workspace file ready")
+                print("  [WARNING] VS Code not found, but workspace file ready")
         else:
-            print("  ⚠️ VS Code workspace file not found")
+            print("  [WARNING] VS Code workspace file not found")
     
     def _test_framework_components(self):
         """Test that framework components are working"""
@@ -449,19 +449,19 @@ venv/
         for path, description in components.items():
             full_path = os.path.join(self.base_dir, path)
             if os.path.exists(full_path):
-                print(f"  ✅ {description}")
+                print(f"  [SUCCESS] {description}")
             else:
-                print(f"  ❌ {description} - Missing: {path}")
+                print(f"  [ERROR] {description} - Missing: {path}")
                 all_ok = False
         
         if not all_ok:
-            print("  ⚠️ Some components missing, but framework may still work")
+            print("  [WARNING] Some components missing, but framework may still work")
         else:
-            print("  ✅ All framework components present")
+            print("  [SUCCESS] All framework components present")
     
     def _run_project_validation(self):
         """Run project validation tests"""
-        print("🔍 Running project validation...")
+        print("[SEARCH] Running project validation...")
         
         # Run diagnostic script if available
         diagnostic_script = os.path.join(self.base_dir, "run_all_diagnostics.py")
@@ -474,22 +474,22 @@ venv/
                 ], capture_output=True, text=True, timeout=60)
                 
                 if result.returncode == 0:
-                    print("  ✅ All diagnostic tests passed")
+                    print("  [SUCCESS] All diagnostic tests passed")
                 else:
-                    print("  ⚠️ Some diagnostic tests failed, but framework should work")
+                    print("  [WARNING] Some diagnostic tests failed, but framework should work")
                     
             except subprocess.TimeoutExpired:
-                print("  ⚠️ Diagnostic tests timed out")
+                print("  [WARNING] Diagnostic tests timed out")
             except Exception as e:
-                print(f"  ⚠️ Could not run diagnostics: {e}")
+                print(f"  [WARNING] Could not run diagnostics: {e}")
         else:
-            print("  ⚠️ Diagnostic script not found")
+            print("  [WARNING] Diagnostic script not found")
         
-        print("  ✅ Project validation completed")
+        print("  [SUCCESS] Project validation completed")
     
     def _provide_troubleshooting(self):
         """Provide troubleshooting information"""
-        print("\\n🔧 TROUBLESHOOTING:")
+        print("\\n[CONFIG] TROUBLESHOOTING:")
         print("=" * 30)
         print("1. Check Python version: python --version (need 3.8+)")
         print("2. Install missing packages: python 1_setup_offline_machine.py")
@@ -505,11 +505,11 @@ if __name__ == "__main__":
         setup_file = os.path.join(package_dir, "2_setup_new_machine_enhanced.py")
         with open(setup_file, "w", encoding='utf-8') as f:
             f.write(setup_content)
-        print(f"  ✅ Created: 2_setup_new_machine_enhanced.py")
+        print(f"  [SUCCESS] Created: 2_setup_new_machine_enhanced.py")
     
     def _create_github_deployer(self, package_dir):
         """Create GitHub deployment script with maximum error handling"""
-        print("🔧 Creating GitHub deployer...")
+        print("[CONFIG] Creating GitHub deployer...")
         
         github_content = '''#!/usr/bin/env python3
 """
@@ -532,10 +532,10 @@ class GitHubDeployer:
         
     def deploy_to_github(self):
         """Complete GitHub deployment with maximum error handling"""
-        print("🚀 POS Automation Framework - GitHub Deployment")
+        print("[LAUNCH] POS Automation Framework - GitHub Deployment")
         print("=" * 55)
-        print(f"📁 Project Directory: {self.base_dir}")
-        print(f"🎯 Default Account: {self.default_account}")
+        print(f"[FOLDER] Project Directory: {self.base_dir}")
+        print(f"[TARGET] Default Account: {self.default_account}")
         print()
         
         try:
@@ -560,16 +560,16 @@ class GitHubDeployer:
             # Post-deployment verification
             self._verify_deployment()
             
-            print("\\n🎉 GitHub deployment completed successfully!")
+            print("\\n[SUCCESS] GitHub deployment completed successfully!")
             self._show_success_information()
             
         except Exception as e:
-            print(f"\\n❌ GitHub deployment failed: {e}")
+            print(f"\\n[ERROR] GitHub deployment failed: {e}")
             self._provide_deployment_troubleshooting()
             
     def _pre_deployment_checks(self):
         """Comprehensive pre-deployment checks"""
-        print("🔍 Pre-deployment checks...")
+        print("[SEARCH] Pre-deployment checks...")
         
         # Check if project is properly set up
         required_files = ["config/config.py", "tests/", "requirements.txt"]
@@ -580,25 +580,25 @@ class GitHubDeployer:
                 missing_files.append(file_path)
         
         if missing_files:
-            print(f"  ⚠️ Missing files: {missing_files}")
+            print(f"  [WARNING] Missing files: {missing_files}")
             print("  💡 Run: python 2_setup_new_machine_enhanced.py first")
             
             response = input("  Continue anyway? (y/n) [y]: ").lower()
             if response and response != 'y':
                 raise Exception("Project not properly set up")
         else:
-            print("  ✅ Project files present")
+            print("  [SUCCESS] Project files present")
     
     def _setup_git_environment(self):
         """Setup Git environment with error handling"""
-        print("🔧 Setting up Git environment...")
+        print("[CONFIG] Setting up Git environment...")
         
         # Check Git installation
         try:
             result = subprocess.run(["git", "--version"], capture_output=True, text=True, check=True)
-            print(f"  ✅ {result.stdout.strip()}")
+            print(f"  [SUCCESS] {result.stdout.strip()}")
         except (subprocess.CalledProcessError, FileNotFoundError):
-            print("  ❌ Git not found!")
+            print("  [ERROR] Git not found!")
             self._provide_git_installation_help()
             raise Exception("Git is not installed")
         
@@ -621,13 +621,13 @@ class GitHubDeployer:
                 name = name_result.stdout.strip()
                 email = email_result.stdout.strip()
                 if name and email:
-                    print(f"  ✅ Git user configured: {name} <{email}>")
+                    print(f"  [SUCCESS] Git user configured: {name} <{email}>")
                     return
         except Exception:
             pass
         
         # Need to configure user
-        print("  🔧 Git user not configured. Please provide details:")
+        print("  [CONFIG] Git user not configured. Please provide details:")
         
         while True:
             try:
@@ -637,14 +637,14 @@ class GitHubDeployer:
                 if user_name and user_email and "@" in user_email:
                     subprocess.run(["git", "config", "user.name", user_name], check=True)
                     subprocess.run(["git", "config", "user.email", user_email], check=True)
-                    print(f"  ✅ Git user configured: {user_name} <{user_email}>")
+                    print(f"  [SUCCESS] Git user configured: {user_name} <{user_email}>")
                     break
                 else:
-                    print("    ❌ Please provide valid name and email")
+                    print("    [ERROR] Please provide valid name and email")
             except KeyboardInterrupt:
                 raise Exception("User cancelled Git configuration")
             except Exception as e:
-                print(f"    ❌ Configuration failed: {e}")
+                print(f"    [ERROR] Configuration failed: {e}")
     
     def _configure_git_settings(self):
         """Configure Git settings for better compatibility"""
@@ -663,7 +663,7 @@ class GitHubDeployer:
             except:
                 pass  # Ignore errors in git config
         
-        print("  ✅ Git settings configured")
+        print("  [SUCCESS] Git settings configured")
     
     def _initialize_repository(self):
         """Initialize Git repository with error handling"""
@@ -672,12 +672,12 @@ class GitHubDeployer:
         git_dir = os.path.join(self.base_dir, ".git")
         
         if os.path.exists(git_dir):
-            print("  ✅ Git repository already initialized")
+            print("  [SUCCESS] Git repository already initialized")
             return
         
         try:
             subprocess.run(["git", "init"], cwd=self.base_dir, check=True)
-            print("  ✅ Git repository initialized")
+            print("  [SUCCESS] Git repository initialized")
         except subprocess.CalledProcessError as e:
             raise Exception(f"Failed to initialize Git repository: {e}")
     
@@ -686,7 +686,7 @@ class GitHubDeployer:
         print("🌐 Setting up GitHub remote...")
         
         # Get account and repository details
-        print(f"  🎯 Default account: {self.default_account}")
+        print(f"  [TARGET] Default account: {self.default_account}")
         account = input(f"    GitHub account [{self.default_account}]: ").strip()
         if not account:
             account = self.default_account
@@ -705,22 +705,22 @@ class GitHubDeployer:
             
             if result.returncode == 0:
                 current_url = result.stdout.strip()
-                print(f"  ✅ Remote already exists: {current_url}")
+                print(f"  [SUCCESS] Remote already exists: {current_url}")
                 
                 if current_url != remote_url:
                     response = input(f"    Change to {remote_url}? (y/n) [n]: ").lower()
                     if response == 'y':
                         subprocess.run(["git", "remote", "set-url", "origin", remote_url], 
                                      cwd=self.base_dir, check=True)
-                        print(f"  ✅ Remote updated to: {remote_url}")
+                        print(f"  [SUCCESS] Remote updated to: {remote_url}")
             else:
                 # Add new remote
                 subprocess.run(["git", "remote", "add", "origin", remote_url], 
                              cwd=self.base_dir, check=True)
-                print(f"  ✅ Remote added: {remote_url}")
+                print(f"  [SUCCESS] Remote added: {remote_url}")
                 
         except subprocess.CalledProcessError as e:
-            print(f"  ⚠️ Remote setup issue: {e}")
+            print(f"  [WARNING] Remote setup issue: {e}")
             print(f"  💡 Make sure repository exists: https://github.com/{account}/{repo_name}")
             
             response = input("    Continue anyway? (y/n) [y]: ").lower()
@@ -740,9 +740,9 @@ class GitHubDeployer:
                                   cwd=self.base_dir, capture_output=True, text=True, check=True)
             
             if result.stdout.strip():
-                print("  ✅ Files staged for commit")
+                print("  [SUCCESS] Files staged for commit")
             else:
-                print("  ⚠️ No changes to commit")
+                print("  [WARNING] No changes to commit")
                 
         except subprocess.CalledProcessError as e:
             raise Exception(f"Failed to prepare files for commit: {e}")
@@ -756,12 +756,12 @@ class GitHubDeployer:
             commit_message = f"Complete POS Automation Framework deployment - {Path().cwd().name}"
             subprocess.run(["git", "commit", "-m", commit_message], 
                          cwd=self.base_dir, check=True)
-            print("  ✅ Changes committed")
+            print("  [SUCCESS] Changes committed")
         except subprocess.CalledProcessError as e:
             if "nothing to commit" in str(e):
-                print("  ⚠️ Nothing to commit")
+                print("  [WARNING] Nothing to commit")
             else:
-                print(f"  ❌ Commit failed: {e}")
+                print(f"  [ERROR] Commit failed: {e}")
                 raise Exception("Commit failed")
         
         # Push with retry and SSL handling
@@ -769,7 +769,7 @@ class GitHubDeployer:
     
     def _push_with_retry(self):
         """Push to GitHub with retry logic and SSL handling"""
-        print("  🚀 Pushing to GitHub...")
+        print("  [LAUNCH] Pushing to GitHub...")
         
         max_retries = 3
         
@@ -783,32 +783,32 @@ class GitHubDeployer:
                                       cwd=self.base_dir, capture_output=True, text=True, timeout=60)
                 
                 if result.returncode == 0:
-                    print("  ✅ Successfully pushed to GitHub")
+                    print("  [SUCCESS] Successfully pushed to GitHub")
                     return
                 else:
                     error_msg = result.stderr.lower()
                     
                     # Handle SSL issues
                     if "ssl" in error_msg or "certificate" in error_msg:
-                        print("    ⚠️ SSL issue detected, trying workaround...")
+                        print("    [WARNING] SSL issue detected, trying workaround...")
                         self._handle_ssl_issues()
                         continue
                     
                     # Handle authentication issues
                     if "authentication" in error_msg or "permission denied" in error_msg:
-                        print("    ⚠️ Authentication issue detected")
+                        print("    [WARNING] Authentication issue detected")
                         self._handle_authentication_issues()
                         continue
                     
-                    print(f"    ❌ Push failed: {result.stderr}")
+                    print(f"    [ERROR] Push failed: {result.stderr}")
                     
             except subprocess.TimeoutExpired:
-                print("    ⚠️ Push timed out")
+                print("    [WARNING] Push timed out")
             except Exception as e:
-                print(f"    ❌ Push error: {e}")
+                print(f"    [ERROR] Push error: {e}")
         
         # If all retries failed
-        print("  ❌ Push failed after all retries")
+        print("  [ERROR] Push failed after all retries")
         self._provide_push_troubleshooting()
     
     def _handle_ssl_issues(self):
@@ -826,11 +826,11 @@ class GitHubDeployer:
                          cwd=self.base_dir, check=True)
             
             if result.returncode == 0:
-                print("    ✅ SSL workaround successful")
+                print("    [SUCCESS] SSL workaround successful")
                 return True
                 
         except Exception as e:
-            print(f"    ❌ SSL workaround failed: {e}")
+            print(f"    [ERROR] SSL workaround failed: {e}")
         
         return False
     
@@ -847,7 +847,7 @@ class GitHubDeployer:
     
     def _verify_deployment(self):
         """Verify GitHub deployment"""
-        print("🔍 Verifying deployment...")
+        print("[SEARCH] Verifying deployment...")
         
         try:
             # Check remote status
@@ -855,7 +855,7 @@ class GitHubDeployer:
                                   cwd=self.base_dir, capture_output=True, text=True, check=True)
             
             if "origin" in result.stdout:
-                print("  ✅ Remote repository configured")
+                print("  [SUCCESS] Remote repository configured")
                 for line in result.stdout.strip().split('\\n'):
                     if 'origin' in line and 'fetch' in line:
                         remote_url = line.split()[1]
@@ -867,12 +867,12 @@ class GitHubDeployer:
                                   cwd=self.base_dir, capture_output=True, text=True)
             
             if result.returncode == 0 and result.stdout.strip():
-                print(f"  ✅ Last commit: {result.stdout.strip()}")
+                print(f"  [SUCCESS] Last commit: {result.stdout.strip()}")
             
-            print("  ✅ Deployment verification completed")
+            print("  [SUCCESS] Deployment verification completed")
             
         except subprocess.CalledProcessError:
-            print("  ⚠️ Could not fully verify deployment")
+            print("  [WARNING] Could not fully verify deployment")
     
     def _show_success_information(self):
         """Show success information and next steps"""
@@ -886,16 +886,16 @@ class GitHubDeployer:
             if result.returncode == 0:
                 repo_url = result.stdout.strip().replace('.git', '')
                 print(f"📍 Repository: {repo_url}")
-                print(f"🎯 Actions: {repo_url}/actions")
-                print(f"📊 Insights: {repo_url}/pulse")
+                print(f"[TARGET] Actions: {repo_url}/actions")
+                print(f"[REPORT] Insights: {repo_url}/pulse")
         except:
             pass
         
         print("\\n📋 What happens next:")
-        print("  ✅ GitHub Actions workflow will run automatically")
-        print("  ✅ Tests will execute in CI/CD environment")
-        print("  ✅ HTML reports will be generated")
-        print("  ✅ Framework ready for team collaboration")
+        print("  [SUCCESS] GitHub Actions workflow will run automatically")
+        print("  [SUCCESS] Tests will execute in CI/CD environment")
+        print("  [SUCCESS] HTML reports will be generated")
+        print("  [SUCCESS] Framework ready for team collaboration")
         
         print("\\n🛠️ Available commands:")
         print("  git status          - Check repository status")
@@ -914,7 +914,7 @@ class GitHubDeployer:
     
     def _provide_deployment_troubleshooting(self):
         """Provide comprehensive troubleshooting"""
-        print("\\n🔧 GITHUB DEPLOYMENT TROUBLESHOOTING:")
+        print("\\n[CONFIG] GITHUB DEPLOYMENT TROUBLESHOOTING:")
         print("=" * 45)
         print("1. Repository Issues:")
         print("   - Make sure repository exists on GitHub")
@@ -944,11 +944,11 @@ if __name__ == "__main__":
         github_file = os.path.join(package_dir, "3_deploy_to_github.py")
         with open(github_file, "w", encoding='utf-8') as f:
             f.write(github_content)
-        print(f"  ✅ Created: 3_deploy_to_github.py")
+        print(f"  [SUCCESS] Created: 3_deploy_to_github.py")
     
     def _create_master_installer(self, package_dir):
         """Create master installer that runs everything in sequence"""
-        print("🔧 Creating master installer...")
+        print("[CONFIG] Creating master installer...")
         
         master_content = '''#!/usr/bin/env python3
 """
@@ -968,7 +968,7 @@ class MasterInstaller:
         
     def run_complete_installation(self):
         """Run complete installation sequence"""
-        print("🎯 POS Automation Framework - Master Installer")
+        print("[TARGET] POS Automation Framework - Master Installer")
         print("=" * 55)
         print("This will run the complete installation sequence:")
         print("  1. Offline package installation")
@@ -986,13 +986,13 @@ class MasterInstaller:
             # Step 3: GitHub deployment (optional)
             self._run_github_deployment()
             
-            print("\\n🎉 COMPLETE INSTALLATION SUCCESSFUL!")
+            print("\\n[SUCCESS] COMPLETE INSTALLATION SUCCESSFUL!")
             self._show_final_summary()
             
         except KeyboardInterrupt:
-            print("\\n⚠️ Installation cancelled by user")
+            print("\\n[WARNING] Installation cancelled by user")
         except Exception as e:
-            print(f"\\n❌ Installation failed: {e}")
+            print(f"\\n[ERROR] Installation failed: {e}")
             self._provide_recovery_steps()
     
     def _run_offline_installation(self):
@@ -1004,7 +1004,7 @@ class MasterInstaller:
         script_path = os.path.join(self.base_dir, "1_setup_offline_machine.py")
         
         if not os.path.exists(script_path):
-            print("❌ Offline installer not found, skipping...")
+            print("[ERROR] Offline installer not found, skipping...")
             return
         
         try:
@@ -1012,14 +1012,14 @@ class MasterInstaller:
                                   cwd=self.base_dir, timeout=300)
             
             if result.returncode == 0:
-                print("✅ Offline installation completed successfully")
+                print("[SUCCESS] Offline installation completed successfully")
             else:
-                print("⚠️ Offline installation had issues, continuing...")
+                print("[WARNING] Offline installation had issues, continuing...")
                 
         except subprocess.TimeoutExpired:
-            print("⚠️ Offline installation timed out, continuing...")
+            print("[WARNING] Offline installation timed out, continuing...")
         except Exception as e:
-            print(f"⚠️ Offline installation error: {e}")
+            print(f"[WARNING] Offline installation error: {e}")
             
             response = input("Continue with project setup? (y/n) [y]: ").lower()
             if response and response != 'y':
@@ -1041,23 +1041,23 @@ class MasterInstaller:
                                   cwd=self.base_dir, timeout=300)
             
             if result.returncode == 0:
-                print("✅ Project setup completed successfully")
+                print("[SUCCESS] Project setup completed successfully")
             else:
-                print("⚠️ Project setup had issues")
+                print("[WARNING] Project setup had issues")
                 response = input("Continue with GitHub deployment? (y/n) [n]: ").lower()
                 if response != 'y':
                     return
                 
         except subprocess.TimeoutExpired:
-            print("⚠️ Project setup timed out")
+            print("[WARNING] Project setup timed out")
         except Exception as e:
-            print(f"❌ Project setup error: {e}")
+            print(f"[ERROR] Project setup error: {e}")
             raise
     
     def _run_github_deployment(self):
         """Run GitHub deployment (optional)"""
         print("\\n" + "="*50)
-        print("🚀 STEP 3: GITHUB DEPLOYMENT (OPTIONAL)")
+        print("[LAUNCH] STEP 3: GITHUB DEPLOYMENT (OPTIONAL)")
         print("="*50)
         
         response = input("Deploy to GitHub? (y/n) [y]: ").lower()
@@ -1068,7 +1068,7 @@ class MasterInstaller:
         script_path = os.path.join(self.base_dir, "3_deploy_to_github.py")
         
         if not os.path.exists(script_path):
-            print("❌ GitHub deployment script not found")
+            print("[ERROR] GitHub deployment script not found")
             return
         
         try:
@@ -1076,37 +1076,37 @@ class MasterInstaller:
                                   cwd=self.base_dir, timeout=600)
             
             if result.returncode == 0:
-                print("✅ GitHub deployment completed successfully")
+                print("[SUCCESS] GitHub deployment completed successfully")
             else:
-                print("⚠️ GitHub deployment had issues")
+                print("[WARNING] GitHub deployment had issues")
                 
         except subprocess.TimeoutExpired:
-            print("⚠️ GitHub deployment timed out")
+            print("[WARNING] GitHub deployment timed out")
         except Exception as e:
-            print(f"❌ GitHub deployment error: {e}")
+            print(f"[ERROR] GitHub deployment error: {e}")
     
     def _show_final_summary(self):
         """Show final installation summary"""
         print("\\n🎊 INSTALLATION COMPLETE!")
         print("=" * 30)
-        print("✅ POS Automation Framework is ready!")
+        print("[SUCCESS] POS Automation Framework is ready!")
         print()
         print("📋 What you can do now:")
         print("  🧪 Run tests: python -m pytest tests/ -v")
-        print("  📊 Generate reports: python -m pytest --html=reports/report.html")
-        print("  🔍 Run diagnostics: python run_all_diagnostics.py")
+        print("  [REPORT] Generate reports: python -m pytest --html=reports/report.html")
+        print("  [SEARCH] Run diagnostics: python run_all_diagnostics.py")
         print("  🎨 Open VS Code: code pos-automation.code-workspace")
         print()
-        print("📁 Important directories:")
+        print("[FOLDER] Important directories:")
         print(f"  📋 Project: {self.base_dir}")
-        print(f"  📊 Reports: {os.path.join(self.base_dir, 'reports')}")
+        print(f"  [REPORT] Reports: {os.path.join(self.base_dir, 'reports')}")
         print(f"  📝 Logs: {os.path.join(self.base_dir, 'logs')}")
         print()
-        print("🎯 Framework ready for POS automation testing!")
+        print("[TARGET] Framework ready for POS automation testing!")
     
     def _provide_recovery_steps(self):
         """Provide recovery steps if installation fails"""
-        print("\\n🔧 RECOVERY STEPS:")
+        print("\\n[CONFIG] RECOVERY STEPS:")
         print("=" * 20)
         print("If installation failed, try running scripts manually:")
         print()
@@ -1130,7 +1130,7 @@ if __name__ == "__main__":
         master_file = os.path.join(package_dir, "0_MASTER_INSTALLER.py")
         with open(master_file, "w", encoding='utf-8') as f:
             f.write(master_content)
-        print(f"  ✅ Created: 0_MASTER_INSTALLER.py")
+        print(f"  [SUCCESS] Created: 0_MASTER_INSTALLER.py")
     
     def _create_execution_guide(self, package_dir):
         """Create comprehensive execution guide"""
@@ -1138,7 +1138,7 @@ if __name__ == "__main__":
         
         guide_content = f'''# POS Automation Framework - Complete Deployment Guide
 
-## 🎯 WHAT TO RUN AFTER EXTRACTING THE PACKAGE
+## [TARGET] WHAT TO RUN AFTER EXTRACTING THE PACKAGE
 
 ### **Quick Start (Recommended)**
 ```bash
@@ -1170,13 +1170,13 @@ python 3_deploy_to_github.py
 
 ---
 
-## 🔧 DETAILED SCRIPT DESCRIPTIONS
+## [CONFIG] DETAILED SCRIPT DESCRIPTIONS
 
 ### **`0_MASTER_INSTALLER.py` - Complete Automation**
-- ✅ Runs all steps automatically
-- ✅ Handles errors and user prompts
-- ✅ Maximum error handling
-- ✅ **RECOMMENDED FOR ALL USERS**
+- [SUCCESS] Runs all steps automatically
+- [SUCCESS] Handles errors and user prompts
+- [SUCCESS] Maximum error handling
+- [SUCCESS] **RECOMMENDED FOR ALL USERS**
 
 ### **`1_setup_offline_machine.py` - Package Installation**
 **When to use:** 
@@ -1185,11 +1185,11 @@ python 3_deploy_to_github.py
 - Package installation failures
 
 **What it does:**
-- ✅ Installs pytest, pywinauto, and other dependencies
-- ✅ Handles offline package installation
-- ✅ Downloads packages if internet available
-- ✅ Provides manual installation instructions
-- ✅ Works with corporate networks
+- [SUCCESS] Installs pytest, pywinauto, and other dependencies
+- [SUCCESS] Handles offline package installation
+- [SUCCESS] Downloads packages if internet available
+- [SUCCESS] Provides manual installation instructions
+- [SUCCESS] Works with corporate networks
 
 ### **`2_setup_new_machine_enhanced.py` - Project Setup**
 **When to use:** 
@@ -1198,12 +1198,12 @@ python 3_deploy_to_github.py
 - Configuring development environment
 
 **What it does:**
-- ✅ Validates Python environment (3.8+ required)
-- ✅ Verifies all dependencies installed
-- ✅ Creates project directory structure
-- ✅ Configures VS Code workspace
-- ✅ Tests framework components
-- ✅ Runs validation diagnostics
+- [SUCCESS] Validates Python environment (3.8+ required)
+- [SUCCESS] Verifies all dependencies installed
+- [SUCCESS] Creates project directory structure
+- [SUCCESS] Configures VS Code workspace
+- [SUCCESS] Tests framework components
+- [SUCCESS] Runs validation diagnostics
 
 ### **`3_deploy_to_github.py` - GitHub Integration**
 **When to use:** 
@@ -1212,17 +1212,17 @@ python 3_deploy_to_github.py
 - Team collaboration setup
 
 **What it does:**
-- ✅ Checks Git installation
-- ✅ Configures Git user credentials
-- ✅ Initializes Git repository
-- ✅ Sets up GitHub remote (defaults to **Diva-ditcom**)
-- ✅ Handles SSL and authentication issues
-- ✅ Pushes complete framework to GitHub
-- ✅ Enables GitHub Actions workflow
+- [SUCCESS] Checks Git installation
+- [SUCCESS] Configures Git user credentials
+- [SUCCESS] Initializes Git repository
+- [SUCCESS] Sets up GitHub remote (defaults to **Diva-ditcom**)
+- [SUCCESS] Handles SSL and authentication issues
+- [SUCCESS] Pushes complete framework to GitHub
+- [SUCCESS] Enables GitHub Actions workflow
 
 ---
 
-## 🎯 GITHUB INTEGRATION FEATURES
+## [TARGET] GITHUB INTEGRATION FEATURES
 
 ### **Default Configuration:**
 - **Account**: `Diva-ditcom` (configurable)
@@ -1231,11 +1231,11 @@ python 3_deploy_to_github.py
 - **Workflow**: GitHub Actions CI/CD enabled
 
 ### **What Happens on GitHub:**
-1. ✅ Complete framework uploaded
-2. ✅ GitHub Actions workflow starts automatically
-3. ✅ Tests run in CI/CD environment
-4. ✅ Test reports generated
-5. ✅ Ready for team collaboration
+1. [SUCCESS] Complete framework uploaded
+2. [SUCCESS] GitHub Actions workflow starts automatically
+3. [SUCCESS] Tests run in CI/CD environment
+4. [SUCCESS] Test reports generated
+5. [SUCCESS] Ready for team collaboration
 
 ---
 
@@ -1271,7 +1271,7 @@ python 3_deploy_to_github.py
 
 ---
 
-## 🔍 VERIFICATION COMMANDS
+## [SEARCH] VERIFICATION COMMANDS
 
 ### **After Each Step:**
 ```bash
@@ -1288,7 +1288,7 @@ git status
 
 ---
 
-## 📁 WHAT'S INCLUDED IN PACKAGE
+## [FOLDER] WHAT'S INCLUDED IN PACKAGE
 
 ### **Framework Components:**
 - `config/` - Framework configuration
@@ -1311,15 +1311,15 @@ git status
 
 ---
 
-## ✅ SUCCESS INDICATORS
+## [SUCCESS] SUCCESS INDICATORS
 
 ### **After Successful Installation:**
-- ✅ All diagnostic tests pass
-- ✅ pytest can discover tests
-- ✅ Framework components load correctly
-- ✅ VS Code workspace configured
-- ✅ GitHub repository created (if deployed)
-- ✅ CI/CD workflow running
+- [SUCCESS] All diagnostic tests pass
+- [SUCCESS] pytest can discover tests
+- [SUCCESS] Framework components load correctly
+- [SUCCESS] VS Code workspace configured
+- [SUCCESS] GitHub repository created (if deployed)
+- [SUCCESS] CI/CD workflow running
 
 ### **Ready for Use When:**
 ```bash
@@ -1329,21 +1329,21 @@ python run_all_diagnostics.py
 
 ---
 
-## 🎉 WHAT YOU GET
+## [SUCCESS] WHAT YOU GET
 
 ### **Complete POS Automation Framework:**
-- ✅ 4 test scenarios ready to run
-- ✅ Data-driven testing with CSV files
-- ✅ HTML and XML report generation
-- ✅ GitHub Actions CI/CD pipeline
-- ✅ VS Code development environment
-- ✅ Cross-platform compatibility
+- [SUCCESS] 4 test scenarios ready to run
+- [SUCCESS] Data-driven testing with CSV files
+- [SUCCESS] HTML and XML report generation
+- [SUCCESS] GitHub Actions CI/CD pipeline
+- [SUCCESS] VS Code development environment
+- [SUCCESS] Cross-platform compatibility
 
 ### **Production Ready:**
-- ✅ Works with any POS application
-- ✅ Configurable for different environments
-- ✅ Team collaboration ready
-- ✅ Enterprise-grade error handling
+- [SUCCESS] Works with any POS application
+- [SUCCESS] Configurable for different environments
+- [SUCCESS] Team collaboration ready
+- [SUCCESS] Enterprise-grade error handling
 
 ---
 
@@ -1363,7 +1363,7 @@ python run_all_diagnostics.py
 
 ---
 
-## 🚀 QUICK SUCCESS PATH
+## [LAUNCH] QUICK SUCCESS PATH
 
 ```bash
 # Extract the package
@@ -1375,7 +1375,7 @@ python 0_MASTER_INSTALLER.py
 # Done! Framework ready for POS automation testing
 ```
 
-**That's it! The framework will be completely set up and ready for use!** 🎯
+**That's it! The framework will be completely set up and ready for use!** [TARGET]
 
 Package created: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 '''
@@ -1383,7 +1383,7 @@ Package created: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
         guide_file = os.path.join(package_dir, "EXECUTION_GUIDE.md")
         with open(guide_file, "w", encoding='utf-8') as f:
             f.write(guide_content)
-        print(f"  ✅ Created: EXECUTION_GUIDE.md")
+        print(f"  [SUCCESS] Created: EXECUTION_GUIDE.md")
     
     def _create_offline_packages(self, package_dir):
         """Create offline packages directory with instructions"""
@@ -1429,7 +1429,7 @@ If you're behind a corporate firewall:
         with open(readme_file, "w", encoding='utf-8') as f:
             f.write(readme_content)
         
-        print(f"  ✅ Created offline packages structure")
+        print(f"  [SUCCESS] Created offline packages structure")
     
     def _create_zip_package(self, package_dir):
         """Create ZIP package for distribution"""
@@ -1450,5 +1450,5 @@ If you're behind a corporate firewall:
                         arc_path = os.path.relpath(file_path, os.path.dirname(package_dir))
                         zipf.write(file_path, arc_path)
         
-        print(f"  ✅ Created ZIP: {zip_path}")
+        print(f"  [SUCCESS] Created ZIP: {zip_path}")
         return zip_path

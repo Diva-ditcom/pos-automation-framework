@@ -65,7 +65,7 @@ class TestLoyaltyCashSale:
         cash_completed = pos.complete_cash_tender()
         assert cash_completed, "Failed to complete cash tender"
         
-        print("\n🎉 TEST PASSED: Loyalty integration cash sale completed successfully!")
+        print("\n[SUCCESS] TEST PASSED: Loyalty integration cash sale completed successfully!")
         print(f"💳 Loyalty Summary: {loyalty_result['summary']}")
         
         # Final cleanup click
@@ -136,23 +136,23 @@ class TestLoyaltyCashSale:
                 print(f"   Transaction Amount: ${total:.2f}")
                 
                 if loyalty_data["eligible_for_loyalty"]:
-                    print("   ✅ Transaction eligible for loyalty benefits")
+                    print("   [SUCCESS] Transaction eligible for loyalty benefits")
                 else:
                     print("   ℹ️ Transaction may not have specific loyalty benefits")
                 
-                print("✅ Loyalty basket analysis completed.")
+                print("[SUCCESS] Loyalty basket analysis completed.")
                 loyalty_data["basket_verified"] = True
                 
                 time.sleep(2)
                 pos.click_button_by_text("OK")
                 return loyalty_data
             else:
-                print("❌ Could not find basket for loyalty analysis")
+                print("[ERROR] Could not find basket for loyalty analysis")
                 pos.click_button_by_text("OK")
                 return loyalty_data
                 
         except Exception as e:
-            print(f"❌ Error in loyalty basket analysis: {e}")
+            print(f"[ERROR] Error in loyalty basket analysis: {e}")
             return loyalty_data
     
     def _is_loyalty_eligible_item(self, item_text):
@@ -193,19 +193,19 @@ class TestLoyaltyCashSale:
                     print("   💳 Choosing to skip loyalty integration for this transaction")
                     time.sleep(4)  # Wait for any animations
                     btn.click_input()
-                    print("   ✅ Successfully handled loyalty popup")
+                    print("   [SUCCESS] Successfully handled loyalty popup")
                     
                     loyalty_result["handled"] = True
                     loyalty_result["integration_type"] = "Skipped"
                     loyalty_result["summary"] = "Loyalty integration skipped - proceeded without member benefits"
                     return loyalty_result
             
-            print("   ❌ Cancel button not found on loyalty popup")
+            print("   [ERROR] Cancel button not found on loyalty popup")
             loyalty_result["summary"] = "Failed to find cancel button on loyalty popup"
             return loyalty_result
             
         except Exception as e:
-            print(f"❌ Error handling loyalty integration: {e}")
+            print(f"[ERROR] Error handling loyalty integration: {e}")
             return {
                 "handled": False,
                 "integration_type": "Error",
@@ -223,4 +223,4 @@ class TestLoyaltyCashSale:
             pos.win.click_input(coords=(x, y))
             print(f"🧹 Cleanup: Clicked at ({x}, {y}) on POS window")
         except Exception as e:
-            print(f"⚠️ Cleanup warning: {e}")
+            print(f"[WARNING] Cleanup warning: {e}")

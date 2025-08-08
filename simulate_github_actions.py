@@ -38,26 +38,26 @@ def run_command(command, description="", check=True):
             print(result.stderr)
         
         if check and result.returncode != 0:
-            print(f"❌ Command failed with exit code: {result.returncode}")
+            print(f"[ERROR] Command failed with exit code: {result.returncode}")
             return False
         else:
-            print(f"✅ Command completed successfully (exit code: {result.returncode})")
+            print(f"[SUCCESS] Command completed successfully (exit code: {result.returncode})")
             return True
             
     except Exception as e:
-        print(f"❌ Exception occurred: {e}")
+        print(f"[ERROR] Exception occurred: {e}")
         return False
 
 def simulate_github_actions():
     """Simulate the exact GitHub Actions workflow"""
     
-    print("🚀 SIMULATING GITHUB ACTIONS WORKFLOW")
+    print("[LAUNCH] SIMULATING GITHUB ACTIONS WORKFLOW")
     print("=" * 60)
     print("This simulates what will happen when you push to GitHub")
     print("=" * 60)
     
     # Step 1: Checkout (already done - we're in the directory)
-    print_step(1, "Checkout code (✅ Already in directory)")
+    print_step(1, "Checkout code ([SUCCESS] Already in directory)")
     print(f"Current directory: {os.getcwd()}")
     
     # Step 2: Setup Python
@@ -72,7 +72,7 @@ def simulate_github_actions():
     # First, try to install the basic requirements
     success = run_command("pip install pytest pywinauto pytest-html", "Install basic packages")
     if not success:
-        print("⚠️ Basic install failed, trying requirements.txt")
+        print("[WARNING] Basic install failed, trying requirements.txt")
     
     success = run_command("pip install -r requirements.txt", "Install from requirements.txt")
     # Continue even if this fails (continue-on-error: true)
@@ -81,10 +81,10 @@ def simulate_github_actions():
     print_step(4, "Run framework setup check")
     
     commands = [
-        ('python -c "print(\'🚀 Framework setup check...\')"', "Print setup message"),
+        ('python -c "print(\'[LAUNCH] Framework setup check...\')"', "Print setup message"),
         ('python -c "import sys; print(f\'Python version: {sys.version}\')"', "Check Python version"),
-        ('python -c "try: import pywinauto; print(\'✅ pywinauto imported successfully\'); except: print(\'❌ pywinauto import failed\')"', "Test pywinauto import"),
-        ('python -c "try: import pytest; print(\'✅ pytest imported successfully\'); except: print(\'❌ pytest import failed\')"', "Test pytest import")
+        ('python -c "try: import pywinauto; print(\'[SUCCESS] pywinauto imported successfully\'); except: print(\'[ERROR] pywinauto import failed\')"', "Test pywinauto import"),
+        ('python -c "try: import pytest; print(\'[SUCCESS] pytest imported successfully\'); except: print(\'[ERROR] pytest import failed\')"', "Test pytest import")
     ]
     
     for command, desc in commands:
@@ -96,11 +96,11 @@ def simulate_github_actions():
     csv_test_command = '''python -c "
 try:
     from data.csv_data_manager import csv_data_manager
-    print('✅ CSV Manager loaded successfully')
+    print('[SUCCESS] CSV Manager loaded successfully')
     scenarios = csv_data_manager.list_available_scenarios()
-    print(f'📊 Found {len(scenarios)} test scenarios: {scenarios}')
+    print(f'[REPORT] Found {len(scenarios)} test scenarios: {scenarios}')
 except Exception as e:
-    print(f'❌ CSV Manager failed: {e}')
+    print(f'[ERROR] CSV Manager failed: {e}')
 "'''
     
     run_command(csv_test_command, "Test CSV data loading", check=False)
@@ -113,10 +113,10 @@ print('🧪 Running simple connection test...')
 try:
     from config.config import Config
     config = Config()
-    print('✅ Configuration loaded successfully')
-    print('✅ Simple connection test PASSED')
+    print('[SUCCESS] Configuration loaded successfully')
+    print('[SUCCESS] Simple connection test PASSED')
 except Exception as e:
-    print(f'❌ Connection test failed: {e}')
+    print(f'[ERROR] Connection test failed: {e}')
 "'''
     
     run_command(connection_test_command, "Test configuration loading", check=False)
@@ -145,7 +145,7 @@ with open('test_report.txt', 'w', encoding='utf-8') as f:
     f.write(f'Date: {datetime.datetime.now()}\\n')
     f.write('Status: Connection Established\\n')
     f.write('Framework: POS Automation\\n')
-print('✅ Test report created')
+print('[SUCCESS] Test report created')
 with open('test_report.txt', 'r', encoding='utf-8') as f:
     print(f.read())
 "'''
@@ -153,30 +153,30 @@ with open('test_report.txt', 'r', encoding='utf-8') as f:
     run_command(report_command, "Create and display test report", check=False)
     
     print_step("FINAL", "GitHub Actions Simulation Complete")
-    print("🎉 Simulation finished!")
+    print("[SUCCESS] Simulation finished!")
     print("📋 Summary:")
-    print("   ✅ Python environment works")
-    print("   ✅ Dependencies can be installed")
-    print("   ✅ Framework components load")
-    print("   ✅ Configuration system works")
-    print("   ✅ Pytest discovery works")
-    print("   ✅ Test reports can be generated")
-    print("\n🚀 Ready for GitHub Actions!")
+    print("   [SUCCESS] Python environment works")
+    print("   [SUCCESS] Dependencies can be installed")
+    print("   [SUCCESS] Framework components load")
+    print("   [SUCCESS] Configuration system works")
+    print("   [SUCCESS] Pytest discovery works")
+    print("   [SUCCESS] Test reports can be generated")
+    print("\n[LAUNCH] Ready for GitHub Actions!")
     
     return True
 
 if __name__ == "__main__":
-    print("🔍 LOCAL GITHUB ACTIONS SIMULATION")
+    print("[SEARCH] LOCAL GITHUB ACTIONS SIMULATION")
     print("This will show you exactly what will happen when GitHub Actions runs")
     print("\nStarting simulation...")
     
     success = simulate_github_actions()
     
     if success:
-        print("\n🎯 RESULT: GitHub Actions simulation SUCCESSFUL!")
+        print("\n[TARGET] RESULT: GitHub Actions simulation SUCCESSFUL!")
         print("Your workflow is ready to run on GitHub!")
     else:
-        print("\n❌ RESULT: Some issues detected")
+        print("\n[ERROR] RESULT: Some issues detected")
         print("Review the output above to fix any problems")
     
     sys.exit(0 if success else 1)

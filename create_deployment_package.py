@@ -20,12 +20,12 @@ class FrameworkPackager:
         
     def create_deployment_package(self):
         """Create complete deployment package"""
-        print("🎯 POS Automation Framework - Deployment Package Creator")
+        print("[TARGET] POS Automation Framework - Deployment Package Creator")
         print("=" * 60)
         
         # Create package directory
         os.makedirs(self.package_dir, exist_ok=True)
-        print(f"📁 Created package directory: {self.package_dir}")
+        print(f"[FOLDER] Created package directory: {self.package_dir}")
         
         # Copy framework files
         self._copy_framework_files()
@@ -42,9 +42,9 @@ class FrameworkPackager:
         # Create ZIP package
         zip_path = self._create_zip_package()
         
-        print(f"\n🎉 Deployment package created successfully!")
+        print(f"\n[SUCCESS] Deployment package created successfully!")
         print(f"📦 Package location: {zip_path}")
-        print(f"📁 Extracted files: {self.package_dir}")
+        print(f"[FOLDER] Extracted files: {self.package_dir}")
         
         return zip_path
     
@@ -81,17 +81,17 @@ class FrameworkPackager:
                 
                 if os.path.isdir(src_path):
                     shutil.copytree(src_path, dst_path, ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
-                    print(f"  ✅ Copied directory: {item}")
+                    print(f"  [SUCCESS] Copied directory: {item}")
                 else:
                     os.makedirs(os.path.dirname(dst_path), exist_ok=True)
                     shutil.copy2(src_path, dst_path)
-                    print(f"  ✅ Copied file: {item}")
+                    print(f"  [SUCCESS] Copied file: {item}")
             else:
-                print(f"  ⚠️ Not found: {item}")
+                print(f"  [WARNING] Not found: {item}")
     
     def _create_setup_scripts(self):
         """Create enhanced setup scripts"""
-        print("\n🔧 Creating setup scripts...")
+        print("\n[CONFIG] Creating setup scripts...")
         
         # Create enhanced new machine setup
         self._create_enhanced_new_machine_setup()
@@ -128,11 +128,11 @@ class FrameworkInstaller:
         
     def setup_framework(self):
         """Complete framework setup"""
-        print("🚀 POS Automation Framework - New Machine Setup")
+        print("[LAUNCH] POS Automation Framework - New Machine Setup")
         print("=" * 50)
         print(f"🖥️ Operating System: {self.system}")
         print(f"🐍 Python: {sys.version}")
-        print(f"📁 Installation Directory: {self.base_dir}")
+        print(f"[FOLDER] Installation Directory: {self.base_dir}")
         print()
         
         try:
@@ -154,22 +154,22 @@ class FrameworkInstaller:
             # Step 6: Setup VS Code (if available)
             self._setup_vscode()
             
-            print("\\n🎉 Framework setup completed successfully!")
-            print("✅ Ready for POS automation testing")
+            print("\\n[SUCCESS] Framework setup completed successfully!")
+            print("[SUCCESS] Ready for POS automation testing")
             
         except Exception as e:
-            print(f"\\n❌ Setup failed: {e}")
+            print(f"\\n[ERROR] Setup failed: {e}")
             sys.exit(1)
     
     def _check_python_environment(self):
         """Check Python version and environment"""
-        print("🔍 Checking Python environment...")
+        print("[SEARCH] Checking Python environment...")
         
         version = sys.version_info
         if version.major < 3 or (version.major == 3 and version.minor < 8):
             raise Exception(f"Python 3.8+ required, found {version.major}.{version.minor}")
         
-        print(f"  ✅ Python {version.major}.{version.minor}.{version.micro} - Compatible")
+        print(f"  [SUCCESS] Python {version.major}.{version.minor}.{version.micro} - Compatible")
     
     def _install_dependencies(self):
         """Install all required dependencies"""
@@ -178,7 +178,7 @@ class FrameworkInstaller:
         # Check if requirements.txt exists
         req_file = os.path.join(self.base_dir, "requirements.txt")
         if not os.path.exists(req_file):
-            print("  ⚠️ requirements.txt not found, creating basic one...")
+            print("  [WARNING] requirements.txt not found, creating basic one...")
             self._create_requirements_file()
         
         # Install packages
@@ -191,10 +191,10 @@ class FrameworkInstaller:
                 self.python_exe, "-m", "pip", "install", "-r", req_file
             ], check=True, capture_output=True)
             
-            print("  ✅ All dependencies installed successfully")
+            print("  [SUCCESS] All dependencies installed successfully")
             
         except subprocess.CalledProcessError as e:
-            print(f"  ❌ Failed to install dependencies: {e}")
+            print(f"  [ERROR] Failed to install dependencies: {e}")
             raise
     
     def _setup_virtual_environment(self):
@@ -208,10 +208,10 @@ class FrameworkInstaller:
                 subprocess.run([
                     self.python_exe, "-m", "venv", venv_dir
                 ], check=True)
-                print(f"  ✅ Virtual environment created: {venv_dir}")
+                print(f"  [SUCCESS] Virtual environment created: {venv_dir}")
                 print(f"  💡 Activate with: {venv_dir}/Scripts/activate (Windows) or source {venv_dir}/bin/activate (Linux/Mac)")
             except subprocess.CalledProcessError:
-                print("  ⚠️ Virtual environment creation failed, continuing without it")
+                print("  [WARNING] Virtual environment creation failed, continuing without it")
         else:
             print("  ⏭️ Skipping virtual environment creation")
     
@@ -227,19 +227,19 @@ class FrameworkInstaller:
         reports_dir = os.path.join(self.base_dir, "reports")
         os.makedirs(reports_dir, exist_ok=True)
         
-        print("  ✅ Directory structure created")
+        print("  [SUCCESS] Directory structure created")
         
         # Configure paths in config files if needed
         self._update_config_paths()
         
-        print("  ✅ Framework configured")
+        print("  [SUCCESS] Framework configured")
     
     def _update_config_paths(self):
         """Update configuration paths for current machine"""
         config_file = os.path.join(self.base_dir, "config", "config.py")
         if os.path.exists(config_file):
             # Update any hardcoded paths if necessary
-            print("  ✅ Configuration paths updated")
+            print("  [SUCCESS] Configuration paths updated")
     
     def _run_validation(self):
         """Run framework validation tests"""
@@ -254,14 +254,14 @@ class FrameworkInstaller:
                 ], capture_output=True, text=True, timeout=60)
                 
                 if result.returncode == 0:
-                    print("  ✅ All validation tests passed")
+                    print("  [SUCCESS] All validation tests passed")
                 else:
-                    print("  ⚠️ Some validation tests failed, but framework should still work")
+                    print("  [WARNING] Some validation tests failed, but framework should still work")
                     
             except subprocess.TimeoutExpired:
-                print("  ⚠️ Validation tests timed out, but framework should still work")
+                print("  [WARNING] Validation tests timed out, but framework should still work")
         else:
-            print("  ⚠️ Diagnostic script not found, skipping validation")
+            print("  [WARNING] Diagnostic script not found, skipping validation")
     
     def _setup_vscode(self):
         """Setup VS Code configuration if VS Code is available"""
@@ -270,16 +270,16 @@ class FrameworkInstaller:
         # Check if VS Code is available
         try:
             subprocess.run(["code", "--version"], capture_output=True, check=True)
-            print("  ✅ VS Code detected")
+            print("  [SUCCESS] VS Code detected")
             
             # Workspace file should already be copied
             workspace_file = os.path.join(self.base_dir, "pos-automation.code-workspace")
             if os.path.exists(workspace_file):
-                print(f"  ✅ VS Code workspace configured: {workspace_file}")
+                print(f"  [SUCCESS] VS Code workspace configured: {workspace_file}")
                 print("  💡 Open workspace with: code pos-automation.code-workspace")
             
         except (subprocess.CalledProcessError, FileNotFoundError):
-            print("  ⚠️ VS Code not found, skipping VS Code setup")
+            print("  [WARNING] VS Code not found, skipping VS Code setup")
     
     def _create_requirements_file(self):
         """Create basic requirements.txt if missing"""
@@ -301,7 +301,7 @@ if __name__ == "__main__":
         setup_file = os.path.join(self.package_dir, "setup_new_machine_enhanced.py")
         with open(setup_file, "w", encoding='utf-8') as f:
             f.write(setup_content)
-        print(f"  ✅ Created: setup_new_machine_enhanced.py")
+        print(f"  [SUCCESS] Created: setup_new_machine_enhanced.py")
     
     def _create_github_deployment_script(self):
         """Create GitHub deployment script"""
@@ -323,7 +323,7 @@ class GitHubDeployer:
         
     def deploy_to_github(self):
         """Complete GitHub deployment process"""
-        print("🚀 GitHub Deployment for POS Automation Framework")
+        print("[LAUNCH] GitHub Deployment for POS Automation Framework")
         print("=" * 55)
         
         try:
@@ -345,19 +345,19 @@ class GitHubDeployer:
             # Step 6: Verify deployment
             self._verify_deployment()
             
-            print("\\n🎉 GitHub deployment completed successfully!")
+            print("\\n[SUCCESS] GitHub deployment completed successfully!")
             
         except Exception as e:
-            print(f"\\n❌ GitHub deployment failed: {e}")
+            print(f"\\n[ERROR] GitHub deployment failed: {e}")
             raise
     
     def _check_git_installation(self):
         """Check if Git is installed"""
-        print("🔍 Checking Git installation...")
+        print("[SEARCH] Checking Git installation...")
         
         try:
             result = subprocess.run(["git", "--version"], capture_output=True, text=True, check=True)
-            print(f"  ✅ {result.stdout.strip()}")
+            print(f"  [SUCCESS] {result.stdout.strip()}")
         except (subprocess.CalledProcessError, FileNotFoundError):
             raise Exception("Git is not installed. Please install Git first.")
     
@@ -371,7 +371,7 @@ class GitHubDeployer:
             email = subprocess.run(["git", "config", "user.email"], capture_output=True, text=True)
             
             if name.returncode == 0 and email.returncode == 0:
-                print(f"  ✅ Git user already configured: {name.stdout.strip()} <{email.stdout.strip()}>")
+                print(f"  [SUCCESS] Git user already configured: {name.stdout.strip()} <{email.stdout.strip()}>")
                 return
         except:
             pass
@@ -384,7 +384,7 @@ class GitHubDeployer:
         if user_name and user_email:
             subprocess.run(["git", "config", "user.name", user_name], check=True)
             subprocess.run(["git", "config", "user.email", user_email], check=True)
-            print(f"  ✅ Git user configured: {user_name} <{user_email}>")
+            print(f"  [SUCCESS] Git user configured: {user_name} <{user_email}>")
     
     def _setup_repository(self):
         """Setup GitHub repository"""
@@ -392,12 +392,12 @@ class GitHubDeployer:
         
         # Check if already a Git repository
         if os.path.exists(os.path.join(self.base_dir, ".git")):
-            print("  ✅ Git repository already exists")
+            print("  [SUCCESS] Git repository already exists")
             return
         
         # Initialize repository
         subprocess.run(["git", "init"], cwd=self.base_dir, check=True)
-        print("  ✅ Git repository initialized")
+        print("  [SUCCESS] Git repository initialized")
         
         # Setup GitHub remote
         self._setup_github_remote()
@@ -416,9 +416,9 @@ class GitHubDeployer:
         try:
             subprocess.run(["git", "remote", "add", "origin", remote_url], 
                          cwd=self.base_dir, check=True)
-            print(f"  ✅ Remote added: {remote_url}")
+            print(f"  [SUCCESS] Remote added: {remote_url}")
         except subprocess.CalledProcessError:
-            print(f"  ⚠️ Remote may already exist or repository not found")
+            print(f"  [WARNING] Remote may already exist or repository not found")
             print(f"  💡 Make sure repository exists: {remote_url}")
     
     def _setup_github_actions(self):
@@ -429,9 +429,9 @@ class GitHubDeployer:
         workflow_file = os.path.join(github_dir, "simple-test.yml")
         
         if os.path.exists(workflow_file):
-            print("  ✅ GitHub Actions workflow already configured")
+            print("  [SUCCESS] GitHub Actions workflow already configured")
         else:
-            print("  ⚠️ GitHub Actions workflow not found")
+            print("  [WARNING] GitHub Actions workflow not found")
             print("  💡 Workflow should be in .github/workflows/ directory")
     
     def _initial_commit_and_push(self):
@@ -462,10 +462,10 @@ class GitHubDeployer:
                 subprocess.run(["git", "config", "http.sslVerify", "true"], 
                              cwd=self.base_dir, check=True)
             
-            print("  ✅ Successfully pushed to GitHub")
+            print("  [SUCCESS] Successfully pushed to GitHub")
             
         except subprocess.CalledProcessError as e:
-            print(f"  ❌ Push failed: {e}")
+            print(f"  [ERROR] Push failed: {e}")
             print("  💡 You may need to:")
             print("    - Create the repository on GitHub first")
             print("    - Setup authentication (token or SSH key)")
@@ -473,7 +473,7 @@ class GitHubDeployer:
     
     def _verify_deployment(self):
         """Verify GitHub deployment"""
-        print("🔍 Verifying deployment...")
+        print("[SEARCH] Verifying deployment...")
         
         try:
             # Check remote status
@@ -481,15 +481,15 @@ class GitHubDeployer:
                                   cwd=self.base_dir, capture_output=True, text=True, check=True)
             
             if "origin" in result.stdout:
-                print("  ✅ Remote repository configured")
+                print("  [SUCCESS] Remote repository configured")
                 for line in result.stdout.strip().split('\\n'):
                     if 'origin' in line:
                         print(f"    {line}")
             
-            print("  ✅ Deployment verification completed")
+            print("  [SUCCESS] Deployment verification completed")
             
         except subprocess.CalledProcessError:
-            print("  ⚠️ Could not verify remote status")
+            print("  [WARNING] Could not verify remote status")
 
 if __name__ == "__main__":
     deployer = GitHubDeployer()
@@ -499,7 +499,7 @@ if __name__ == "__main__":
         github_file = os.path.join(self.package_dir, "deploy_to_github.py")
         with open(github_file, "w", encoding='utf-8') as f:
             f.write(github_content)
-        print(f"  ✅ Created: deploy_to_github.py")
+        print(f"  [SUCCESS] Created: deploy_to_github.py")
     
     def _create_one_click_installer(self):
         """Create one-click installer script"""
@@ -513,28 +513,28 @@ echo.
 REM Check Python installation
 python --version >nul 2>&1
 if errorlevel 1 (
-    echo ❌ Python not found! Please install Python 3.8+ first.
+    echo [ERROR] Python not found! Please install Python 3.8+ first.
     echo 💡 Download from: https://python.org/downloads/
     pause
     exit /b 1
 )
 
-echo ✅ Python found
+echo [SUCCESS] Python found
 echo.
 
 REM Run enhanced setup
-echo 🚀 Starting framework installation...
+echo [LAUNCH] Starting framework installation...
 python setup_new_machine_enhanced.py
 
 if errorlevel 1 (
     echo.
-    echo ❌ Installation failed!
+    echo [ERROR] Installation failed!
     pause
     exit /b 1
 )
 
 echo.
-echo 🎉 Installation completed successfully!
+echo [SUCCESS] Installation completed successfully!
 echo.
 echo 📋 Next steps:
 echo   1. Run: python run_all_diagnostics.py
@@ -547,7 +547,7 @@ pause
         installer_file = os.path.join(self.package_dir, "INSTALL.bat")
         with open(installer_file, "w", encoding='utf-8') as f:
             f.write(installer_content)
-        print(f"  ✅ Created: INSTALL.bat")
+        print(f"  [SUCCESS] Created: INSTALL.bat")
         
         # Create Linux/Mac version
         installer_sh_content = '''#!/bin/bash
@@ -560,25 +560,25 @@ echo
 
 # Check Python installation
 if ! command -v python3 &> /dev/null; then
-    echo "❌ Python3 not found! Please install Python 3.8+ first."
+    echo "[ERROR] Python3 not found! Please install Python 3.8+ first."
     exit 1
 fi
 
-echo "✅ Python found"
+echo "[SUCCESS] Python found"
 echo
 
 # Run enhanced setup
-echo "🚀 Starting framework installation..."
+echo "[LAUNCH] Starting framework installation..."
 python3 setup_new_machine_enhanced.py
 
 if [ $? -ne 0 ]; then
     echo
-    echo "❌ Installation failed!"
+    echo "[ERROR] Installation failed!"
     exit 1
 fi
 
 echo
-echo "🎉 Installation completed successfully!"
+echo "[SUCCESS] Installation completed successfully!"
 echo
 echo "📋 Next steps:"
 echo "  1. Run: python3 run_all_diagnostics.py"
@@ -594,7 +594,7 @@ echo
         # Make executable
         import stat
         os.chmod(installer_sh_file, stat.S_IRWXU | stat.S_IRGRP | stat.S_IROTH)
-        print(f"  ✅ Created: install.sh")
+        print(f"  [SUCCESS] Created: install.sh")
     
     def _create_verification_script(self):
         """Create framework verification script"""
@@ -611,7 +611,7 @@ import importlib.util
 
 def verify_framework():
     """Complete framework verification"""
-    print("🔍 POS Automation Framework - Verification")
+    print("[SEARCH] POS Automation Framework - Verification")
     print("=" * 45)
     
     results = {
@@ -627,10 +627,10 @@ def verify_framework():
     print("\\n1. 🐍 Python Environment:")
     version = sys.version_info
     if version.major >= 3 and version.minor >= 8:
-        print(f"   ✅ Python {version.major}.{version.minor}.{version.micro} - Compatible")
+        print(f"   [SUCCESS] Python {version.major}.{version.minor}.{version.micro} - Compatible")
         results["python_environment"] = True
     else:
-        print(f"   ❌ Python {version.major}.{version.minor}.{version.micro} - Incompatible (need 3.8+)")
+        print(f"   [ERROR] Python {version.major}.{version.minor}.{version.micro} - Incompatible (need 3.8+)")
     
     # Check dependencies
     print("\\n2. 📦 Dependencies:")
@@ -640,15 +640,15 @@ def verify_framework():
     for package in required_packages:
         try:
             __import__(package)
-            print(f"   ✅ {package} - Available")
+            print(f"   [SUCCESS] {package} - Available")
         except ImportError:
-            print(f"   ❌ {package} - Missing")
+            print(f"   [ERROR] {package} - Missing")
             all_deps_ok = False
     
     results["dependencies"] = all_deps_ok
     
     # Check framework components
-    print("\\n3. 🔧 Framework Components:")
+    print("\\n3. [CONFIG] Framework Components:")
     components = {
         "config/config.py": "Configuration",
         "data/csv_data_manager.py": "CSV Data Manager", 
@@ -662,9 +662,9 @@ def verify_framework():
     for path, name in components.items():
         full_path = os.path.join(base_dir, path)
         if os.path.exists(full_path):
-            print(f"   ✅ {name} - Found")
+            print(f"   [SUCCESS] {name} - Found")
         else:
-            print(f"   ❌ {name} - Missing")
+            print(f"   [ERROR] {name} - Missing")
             all_components_ok = False
     
     results["framework_components"] = all_components_ok
@@ -678,14 +678,14 @@ def verify_framework():
             if spec and spec.loader:
                 config_module = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(config_module)
-                print("   ✅ Configuration loads successfully")
+                print("   [SUCCESS] Configuration loads successfully")
                 results["configuration"] = True
             else:
-                print("   ❌ Configuration module spec failed")
+                print("   [ERROR] Configuration module spec failed")
         else:
-            print("   ❌ Configuration file not found")
+            print("   [ERROR] Configuration file not found")
     except Exception as e:
-        print(f"   ❌ Configuration failed: {e}")
+        print(f"   [ERROR] Configuration failed: {e}")
     
     # Check test discovery
     print("\\n5. 🧪 Test Discovery:")
@@ -696,21 +696,21 @@ def verify_framework():
         
         if result.returncode == 0:
             test_count = result.stdout.count("test")
-            print(f"   ✅ Pytest discovers tests ({test_count} found)")
+            print(f"   [SUCCESS] Pytest discovers tests ({test_count} found)")
             results["test_discovery"] = True
         else:
-            print(f"   ❌ Test discovery failed")
+            print(f"   [ERROR] Test discovery failed")
     except Exception as e:
-        print(f"   ❌ Test discovery error: {e}")
+        print(f"   [ERROR] Test discovery error: {e}")
     
     # Check reports generation
-    print("\\n6. 📊 Reports Generation:")
+    print("\\n6. [REPORT] Reports Generation:")
     reports_dir = os.path.join(base_dir, "reports")
     if os.path.exists(reports_dir):
-        print("   ✅ Reports directory exists")
+        print("   [SUCCESS] Reports directory exists")
         results["reports_generation"] = True
     else:
-        print("   ❌ Reports directory missing")
+        print("   [ERROR] Reports directory missing")
     
     # Summary
     print("\\n" + "=" * 45)
@@ -720,16 +720,16 @@ def verify_framework():
     total = len(results)
     
     for check, status in results.items():
-        icon = "✅" if status else "❌"
+        icon = "[SUCCESS]" if status else "[ERROR]"
         print(f"   {icon} {check.replace('_', ' ').title()}")
     
-    print(f"\\n🎯 Overall Status: {passed}/{total} checks passed")
+    print(f"\\n[TARGET] Overall Status: {passed}/{total} checks passed")
     
     if passed == total:
-        print("🎉 Framework verification PASSED! Ready for use.")
+        print("[SUCCESS] Framework verification PASSED! Ready for use.")
         return True
     else:
-        print("⚠️ Framework verification FAILED! Please check missing components.")
+        print("[WARNING] Framework verification FAILED! Please check missing components.")
         return False
 
 if __name__ == "__main__":
@@ -740,7 +740,7 @@ if __name__ == "__main__":
         verify_file = os.path.join(self.package_dir, "verify_installation.py")
         with open(verify_file, "w", encoding='utf-8') as f:
             f.write(verify_content)
-        print(f"  ✅ Created: verify_installation.py")
+        print(f"  [SUCCESS] Created: verify_installation.py")
     
     def _create_config_files(self):
         """Create configuration files for deployment"""
@@ -780,7 +780,7 @@ if __name__ == "__main__":
         config_file = os.path.join(self.package_dir, "deployment_config.json")
         with open(config_file, "w", encoding='utf-8') as f:
             json.dump(deploy_config, f, indent=2)
-        print(f"  ✅ Created: deployment_config.json")
+        print(f"  [SUCCESS] Created: deployment_config.json")
     
     def _create_documentation(self):
         """Create comprehensive documentation"""
@@ -789,7 +789,7 @@ if __name__ == "__main__":
         # Create deployment README
         readme_content = f'''# POS Automation Framework - Deployment Package
 
-## 🎯 Quick Start
+## [TARGET] Quick Start
 
 ### Option 1: One-Click Installation (Recommended)
 **Windows:**
@@ -838,7 +838,7 @@ python deploy_to_github.py
 - `pos-automation.code-workspace` - VS Code workspace
 - `import_helper.py` - Development import utilities
 
-## 🔧 System Requirements
+## [CONFIG] System Requirements
 
 - **Python**: 3.8+ (3.11+ recommended)
 - **OS**: Windows 10+, Linux, macOS
@@ -860,7 +860,7 @@ After installation, verify everything works:
 python verify_installation.py
 ```
 
-## 🚀 GitHub Deployment
+## [LAUNCH] GitHub Deployment
 
 Deploy to your GitHub account:
 ```bash
@@ -872,14 +872,14 @@ Default settings:
 - Repository: `pos-automation-framework`
 - Branch: `main`
 
-## 📊 Running Tests
+## [REPORT] Running Tests
 
 Execute all test cases:
 ```bash
 python -m pytest tests/ -v --html=reports/test_report.html
 ```
 
-## 🔍 Troubleshooting
+## [SEARCH] Troubleshooting
 
 ### Common Issues
 
@@ -906,13 +906,13 @@ python -m pytest tests/ -v --html=reports/test_report.html
 3. Review reports in `reports/` directory
 4. Check GitHub Actions in repository
 
-## 🎉 Success Indicators
+## [SUCCESS] Success Indicators
 
-✅ All diagnostic tests pass  
-✅ Framework components load correctly  
-✅ Test discovery finds test cases  
-✅ HTML reports generated  
-✅ GitHub Actions workflow runs  
+[SUCCESS] All diagnostic tests pass  
+[SUCCESS] Framework components load correctly  
+[SUCCESS] Test discovery finds test cases  
+[SUCCESS] HTML reports generated  
+[SUCCESS] GitHub Actions workflow runs  
 
 Package created: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 '''
@@ -920,7 +920,7 @@ Package created: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
         readme_file = os.path.join(self.package_dir, "README.md")
         with open(readme_file, "w", encoding='utf-8') as f:
             f.write(readme_content)
-        print(f"  ✅ Created: README.md")
+        print(f"  [SUCCESS] Created: README.md")
     
     def _create_zip_package(self):
         """Create ZIP package for easy distribution"""
@@ -939,5 +939,5 @@ Package created: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
                         arc_path = os.path.relpath(file_path, os.path.dirname(self.package_dir))
                         zipf.write(file_path, arc_path)
         
-        print(f"  ✅ Created ZIP: {zip_path}")
+        print(f"  [SUCCESS] Created ZIP: {zip_path}")
         return zip_path

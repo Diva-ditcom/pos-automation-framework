@@ -16,7 +16,7 @@ class GitHubDeployer:
         
     def deploy_to_github(self):
         """Complete GitHub deployment process"""
-        print("🚀 GitHub Deployment for POS Automation Framework")
+        print("[LAUNCH] GitHub Deployment for POS Automation Framework")
         print("=" * 55)
         
         try:
@@ -38,19 +38,19 @@ class GitHubDeployer:
             # Step 6: Verify deployment
             self._verify_deployment()
             
-            print("\n🎉 GitHub deployment completed successfully!")
+            print("\n[SUCCESS] GitHub deployment completed successfully!")
             
         except Exception as e:
-            print(f"\n❌ GitHub deployment failed: {e}")
+            print(f"\n[ERROR] GitHub deployment failed: {e}")
             raise
     
     def _check_git_installation(self):
         """Check if Git is installed"""
-        print("🔍 Checking Git installation...")
+        print("[SEARCH] Checking Git installation...")
         
         try:
             result = subprocess.run(["git", "--version"], capture_output=True, text=True, check=True)
-            print(f"  ✅ {result.stdout.strip()}")
+            print(f"  [SUCCESS] {result.stdout.strip()}")
         except (subprocess.CalledProcessError, FileNotFoundError):
             raise Exception("Git is not installed. Please install Git first.")
     
@@ -64,7 +64,7 @@ class GitHubDeployer:
             email = subprocess.run(["git", "config", "user.email"], capture_output=True, text=True)
             
             if name.returncode == 0 and email.returncode == 0:
-                print(f"  ✅ Git user already configured: {name.stdout.strip()} <{email.stdout.strip()}>")
+                print(f"  [SUCCESS] Git user already configured: {name.stdout.strip()} <{email.stdout.strip()}>")
                 return
         except:
             pass
@@ -77,7 +77,7 @@ class GitHubDeployer:
         if user_name and user_email:
             subprocess.run(["git", "config", "user.name", user_name], check=True)
             subprocess.run(["git", "config", "user.email", user_email], check=True)
-            print(f"  ✅ Git user configured: {user_name} <{user_email}>")
+            print(f"  [SUCCESS] Git user configured: {user_name} <{user_email}>")
     
     def _setup_repository(self):
         """Setup GitHub repository"""
@@ -85,12 +85,12 @@ class GitHubDeployer:
         
         # Check if already a Git repository
         if os.path.exists(os.path.join(self.base_dir, ".git")):
-            print("  ✅ Git repository already exists")
+            print("  [SUCCESS] Git repository already exists")
             return
         
         # Initialize repository
         subprocess.run(["git", "init"], cwd=self.base_dir, check=True)
-        print("  ✅ Git repository initialized")
+        print("  [SUCCESS] Git repository initialized")
         
         # Setup GitHub remote
         self._setup_github_remote()
@@ -109,9 +109,9 @@ class GitHubDeployer:
         try:
             subprocess.run(["git", "remote", "add", "origin", remote_url], 
                          cwd=self.base_dir, check=True)
-            print(f"  ✅ Remote added: {remote_url}")
+            print(f"  [SUCCESS] Remote added: {remote_url}")
         except subprocess.CalledProcessError:
-            print(f"  ⚠️ Remote may already exist or repository not found")
+            print(f"  [WARNING] Remote may already exist or repository not found")
             print(f"  💡 Make sure repository exists: {remote_url}")
     
     def _setup_github_actions(self):
@@ -122,9 +122,9 @@ class GitHubDeployer:
         workflow_file = os.path.join(github_dir, "simple-test.yml")
         
         if os.path.exists(workflow_file):
-            print("  ✅ GitHub Actions workflow already configured")
+            print("  [SUCCESS] GitHub Actions workflow already configured")
         else:
-            print("  ⚠️ GitHub Actions workflow not found")
+            print("  [WARNING] GitHub Actions workflow not found")
             print("  💡 Workflow should be in .github/workflows/ directory")
     
     def _initial_commit_and_push(self):
@@ -155,10 +155,10 @@ class GitHubDeployer:
                 subprocess.run(["git", "config", "http.sslVerify", "true"], 
                              cwd=self.base_dir, check=True)
             
-            print("  ✅ Successfully pushed to GitHub")
+            print("  [SUCCESS] Successfully pushed to GitHub")
             
         except subprocess.CalledProcessError as e:
-            print(f"  ❌ Push failed: {e}")
+            print(f"  [ERROR] Push failed: {e}")
             print("  💡 You may need to:")
             print("    - Create the repository on GitHub first")
             print("    - Setup authentication (token or SSH key)")
@@ -166,7 +166,7 @@ class GitHubDeployer:
     
     def _verify_deployment(self):
         """Verify GitHub deployment"""
-        print("🔍 Verifying deployment...")
+        print("[SEARCH] Verifying deployment...")
         
         try:
             # Check remote status
@@ -174,15 +174,15 @@ class GitHubDeployer:
                                   cwd=self.base_dir, capture_output=True, text=True, check=True)
             
             if "origin" in result.stdout:
-                print("  ✅ Remote repository configured")
+                print("  [SUCCESS] Remote repository configured")
                 for line in result.stdout.strip().split('\n'):
                     if 'origin' in line:
                         print(f"    {line}")
             
-            print("  ✅ Deployment verification completed")
+            print("  [SUCCESS] Deployment verification completed")
             
         except subprocess.CalledProcessError:
-            print("  ⚠️ Could not verify remote status")
+            print("  [WARNING] Could not verify remote status")
 
 if __name__ == "__main__":
     deployer = GitHubDeployer()
