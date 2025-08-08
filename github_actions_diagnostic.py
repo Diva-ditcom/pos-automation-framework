@@ -41,24 +41,67 @@ def diagnose_local_environment():
     # Test 3: Framework Components
     print(f"\nFramework Components:")
     
-    try:
-        from config.config import Config
-        print("   Config module loads")
-    except Exception as e:
-        print(f"   Config module failed: {e}")
+    # Setup imports - add current directory to Python path
+    import sys
+    import os
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    if current_dir not in sys.path:
+        sys.path.insert(0, current_dir)
     
+    # Test Config module
     try:
-        from data.csv_data_manager import csv_data_manager
-        scenarios = csv_data_manager.list_available_scenarios()
-        print(f"   CSV Manager loads ({len(scenarios)} scenarios)")
+        # Use importlib for dynamic imports to avoid static analysis issues
+        import importlib.util
+        
+        config_path = os.path.join(current_dir, 'config', 'config.py')
+        spec = importlib.util.spec_from_file_location("config.config", config_path)
+        if spec and spec.loader:
+            config_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(config_module)
+            Config = getattr(config_module, 'Config', None)
+            if Config:
+                print("   ✓ Config module loads")
+            else:
+                print("   ✗ Config class not found in module")
+        else:
+            print(f"   ✗ Config module spec failed")
     except Exception as e:
-        print(f"   CSV Manager failed: {e}")
+        print(f"   ✗ Config module failed: {e}")
     
+    # Test CSV data manager
     try:
-        from utils.pos_base import POSAutomation
-        print("   POS Automation module loads")
+        csv_manager_path = os.path.join(current_dir, 'data', 'csv_data_manager.py')
+        spec = importlib.util.spec_from_file_location("data.csv_data_manager", csv_manager_path)
+        if spec and spec.loader:
+            csv_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(csv_module)
+            csv_data_manager = getattr(csv_module, 'csv_data_manager', None)
+            if csv_data_manager and hasattr(csv_data_manager, 'list_available_scenarios'):
+                scenarios = csv_data_manager.list_available_scenarios()
+                print(f"   ✓ CSV Manager loads ({len(scenarios)} scenarios)")
+            else:
+                print("   ✗ csv_data_manager object not found or incomplete")
+        else:
+            print(f"   ✗ CSV Manager module spec failed")
     except Exception as e:
-        print(f"   POS Automation failed: {e}")
+        print(f"   ✗ CSV Manager failed: {e}")
+    
+    # Test POS Automation module
+    try:
+        pos_base_path = os.path.join(current_dir, 'utils', 'pos_base.py')
+        spec = importlib.util.spec_from_file_location("utils.pos_base", pos_base_path)
+        if spec and spec.loader:
+            pos_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(pos_module)
+            POSAutomation = getattr(pos_module, 'POSAutomation', None)
+            if POSAutomation:
+                print("   ✓ POS Automation module loads")
+            else:
+                print("   ✗ POSAutomation class not found in module")
+        else:
+            print(f"   ✗ POS Automation module spec failed")
+    except Exception as e:
+        print(f"   ✗ POS Automation failed: {e}")
     
     # Test 4: Pytest Discovery
     print(f"\nTest Discovery:")
