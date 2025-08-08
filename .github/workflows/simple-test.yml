@@ -30,8 +30,9 @@ jobs:
       run: |
         python -c "print('Framework setup check...')"
         python -c "import sys; print(f'Python version: {sys.version}')"
-        python -c "try: import pywinauto; print('pywinauto imported successfully'); except: print('pywinauto import failed')"
-        python -c "try: import pytest; print('pytest imported successfully'); except: print('pytest import failed')"
+        python -c "import pywinauto; print('pywinauto imported successfully')"
+        python -c "import pytest; print('pytest imported successfully')"
+      continue-on-error: true
     
     - name: Test CSV data loading
       run: |
@@ -43,6 +44,8 @@ jobs:
             print(f'Found {len(scenarios)} test scenarios: {scenarios}')
         except Exception as e:
             print(f'CSV Manager failed: {e}')
+            import traceback
+            traceback.print_exc()
         "
       continue-on-error: true
     
@@ -57,6 +60,8 @@ jobs:
             print('Simple connection test PASSED')
         except Exception as e:
             print(f'Connection test failed: {e}')
+            import traceback
+            traceback.print_exc()
         "
       continue-on-error: true
     
