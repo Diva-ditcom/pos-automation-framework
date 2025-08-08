@@ -10,46 +10,46 @@ from datetime import datetime
 
 def test_basic_imports():
     """Test that all basic imports work"""
-    print("🧪 Testing basic imports...")
+    print("Testing basic imports...")
     try:
         import pytest
         import pywinauto
-        print("✅ Core dependencies imported successfully")
+        print("Core dependencies imported successfully")
         return True
     except ImportError as e:
-        print(f"❌ Import failed: {e}")
+        print(f"Import failed: {e}")
         return False
 
 def test_framework_components():
     """Test framework components"""
-    print("🧪 Testing framework components...")
+    print("Testing framework components...")
     try:
         from data.csv_data_manager import csv_data_manager
         from config.config import Config
         from utils.pos_base import POSAutomation
         
-        print("✅ All framework components imported successfully")
+        print("All framework components imported successfully")
         return True
     except ImportError as e:
-        print(f"❌ Framework import failed: {e}")
+        print(f"Framework import failed: {e}")
         return False
 
 def test_configuration():
     """Test configuration loading"""
-    print("🧪 Testing configuration...")
+    print("Testing configuration...")
     try:
         from config.config import Config
         config = Config()
         scenarios = config.list_available_scenarios()
-        print(f"✅ Configuration loaded: {len(scenarios)} scenarios found")
+        print(f"Configuration loaded: {len(scenarios)} scenarios found")
         return True
     except Exception as e:
-        print(f"❌ Configuration test failed: {e}")
+        print(f"Configuration test failed: {e}")
         return False
 
 def test_pytest_discovery():
     """Test pytest can discover tests"""
-    print("🧪 Testing pytest discovery...")
+    print("Testing pytest discovery...")
     try:
         import subprocess
         result = subprocess.run([
@@ -59,13 +59,13 @@ def test_pytest_discovery():
         
         if result.returncode == 0:
             test_count = result.stdout.count(" test ")
-            print(f"✅ Pytest discovered tests successfully")
+            print(f"Pytest discovered tests successfully")
             return True
         else:
-            print(f"❌ Pytest discovery failed: {result.stderr}")
+            print(f"Pytest discovery failed: {result.stderr}")
             return False
     except Exception as e:
-        print(f"❌ Pytest test failed: {e}")
+        print(f"Pytest test failed: {e}")
         return False
 
 def generate_report(results):
@@ -95,12 +95,12 @@ def generate_report(results):
             status = "PASS" if result else "FAIL"
             f.write(f"  {test}: {status}\n")
     
-    print(f"\n📊 Report generated: Overall Status = {report['overall_status']}")
+    print(f"\nReport generated: Overall Status = {report['overall_status']}")
     return report
 
 def main():
     """Main test function"""
-    print("🚀 GitHub Actions Connection Test")
+    print("GitHub Actions Connection Test")
     print("=" * 50)
     
     # Run all tests
@@ -116,12 +116,12 @@ def main():
     
     # Print summary
     print("\n" + "=" * 50)
-    print("📋 Test Summary:")
+    print("Test Summary:")
     for test, result in results.items():
-        status = "✅ PASS" if result else "❌ FAIL"
+        status = "PASS" if result else "FAIL"
         print(f"  {test.replace('_', ' ').title()}: {status}")
     
-    print(f"\n🎯 Overall Status: {report['overall_status']}")
+    print(f"\nOverall Status: {report['overall_status']}")
     
     # Return appropriate exit code
     return 0 if report['overall_status'] == "PASS" else 1
