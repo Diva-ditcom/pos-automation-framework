@@ -24,7 +24,7 @@ class Config:
     # POS Application Settings (loaded from CSV)
     @property
     def POS_LAUNCH_PATH(self):
-        return self.data_manager.get_setting('POS_LAUNCH_PATH', 'C:\\pos\\bin\\launch.bat')
+        return self.data_manager.get_setting('POS_LAUNCH_PATH', 'C:\WIN_POC\Copilot_project\GitHubintegration\github\Scripts\pywinauto\launch.bat')
     
     @property
     def POS_STARTUP_WAIT(self):
