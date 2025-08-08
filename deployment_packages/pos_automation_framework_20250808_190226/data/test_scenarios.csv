@@ -1,0 +1,4 @@
+scenario_name,user_name,password,ean_code,item_name,expected_price,cash_tender_amount,loyalty_number,promotion_code,quantity
+basic_cash_sale,cashier01,pass123,9300675084147,Test Product 1,5.99,50.00,,,1
+promotion_cash_sale,cashier01,pass123,9300675079686,Promotion Item,12.99,50.00,,PROMO10,2
+loyalty_cash_sale,cashier01,pass123,9300675084147,Test Product 1,5.99,50.00,LOY123456789,,1

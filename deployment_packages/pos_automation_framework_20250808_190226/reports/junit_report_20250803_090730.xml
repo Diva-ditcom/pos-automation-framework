@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="3" failures="0" skipped="0" tests="3" time="44.982" timestamp="2025-08-03T09:07:43.181263+05:30" hostname="LTIN596079"><testcase classname="tests.pos_automation.test_01_basic_cash_sale.TestBasicCashSale" name="test_add_single_item_complete_with_cash" time="38.202"><error message="failed on setup with &quot;AssertionError: Failed to connect to POS&#10;assert False&#10; +  where False = connect_to_pos()&#10; +    where connect_to_pos = &lt;utils.pos_base.POSAutomation object at 0x000002077E1AC980&gt;.connect_to_pos&quot;">tests\conftest.py:20: in pos_session
+    assert pos.connect_to_pos(), "Failed to connect to POS"
+E   AssertionError: Failed to connect to POS
+E   assert False
+E    +  where False = connect_to_pos()
+E    +    where connect_to_pos = &lt;utils.pos_base.POSAutomation object at 0x000002077E1AC980&gt;.connect_to_pos</error></testcase><testcase classname="tests.pos_automation.test_02_promotion_cash_sale.TestPromotionCashSale" name="test_add_multiple_items_with_promotion_cash_sale" time="0.001"><error message="failed on setup with &quot;AssertionError: Failed to connect to POS&#10;assert False&#10; +  where False = connect_to_pos()&#10; +    where connect_to_pos = &lt;utils.pos_base.POSAutomation object at 0x000002077E1AC980&gt;.connect_to_pos&quot;">tests\conftest.py:20: in pos_session
+    assert pos.connect_to_pos(), "Failed to connect to POS"
+E   AssertionError: Failed to connect to POS
+E   assert False
+E    +  where False = connect_to_pos()
+E    +    where connect_to_pos = &lt;utils.pos_base.POSAutomation object at 0x000002077E1AC980&gt;.connect_to_pos</error></testcase><testcase classname="tests.pos_automation.test_03_loyalty_cash_sale.TestLoyaltyCashSale" name="test_add_item_with_loyalty_integration_cash_sale" time="0.001"><error message="failed on setup with &quot;AssertionError: Failed to connect to POS&#10;assert False&#10; +  where False = connect_to_pos()&#10; +    where connect_to_pos = &lt;utils.pos_base.POSAutomation object at 0x000002077E1AC980&gt;.connect_to_pos&quot;">tests\conftest.py:20: in pos_session
+    assert pos.connect_to_pos(), "Failed to connect to POS"
+E   AssertionError: Failed to connect to POS
+E   assert False
+E    +  where False = connect_to_pos()
+E    +    where connect_to_pos = &lt;utils.pos_base.POSAutomation object at 0x000002077E1AC980&gt;.connect_to_pos</error></testcase></testsuite></testsuites>

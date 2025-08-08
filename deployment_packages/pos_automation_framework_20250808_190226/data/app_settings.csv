@@ -1,0 +1,8 @@
+setting_name,setting_value,description
+POS_LAUNCH_PATH,C:\WIN_POC\Copilot_project\POs_automation\Scripts\pywinauto\launch.bat,Path to POS application launcher
+POS_STARTUP_WAIT,10,Seconds to wait after launching POS
+POS_APP_TITLE,POS Application,Title of the POS application window
+POS_TITLE_REGEX,.*R10PosClient.*,Regex pattern to match POS application window title
+DEFAULT_TIMEOUT,30,Default timeout for UI operations in seconds
+SCREENSHOT_ON_FAILURE,true,Take screenshot when test fails
+REPORT_TITLE,POS Automation Test Report,Title for HTML test reports

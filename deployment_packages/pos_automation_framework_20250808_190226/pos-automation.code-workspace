@@ -1,0 +1,43 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "python.analysis.extraPaths": [
+            "${workspaceFolder}",
+            "${workspaceFolder}/config",
+            "${workspaceFolder}/data", 
+            "${workspaceFolder}/utils",
+            "${workspaceFolder}/tests"
+        ],
+        "python.defaultInterpreterPath": "../../python.exe",
+        "python.analysis.autoSearchPaths": true,
+        "python.analysis.autoImportCompletions": true,
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": false,
+        "python.linting.flake8Enabled": true,
+        "python.analysis.typeCheckingMode": "basic",
+        "python.terminal.activateEnvironment": true,
+        "files.associations": {
+            "*.py": "python"
+        },
+        "python.analysis.include": [
+            "**/*.py"
+        ],
+        "python.analysis.exclude": [
+            "**/node_modules",
+            "**/__pycache__",
+            ".git"
+        ]
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-python.python",
+            "ms-python.debugpy",
+            "ms-python.flake8",
+            "ms-toolsai.jupyter"
+        ]
+    }
+}
