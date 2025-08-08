@@ -7,16 +7,50 @@ import sys
 import os
 import json
 from datetime import datetime
+import importlib.util
+
+# Setup Python path for imports
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
+
+def safe_import(module_name, package_name=None):
+    """Safely import a module with error handling"""
+    try:
+        if package_name:
+            # For local framework modules
+            module_path = os.path.join(current_dir, package_name, f"{module_name}.py")
+            if os.path.exists(module_path):
+                spec = importlib.util.spec_from_file_location(f"{package_name}.{module_name}", module_path)
+                if spec and spec.loader:
+                    module = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(module)
+                    return module
+        else:
+            # For external packages
+            return __import__(module_name)
+    except Exception:
+        return None
+    return None
 
 def test_basic_imports():
     """Test that all basic imports work"""
     print("Testing basic imports...")
     try:
-        import pytest
-        import pywinauto
-        print("Core dependencies imported successfully")
-        return True
-    except ImportError as e:
+        # Test external dependencies
+        pytest = safe_import('pytest')
+        pywinauto = safe_import('pywinauto')
+        
+        if pytest and pywinauto:
+            print("Core dependencies imported successfully")
+            return True
+        else:
+            missing = []
+            if not pytest: missing.append('pytest')
+            if not pywinauto: missing.append('pywinauto')
+            print(f"Missing dependencies: {', '.join(missing)}")
+            return False
+    except Exception as e:
         print(f"Import failed: {e}")
         return False
 
@@ -24,13 +58,22 @@ def test_framework_components():
     """Test framework components"""
     print("Testing framework components...")
     try:
-        from data.csv_data_manager import csv_data_manager
-        from config.config import Config
-        from utils.pos_base import POSAutomation
+        # Test framework imports using safe_import
+        csv_module = safe_import('csv_data_manager', 'data')
+        config_module = safe_import('config', 'config')
+        pos_module = safe_import('pos_base', 'utils')
         
-        print("All framework components imported successfully")
-        return True
-    except ImportError as e:
+        if csv_module and config_module and pos_module:
+            print("All framework components imported successfully")
+            return True
+        else:
+            missing = []
+            if not csv_module: missing.append('data.csv_data_manager')
+            if not config_module: missing.append('config.config')
+            if not pos_module: missing.append('utils.pos_base')
+            print(f"Missing framework components: {', '.join(missing)}")
+            return False
+    except Exception as e:
         print(f"Framework import failed: {e}")
         return False
 
@@ -38,11 +81,16 @@ def test_configuration():
     """Test configuration loading"""
     print("Testing configuration...")
     try:
-        from config.config import Config
-        config = Config()
-        scenarios = config.list_available_scenarios()
-        print(f"Configuration loaded: {len(scenarios)} scenarios found")
-        return True
+        config_module = safe_import('config', 'config')
+        if config_module and hasattr(config_module, 'Config'):
+            Config = getattr(config_module, 'Config')
+            config = Config()
+            scenarios = config.list_available_scenarios()
+            print(f"Configuration loaded: {len(scenarios)} scenarios found")
+            return True
+        else:
+            print("Config class not found")
+            return False
     except Exception as e:
         print(f"Configuration test failed: {e}")
         return False
