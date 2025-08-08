@@ -40,12 +40,12 @@ class CSVDataManager:
                             row['quantity'] = int(row['quantity'])
                         
                         self._scenarios_cache.append(row)
-                print(f"✅ Loaded {len(self._scenarios_cache)} scenarios from CSV")
+                print(f"Loaded {len(self._scenarios_cache)} scenarios from CSV")
             except FileNotFoundError:
-                print(f"❌ Scenarios file not found: {self.scenarios_file}")
+                print(f"Scenarios file not found: {self.scenarios_file}")
                 return []
             except Exception as e:
-                print(f"❌ Error loading scenarios: {str(e)}")
+                print(f"Error loading scenarios: {str(e)}")
                 return []
         
         return self._scenarios_cache

@@ -28,35 +28,35 @@ jobs:
     
     - name: Run framework setup check
       run: |
-        python -c "print('🚀 Framework setup check...')"
+        python -c "print('Framework setup check...')"
         python -c "import sys; print(f'Python version: {sys.version}')"
-        python -c "try: import pywinauto; print('✅ pywinauto imported successfully'); except: print('❌ pywinauto import failed')"
-        python -c "try: import pytest; print('✅ pytest imported successfully'); except: print('❌ pytest import failed')"
+        python -c "try: import pywinauto; print('pywinauto imported successfully'); except: print('pywinauto import failed')"
+        python -c "try: import pytest; print('pytest imported successfully'); except: print('pytest import failed')"
     
     - name: Test CSV data loading
       run: |
         python -c "
         try:
             from data.csv_data_manager import csv_data_manager
-            print('✅ CSV Manager loaded successfully')
+            print('CSV Manager loaded successfully')
             scenarios = csv_data_manager.list_available_scenarios()
-            print(f'📊 Found {len(scenarios)} test scenarios: {scenarios}')
+            print(f'Found {len(scenarios)} test scenarios: {scenarios}')
         except Exception as e:
-            print(f'❌ CSV Manager failed: {e}')
+            print(f'CSV Manager failed: {e}')
         "
       continue-on-error: true
     
     - name: Run simple connection test
       run: |
         python -c "
-        print('🧪 Running simple connection test...')
+        print('Running simple connection test...')
         try:
             from config.config import Config
             config = Config()
-            print('✅ Configuration loaded successfully')
-            print('✅ Simple connection test PASSED')
+            print('Configuration loaded successfully')
+            print('Simple connection test PASSED')
         except Exception as e:
-            print(f'❌ Connection test failed: {e}')
+            print(f'Connection test failed: {e}')
         "
       continue-on-error: true
     
@@ -67,11 +67,11 @@ jobs:
     
     - name: Create test report
       run: |
-        echo "🎉 GitHub Actions Connection Test Completed!" > test_report.txt
+        echo "GitHub Actions Connection Test Completed!" > test_report.txt
         echo "Date: $(Get-Date)" >> test_report.txt
         echo "Status: Connection Established" >> test_report.txt
         echo "Framework: POS Automation" >> test_report.txt
-        cat test_report.txt
+        Get-Content test_report.txt
     
     - name: Upload test report
       uses: actions/upload-artifact@v4
