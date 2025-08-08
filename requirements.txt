@@ -1,0 +1,5 @@
+# POS Automation Test Suite Requirements
+pywinauto>=0.6.9
+pytest>=7.0.0
+pytest-html>=3.1.0
+pytest-xdist>=2.5.0

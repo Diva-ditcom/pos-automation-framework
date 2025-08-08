@@ -1,0 +1,37 @@
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = [
+    "--html=reports/report.html",
+    "--self-contained-html",
+    "--tb=short",
+    "--strict-markers",
+    "-v"
+]
+testpaths = [
+    "tests"
+]
+python_files = [
+    "test_*.py",
+    "*_test.py"
+]
+python_classes = [
+    "Test*"
+]
+python_functions = [
+    "test_*"
+]
+markers = [
+    "smoke: marks tests as smoke tests",
+    "regression: marks tests as regression tests",
+    "cash_flow: marks tests as cash flow scenarios",
+    "promotion: marks tests as promotion scenarios",
+    "loyalty: marks tests as loyalty scenarios"
+]
+
+[tool.pylsp-mypy]
+enabled = true
+live_mode = true
+
+[tool.pyright]
+include = ["tests", "config", "utils"]
+exclude = ["**/__pycache__"]
