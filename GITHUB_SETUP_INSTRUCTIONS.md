@@ -1,76 +1,83 @@
-# GitHub Repository Setup Instructions
+# GitHub Repository Setup Instructions - Diva-ditcom Account
 
-## 🚀 **READY TO CREATE GITHUB REPOSITORY**
+## 🚀 **READY TO PUSH TO GITHUB**
 
-Your POS automation framework is ready for GitHub! Here's what to do:
+Your POS automation framework is ready to push to: **https://github.com/Diva-ditcom**
 
-### 📋 **Step 1: Create GitHub Repository**
+### 📋 **Step 1: Create Repository on GitHub**
 
-1. Go to **https://github.com** and sign in
-2. Click the **"+"** button (top right) → **"New repository"**
-3. Fill in these details:
+1. **Go to**: https://github.com/Diva-ditcom
+2. **Sign in** to the account
+3. **Click the "+" button** (top right) → **"New repository"**
+4. **Fill in these details:**
    - **Repository name**: `pos-automation-framework`
    - **Description**: `POS Automation Testing Framework with CI/CD Actions`
    - **Visibility**: Choose Public or Private
-   - **DO NOT** check "Add a README file" (we already have one)
-   - **DO NOT** check "Add .gitignore" (we already have one)
-   - **DO NOT** choose a license (optional)
+   - **❌ IMPORTANT**: **DON'T** check any of these boxes:
+     - Don't add README file (we already have one)
+     - Don't add .gitignore (we already have one)
+     - Don't choose a license
+5. **Click "Create repository"**
 
-4. Click **"Create repository"**
+### 📋 **Step 2: Push the Code**
 
-### 📋 **Step 2: Connect Local Repository to GitHub**
-
-After creating the repository, GitHub will show you commands. Use these exact commands:
+After creating the repository, run this command:
 
 ```powershell
-# Add GitHub remote (replace YOUR_USERNAME with your actual GitHub username)
-git remote add origin https://github.com/YOUR_USERNAME/pos-automation-framework.git
-
-# Rename main branch (GitHub uses 'main', we have 'master')
-git branch -M main
-
 # Push to GitHub
 git push -u origin main
 ```
 
-### 📋 **Step 3: Verify GitHub Actions**
+Or run the automated script:
+```powershell
+powershell -ExecutionPolicy Bypass -File push_to_github.ps1
+```
 
-1. After pushing, go to your repository on GitHub
-2. Click the **"Actions"** tab
-3. You should see a workflow running automatically
-4. Click on the workflow run to see the details
+### 🧪 **Step 3: Verify GitHub Actions**
 
-### 🧪 **What the Actions Will Test**
+1. **Go to your repository**: https://github.com/Diva-ditcom/pos-automation-framework
+2. **Click the "Actions"** tab
+3. **Watch the workflow** run automatically
+4. **All steps should pass** with green checkmarks
 
-✅ **Python 3.11 Setup** on Windows  
+### 📊 **What Will Be Tested Automatically**
+
+✅ **Python 3.11 Setup** on Windows runner  
 ✅ **Dependency Installation** (pytest, pywinauto, etc.)  
 ✅ **Framework Component Loading** (CSV manager, config, POS automation)  
 ✅ **CSV Data Loading** (3 test scenarios)  
 ✅ **Test Discovery** (4 tests found)  
 ✅ **Connection Test** and Report Generation  
 
-### 📊 **Expected Results**
+### 🎯 **Current Repository Status**
 
-The Actions workflow should show:
-- ✅ All steps passing
-- ✅ Python version 3.11.x
-- ✅ All dependencies installed
-- ✅ Framework components loaded successfully
-- ✅ CSV data loaded (3 scenarios found)
-- ✅ Pytest discovered 1 test successfully
-- ✅ Test report artifact uploaded
+- ✅ **3 commits** ready to push
+- ✅ **GitHub Actions workflow** configured
+- ✅ **All dependencies** working
+- ✅ **Framework validated** and tested
+- ✅ **Unicode issues** fixed for CI/CD
 
----
+### 🔧 **If Push Fails**
 
-## 🎯 **Quick Commands Summary**
+If you get authentication errors:
+
+1. **Create the repository first** (Step 1 above)
+2. **Set up Personal Access Token**:
+   - Go to GitHub Settings → Developer settings → Personal access tokens
+   - Create new token with 'repo' permissions
+   - Use token as password when prompted
+
+### � **Ready Commands**
 
 ```powershell
-# 1. Create repository on GitHub first, then:
-git remote add origin https://github.com/YOUR_USERNAME/pos-automation-framework.git
-git branch -M main
+# Check status
+git status
+
+# Push to GitHub (after creating repository)
 git push -u origin main
 
-# 2. Check GitHub Actions tab in your repository
+# Run automated push script
+powershell push_to_github.ps1
 ```
 
-**Ready to proceed?** Create the GitHub repository and run the commands above!
+**The framework is 100% ready for GitHub!** Just create the repository and push!
